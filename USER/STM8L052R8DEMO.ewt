@@ -1942,6 +1942,36 @@
   </configuration>
   <group>
     <name>HARDWARE</name>
+    <group>
+      <name>GPIO</name>
+      <file>
+        <name>$PROJ_DIR$\..\HARDWARE\GPIO\gpio.c</name>
+      </file>
+    </group>
+    <group>
+      <name>IWDG</name>
+      <file>
+        <name>$PROJ_DIR$\..\HARDWARE\IWDG\iwdg.c</name>
+      </file>
+    </group>
+    <group>
+      <name>RGBLED</name>
+      <file>
+        <name>$PROJ_DIR$\..\HARDWARE\RGBLED\rgbled.c</name>
+      </file>
+    </group>
+    <group>
+      <name>TIMER</name>
+      <file>
+        <name>$PROJ_DIR$\..\HARDWARE\TIMER\timer.c</name>
+      </file>
+    </group>
+    <group>
+      <name>USART</name>
+      <file>
+        <name>$PROJ_DIR$\..\HARDWARE\USART\usart.c</name>
+      </file>
+    </group>
   </group>
   <group>
     <name>STM8L15x_StdPeriph_Driver</name>
@@ -2036,6 +2066,12 @@
       <name>Misc</name>
       <file>
         <name>$PROJ_DIR$\..\SYSTEM\Misc\timing_delay.c</name>
+      </file>
+    </group>
+    <group>
+      <name>SYS</name>
+      <file>
+        <name>$PROJ_DIR$\..\SYSTEM\SYS\syscfg.c</name>
       </file>
     </group>
   </group>

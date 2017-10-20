@@ -4,54 +4,54 @@
 #include "stm8l15x.h"
 #include "stm8l15x_gpio.h"
 
-//°´¼ü¡°ADD¡±¶Ë¿ÚÎ»ÖÃ¶¨Òå
+//æŒ‰é”®â€œADDâ€ç«¯å£ä½ç½®å®šä¹‰
 #define KEY_ADD_GPIO_TypeDef GPIOF
 #define KEY_ADD_GPIO_PIN GPIO_Pin_4
-//°´¼ü¡°VPT¡±¶Ë¿ÚÎ»ÖÃ¶¨Òå
+//æŒ‰é”®â€œVPTâ€ç«¯å£ä½ç½®å®šä¹‰
 #define KEY_VPT_GPIO_TypeDef GPIOF
 #define KEY_VPT_GPIO_PIN GPIO_Pin_6
-//°´¼ü¡°UP¡±¶Ë¿ÚÎ»ÖÃ¶¨Òå
+//æŒ‰é”®â€œUPâ€ç«¯å£ä½ç½®å®šä¹‰
 #define KEY_UP_GPIO_TypeDef GPIOF
 #define KEY_UP_GPIO_PIN GPIO_Pin_5
-//°´¼ü¡°DOWN¡±¶Ë¿ÚÎ»ÖÃ¶¨Òå
+//æŒ‰é”®â€œDOWNâ€ç«¯å£ä½ç½®å®šä¹‰
 #define KEY_DOWN_GPIO_TypeDef GPIOF
 #define KEY_DOWN_GPIO_PIN GPIO_Pin_7
-//°´¼ü¡°SET¡±¶Ë¿ÚÎ»ÖÃ¶¨Òå
+//æŒ‰é”®â€œSETâ€ç«¯å£ä½ç½®å®šä¹‰
 #define KEY_SET_GPIO_TypeDef GPIOC
 #define KEY_SET_GPIO_PIN GPIO_Pin_1
-//°´¼ü¡°OK¡±¶Ë¿ÚÎ»ÖÃ¶¨Òå
+//æŒ‰é”®â€œOKâ€ç«¯å£ä½ç½®å®šä¹‰
 #define KEY_OK_GPIO_TypeDef GPIOC
 #define KEY_OK_GPIO_PIN GPIO_Pin_0
 
-#define    KEY1_Down_FG_SET 0x01
-#define    KEY2_Down_FG_SET 0x02
-#define    KEY3_Down_FG_SET 0x04
+#define KEY1_Down_FG_SET 0x01
+#define KEY2_Down_FG_SET 0x02
+#define KEY3_Down_FG_SET 0x04
 
-#define    KEY4_Down_FG_SET 0x08
-#define    KEY5_Down_FG_SET 0x10
-#define    KEY6_Down_FG_SET 0x20
+#define KEY4_Down_FG_SET 0x08
+#define KEY5_Down_FG_SET 0x10
+#define KEY6_Down_FG_SET 0x20
 
-#define    KEY1_Down_FG_RST 0xFE
-#define    KEY2_Down_FG_RST 0xFD
-#define    KEY3_Down_FG_RST 0xFB
+#define KEY1_Down_FG_RST 0xFE
+#define KEY2_Down_FG_RST 0xFD
+#define KEY3_Down_FG_RST 0xFB
 
-#define    KEY4_Down_FG_RST 0xF7
-#define    KEY5_Down_FG_RST 0xEF
-#define    KEY6_Down_FG_RST 0xDF
+#define KEY4_Down_FG_RST 0xF7
+#define KEY5_Down_FG_RST 0xEF
+#define KEY6_Down_FG_RST 0xDF
 
-//¼üÖµ¶¨Òå
-#define KEY_NO  0x00 //ÎŞ°´¼ü°´ÏÂ
-#define KEY_ADD  0x01//µØÖ·°´¼ü(KEY1)
-#define KEY_VPT  0x02//ãĞÖµ°´¼ü(KEY2)
-#define KEY_UP  0x03//ÉÏ°´¼ü(KEY3)
-#define KEY_DOWN  0x04//ÏÂ°´¼ü(KEY4)
-#define KEY_SET  0x05//ÉèÖÃ°´¼ü(KEY5)
-#define KEY_OK  0x06//È·ÈÏ°´¼ü(KEY6)
+//é”®å€¼å®šä¹‰
+#define KEY_NO 0x00   //æ— æŒ‰é”®æŒ‰ä¸‹
+#define KEY_ADD 0x01  //åœ°å€æŒ‰é”®(KEY1)
+#define KEY_VPT 0x02  //é˜ˆå€¼æŒ‰é”®(KEY2)
+#define KEY_UP 0x03   //ä¸ŠæŒ‰é”®(KEY3)
+#define KEY_DOWN 0x04 //ä¸‹æŒ‰é”®(KEY4)
+#define KEY_SET 0x05  //è®¾ç½®æŒ‰é”®(KEY5)
+#define KEY_OK 0x06   //ç¡®è®¤æŒ‰é”®(KEY6)
 
 extern u8 KeyFlag;
 
-//¹¦ÄÜº¯ÊıÉùÃ÷
-u8 KeyDispose(void);//°´¼ü´¦Àí£¨·µ»Ø°´¼üÖµ£©
-void KeyInit(void);//°´¼ü³õÊ¼»¯
+//åŠŸèƒ½å‡½æ•°å£°æ˜
+u8 KeyDispose(void); //æŒ‰é”®å¤„ç†ï¼ˆè¿”å›æŒ‰é”®å€¼ï¼‰
+void KeyInit(void);  //æŒ‰é”®åˆå§‹åŒ–
 
 #endif

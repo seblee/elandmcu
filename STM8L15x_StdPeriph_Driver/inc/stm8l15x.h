@@ -170,7 +170,7 @@ defined(STM8L05X_LD_VL) || \
 /*!< Used with memory Models for code higher than 64K */
 #define PointerAttr FAR
 #define MemoryAddressCast uint32_t
-#endif /* STM8L15X_MD or STM8L15X_MDP or STM8L15X_LD or STM8L05X_LD_VL or STM8L05X_MD_VL \ \ \ \
+#endif /* STM8L15X_MD or STM8L15X_MDP or STM8L15X_LD or STM8L05X_LD_VL or STM8L05X_MD_VL \ \ \ \ \ \ \
           or STM8AL31_L_MD */
 
 /* Uncomment the line below to enable the FLASH functions execution from RAM */
@@ -278,11 +278,11 @@ typedef enum { ERROR = 0,
   */
 typedef struct GPIO_struct
 {
-  __IO uint8_t ODR; /*!< Output Data Register */
-  __IO uint8_t IDR; /*!< Input Data Register */
-  __IO uint8_t DDR; /*!< Data Direction Register */
-  __IO uint8_t CR1; /*!< Configuration Register 1 */
-  __IO uint8_t CR2; /*!< Configuration Register 2 */
+    __IO uint8_t ODR; /*!< Output Data Register */
+    __IO uint8_t IDR; /*!< Input Data Register */
+    __IO uint8_t DDR; /*!< Data Direction Register */
+    __IO uint8_t CR1; /*!< Configuration Register 1 */
+    __IO uint8_t CR2; /*!< Configuration Register 2 */
 } GPIO_TypeDef;
 
 /** @addtogroup GPIO_Registers_Reset_Value
@@ -302,67 +302,67 @@ typedef struct GPIO_struct
   */
 typedef struct RTC_struct
 {
-  __IO uint8_t TR1; /*!<  Time  Register  1*/
-  __IO uint8_t TR2; /*!<  Time  Register  2*/
-  __IO uint8_t TR3; /*!<  Time  Register  3*/
+    __IO uint8_t TR1; /*!<  Time  Register  1*/
+    __IO uint8_t TR2; /*!<  Time  Register  2*/
+    __IO uint8_t TR3; /*!<  Time  Register  3*/
 
-  uint8_t RESERVED0;
+    uint8_t RESERVED0;
 
-  __IO uint8_t DR1; /*!<  Date  Register  1*/
-  __IO uint8_t DR2; /*!<  Date  Register  2*/
-  __IO uint8_t DR3; /*!<  Date  Register  3*/
+    __IO uint8_t DR1; /*!<  Date  Register  1*/
+    __IO uint8_t DR2; /*!<  Date  Register  2*/
+    __IO uint8_t DR3; /*!<  Date  Register  3*/
 
-  uint8_t RESERVED1;
+    uint8_t RESERVED1;
 
-  __IO uint8_t CR1; /*!<  Control  Register  1*/
-  __IO uint8_t CR2; /*!<  Control  Register  2*/
-  __IO uint8_t CR3; /*!<  Control  Register  3*/
+    __IO uint8_t CR1; /*!<  Control  Register  1*/
+    __IO uint8_t CR2; /*!<  Control  Register  2*/
+    __IO uint8_t CR3; /*!<  Control  Register  3*/
 
-  uint8_t RESERVED2;
+    uint8_t RESERVED2;
 
-  __IO uint8_t ISR1; /*!<  Initialisation and Status  Register 1 */
-  __IO uint8_t ISR2; /*!<  Initialisation and Status  Register 2 */
+    __IO uint8_t ISR1; /*!<  Initialisation and Status  Register 1 */
+    __IO uint8_t ISR2; /*!<  Initialisation and Status  Register 2 */
 
-  uint8_t RESERVED3;
-  uint8_t RESERVED4;
+    uint8_t RESERVED3;
+    uint8_t RESERVED4;
 
-  __IO uint8_t SPRERH; /*!<  Synchronous Prediv high  Register  */
-  __IO uint8_t SPRERL; /*!<  Synchronous Prediv Low Register  */
-  __IO uint8_t APRER;  /*!<  Asynchronous Prediv  Register  */
+    __IO uint8_t SPRERH; /*!<  Synchronous Prediv high  Register  */
+    __IO uint8_t SPRERL; /*!<  Synchronous Prediv Low Register  */
+    __IO uint8_t APRER;  /*!<  Asynchronous Prediv  Register  */
 
-  uint8_t RESERVED5;
+    uint8_t RESERVED5;
 
-  __IO uint8_t WUTRH; /*!<  Wake-Up Timer High Register  */
-  __IO uint8_t WUTRL; /*!<  Wake-Up Timer  Low Register  */
+    __IO uint8_t WUTRH; /*!<  Wake-Up Timer High Register  */
+    __IO uint8_t WUTRL; /*!<  Wake-Up Timer  Low Register  */
 
-  uint8_t RESERVED6;
+    uint8_t RESERVED6;
 
-  __IO uint8_t SSRH; /*!< Sub Second High Register  */
-  __IO uint8_t SSRL; /*!< Sub Second Low Register  */
+    __IO uint8_t SSRH; /*!< Sub Second High Register  */
+    __IO uint8_t SSRL; /*!< Sub Second Low Register  */
 
-  __IO uint8_t WPR; /*!< Write Protection Register  */
+    __IO uint8_t WPR; /*!< Write Protection Register  */
 
-  __IO uint8_t SHIFTRH; /*!< Shift control High Register  */
-  __IO uint8_t SHIFTRL; /*!<  Shift control Low Register  */
+    __IO uint8_t SHIFTRH; /*!< Shift control High Register  */
+    __IO uint8_t SHIFTRL; /*!<  Shift control Low Register  */
 
-  __IO uint8_t ALRMAR1; /*!<  ALARM A  Register 1  */
-  __IO uint8_t ALRMAR2; /*!<  ALARM A  Register 2 */
-  __IO uint8_t ALRMAR3; /*!<  ALARM A  Register 3 */
-  __IO uint8_t ALRMAR4; /*!<  ALARM A  Register 4 */
+    __IO uint8_t ALRMAR1; /*!<  ALARM A  Register 1  */
+    __IO uint8_t ALRMAR2; /*!<  ALARM A  Register 2 */
+    __IO uint8_t ALRMAR3; /*!<  ALARM A  Register 3 */
+    __IO uint8_t ALRMAR4; /*!<  ALARM A  Register 4 */
 
-  uint8_t RESERVED7[4];
+    uint8_t RESERVED7[4];
 
-  __IO uint8_t ALRMASSRH;   /*!<  ALARM A Subsecond Register High */
-  __IO uint8_t ALRMASSRL;   /*!<  ALARM A Subsecond Register Low  */
-  __IO uint8_t ALRMASSMSKR; /*!<  ALARM A Subsecond Mask Register  */
+    __IO uint8_t ALRMASSRH;   /*!<  ALARM A Subsecond Register High */
+    __IO uint8_t ALRMASSRL;   /*!<  ALARM A Subsecond Register Low  */
+    __IO uint8_t ALRMASSMSKR; /*!<  ALARM A Subsecond Mask Register  */
 
-  uint8_t RESERVED8[3];
+    uint8_t RESERVED8[3];
 
-  __IO uint8_t CALRH; /*!<  Calibration register high  */
-  __IO uint8_t CALRL; /*!<  Calibration register low  */
+    __IO uint8_t CALRH; /*!<  Calibration register high  */
+    __IO uint8_t CALRL; /*!<  Calibration register low  */
 
-  __IO uint8_t TCR1; /*!<  Tamper control register 1   */
-  __IO uint8_t TCR2; /*!<  Tamper control register 2  */
+    __IO uint8_t TCR1; /*!<  Tamper control register 1   */
+    __IO uint8_t TCR2; /*!<  Tamper control register 2  */
 } RTC_TypeDef;
 
 /** @addtogroup RTC_Registers_Reset_Value
@@ -560,7 +560,7 @@ typedef struct RTC_struct
   */
 typedef struct CSSLSE_struct
 {
-  __IO uint8_t CSR; /*!<  Control and Status Register*/
+    __IO uint8_t CSR; /*!<  Control and Status Register*/
 } CSSLSE_TypeDef;
 
 /** @addtogroup CSSLSE_Registers_Reset_Value
@@ -593,10 +593,10 @@ typedef struct CSSLSE_struct
 
 typedef struct BEEP_struct
 {
-  __IO uint8_t CSR1; /*!< BEEP Control status register1 */
-  uint8_t RSERVED1;
-  uint8_t RESERVED2;
-  __IO uint8_t CSR2; /*!< BEEP Control status register2 */
+    __IO uint8_t CSR1; /*!< BEEP Control status register1 */
+    uint8_t RSERVED1;
+    uint8_t RESERVED2;
+    __IO uint8_t CSR2; /*!< BEEP Control status register2 */
 } BEEP_TypeDef;
 
 /** @addtogroup BEEP_Registers_Reset_Value
@@ -631,7 +631,7 @@ typedef struct BEEP_struct
 
 typedef struct CFG_struct
 {
-  __IO uint8_t GCR; /*!< Global Configuration register */
+    __IO uint8_t GCR; /*!< Global Configuration register */
 } CFG_TypeDef;
 
 /** @addtogroup CFG_Registers_Reset_Value
@@ -662,9 +662,9 @@ typedef struct CFG_struct
 
 typedef struct SYSCFG_struct
 {
-  __IO uint8_t RMPCR3; /*!< Remap control register 3 */
-  __IO uint8_t RMPCR1; /*!< Remap control register 1 */
-  __IO uint8_t RMPCR2; /*!< Remap control register 2 */
+    __IO uint8_t RMPCR3; /*!< Remap control register 3 */
+    __IO uint8_t RMPCR1; /*!< Remap control register 1 */
+    __IO uint8_t RMPCR2; /*!< Remap control register 2 */
 } SYSCFG_TypeDef;
 
 /** @addtogroup SYSCFG_Registers_Reset_Value
@@ -717,23 +717,23 @@ typedef struct SYSCFG_struct
   */
 typedef struct CLK_struct
 {
-  __IO uint8_t CKDIVR;    /*!< Clock Master Divider Register */
-  __IO uint8_t CRTCR;     /*!< RTC Clock selection Register */
-  __IO uint8_t ICKCR;     /*!< Internal Clocks Control Register */
-  __IO uint8_t PCKENR1;   /*!< Peripheral Clock Gating Register 1 */
-  __IO uint8_t PCKENR2;   /*!< Peripheral Clock Gating Register 2 */
-  __IO uint8_t CCOR;      /*!< Configurable Clock Output Register */
-  __IO uint8_t ECKCR;     /*!< External Clocks Control Register */
-  __IO uint8_t SCSR;      /*!< System clock status Register */
-  __IO uint8_t SWR;       /*!< System clock Switch Register */
-  __IO uint8_t SWCR;      /*!< Switch Control Register */
-  __IO uint8_t CSSR;      /*!< Clock Security Sytem Register */
-  __IO uint8_t CBEEPR;    /*!< Clock BEEP Register */
-  __IO uint8_t HSICALR;   /*!< HSI Calibration Register */
-  __IO uint8_t HSITRIMR;  /*!< HSI clock Calibration Trimmer Register */
-  __IO uint8_t HSIUNLCKR; /*!< HSI Unlock  Register */
-  __IO uint8_t REGCSR;    /*!< Main regulator control status register */
-  __IO uint8_t PCKENR3;   /*!< Peripheral Clock Gating Register 3 */
+    __IO uint8_t CKDIVR;    /*!< Clock Master Divider Register */
+    __IO uint8_t CRTCR;     /*!< RTC Clock selection Register */
+    __IO uint8_t ICKCR;     /*!< Internal Clocks Control Register */
+    __IO uint8_t PCKENR1;   /*!< Peripheral Clock Gating Register 1 */
+    __IO uint8_t PCKENR2;   /*!< Peripheral Clock Gating Register 2 */
+    __IO uint8_t CCOR;      /*!< Configurable Clock Output Register */
+    __IO uint8_t ECKCR;     /*!< External Clocks Control Register */
+    __IO uint8_t SCSR;      /*!< System clock status Register */
+    __IO uint8_t SWR;       /*!< System clock Switch Register */
+    __IO uint8_t SWCR;      /*!< Switch Control Register */
+    __IO uint8_t CSSR;      /*!< Clock Security Sytem Register */
+    __IO uint8_t CBEEPR;    /*!< Clock BEEP Register */
+    __IO uint8_t HSICALR;   /*!< HSI Calibration Register */
+    __IO uint8_t HSITRIMR;  /*!< HSI clock Calibration Trimmer Register */
+    __IO uint8_t HSIUNLCKR; /*!< HSI Unlock  Register */
+    __IO uint8_t REGCSR;    /*!< Main regulator control status register */
+    __IO uint8_t PCKENR3;   /*!< Peripheral Clock Gating Register 3 */
 } CLK_TypeDef;
 
 /** @addtogroup CLK_Registers_Reset_Value
@@ -856,11 +856,11 @@ typedef struct CLK_struct
 
 typedef struct COMP_struct
 {
-  __IO uint8_t CSR1; /*!< Control status register 1  */
-  __IO uint8_t CSR2; /*!< Control status register 2  */
-  __IO uint8_t CSR3; /*!< Control status register 3  */
-  __IO uint8_t CSR4; /*!< Control status register 4  */
-  __IO uint8_t CSR5; /*!< Control status register 5  */
+    __IO uint8_t CSR1; /*!< Control status register 1  */
+    __IO uint8_t CSR2; /*!< Control status register 2  */
+    __IO uint8_t CSR3; /*!< Control status register 3  */
+    __IO uint8_t CSR4; /*!< Control status register 4  */
+    __IO uint8_t CSR5; /*!< Control status register 5  */
 } COMP_TypeDef;
 
 /** @addtogroup COMP_Registers_Reset_Value
@@ -920,15 +920,15 @@ typedef struct COMP_struct
   */
 typedef struct EXTI_struct
 {
-  __IO uint8_t CR1;    /*!<  The four LSB EXTI  pin sensitivity */
-  __IO uint8_t CR2;    /*!<  The four MSB EXTI  pin sensitivity */
-  __IO uint8_t CR3;    /*!<  EXTI port B & port D sensitivity */
-  __IO uint8_t SR1;    /*!<  Pins Status flag register 1 */
-  __IO uint8_t SR2;    /*!<  Ports Status flage register 2 */
-  __IO uint8_t CONF1;  /*!<  Port interrupt selector */
-  uint8_t RESERVED[4]; /*!<  reserved area */
-  __IO uint8_t CR4;    /*!<  EXTI port G & port H sensitivity */
-  __IO uint8_t CONF2;  /*!<  Port interrupt selector */
+    __IO uint8_t CR1;    /*!<  The four LSB EXTI  pin sensitivity */
+    __IO uint8_t CR2;    /*!<  The four MSB EXTI  pin sensitivity */
+    __IO uint8_t CR3;    /*!<  EXTI port B & port D sensitivity */
+    __IO uint8_t SR1;    /*!<  Pins Status flag register 1 */
+    __IO uint8_t SR2;    /*!<  Ports Status flage register 2 */
+    __IO uint8_t CONF1;  /*!<  Port interrupt selector */
+    uint8_t RESERVED[4]; /*!<  reserved area */
+    __IO uint8_t CR4;    /*!<  EXTI port G & port H sensitivity */
+    __IO uint8_t CONF2;  /*!<  Port interrupt selector */
 } EXTI_TypeDef;
 
 /** @addtogroup EXTI_Registers_Reset_Value
@@ -1003,11 +1003,11 @@ typedef struct EXTI_struct
   */
 typedef struct FLASH_struct
 {
-  __IO uint8_t CR1;   /*!< Flash control register 1 */
-  __IO uint8_t CR2;   /*!< Flash control register 2 */
-  __IO uint8_t PUKR;  /*!< Flash program memory unprotection register */
-  __IO uint8_t DUKR;  /*!< Data EEPROM unprotection register */
-  __IO uint8_t IAPSR; /*!< Flash in-application programming status register */
+    __IO uint8_t CR1;   /*!< Flash control register 1 */
+    __IO uint8_t CR2;   /*!< Flash control register 2 */
+    __IO uint8_t PUKR;  /*!< Flash program memory unprotection register */
+    __IO uint8_t DUKR;  /*!< Data EEPROM unprotection register */
+    __IO uint8_t IAPSR; /*!< Flash in-application programming status register */
 } FLASH_TypeDef;
 
 /** @addtogroup FLASH_Registers_Reset_Value
@@ -1058,21 +1058,21 @@ typedef struct FLASH_struct
   */
 typedef struct I2C_struct
 {
-  __IO uint8_t CR1;    /*!< I2C control register 1 */
-  __IO uint8_t CR2;    /*!< I2C control register 2 */
-  __IO uint8_t FREQR;  /*!< I2C frequency register */
-  __IO uint8_t OARL;   /*!< I2C own address register 1 LSB */
-  __IO uint8_t OARH;   /*!< I2C own address register 1 MSB */
-  __IO uint8_t OAR2;   /*!< I2C own address register 2 */
-  __IO uint8_t DR;     /*!< I2C data register */
-  __IO uint8_t SR1;    /*!< I2C status register 1 */
-  __IO uint8_t SR2;    /*!< I2C status register 2 */
-  __IO uint8_t SR3;    /*!< I2C status register 3 */
-  __IO uint8_t ITR;    /*!< I2C interrupt & DMA register */
-  __IO uint8_t CCRL;   /*!< I2C clock control register low */
-  __IO uint8_t CCRH;   /*!< I2C clock control register high */
-  __IO uint8_t TRISER; /*!< I2C maximum rise time register */
-  __IO uint8_t PECR;   /*!< I2CPacket Error Checking register */
+    __IO uint8_t CR1;    /*!< I2C control register 1 */
+    __IO uint8_t CR2;    /*!< I2C control register 2 */
+    __IO uint8_t FREQR;  /*!< I2C frequency register */
+    __IO uint8_t OARL;   /*!< I2C own address register 1 LSB */
+    __IO uint8_t OARH;   /*!< I2C own address register 1 MSB */
+    __IO uint8_t OAR2;   /*!< I2C own address register 2 */
+    __IO uint8_t DR;     /*!< I2C data register */
+    __IO uint8_t SR1;    /*!< I2C status register 1 */
+    __IO uint8_t SR2;    /*!< I2C status register 2 */
+    __IO uint8_t SR3;    /*!< I2C status register 3 */
+    __IO uint8_t ITR;    /*!< I2C interrupt & DMA register */
+    __IO uint8_t CCRL;   /*!< I2C clock control register low */
+    __IO uint8_t CCRH;   /*!< I2C clock control register high */
+    __IO uint8_t TRISER; /*!< I2C maximum rise time register */
+    __IO uint8_t PECR;   /*!< I2CPacket Error Checking register */
 } I2C_TypeDef;
 
 /** @addtogroup I2C_Registers_Reset_Value
@@ -1184,7 +1184,7 @@ typedef struct I2C_struct
   */
 typedef struct IRTIM_struct
 {
-  __IO uint8_t CR; /*!< control register */
+    __IO uint8_t CR; /*!< control register */
 } IRTIM_TypeDef;
 /** @addtogroup IRTIM_Registers_Reset_Value
   * @{
@@ -1213,14 +1213,14 @@ typedef struct IRTIM_struct
   */
 typedef struct ITC_struct
 {
-  __IO uint8_t ISPR1; /*!<  Interrupt Software Priority register 1 */
-  __IO uint8_t ISPR2; /*!<  Interrupt Software Priority register 2 */
-  __IO uint8_t ISPR3; /*!<  Interrupt Software Priority register 3 */
-  __IO uint8_t ISPR4; /*!<  Interrupt Software Priority register 4 */
-  __IO uint8_t ISPR5; /*!<  Interrupt Software Priority register 5 */
-  __IO uint8_t ISPR6; /*!<  Interrupt Software Priority register 6 */
-  __IO uint8_t ISPR7; /*!<  Interrupt Software Priority register 7 */
-  __IO uint8_t ISPR8; /*!<  Interrupt Software Priority register 8 */
+    __IO uint8_t ISPR1; /*!<  Interrupt Software Priority register 1 */
+    __IO uint8_t ISPR2; /*!<  Interrupt Software Priority register 2 */
+    __IO uint8_t ISPR3; /*!<  Interrupt Software Priority register 3 */
+    __IO uint8_t ISPR4; /*!<  Interrupt Software Priority register 4 */
+    __IO uint8_t ISPR5; /*!<  Interrupt Software Priority register 5 */
+    __IO uint8_t ISPR6; /*!<  Interrupt Software Priority register 6 */
+    __IO uint8_t ISPR7; /*!<  Interrupt Software Priority register 7 */
+    __IO uint8_t ISPR8; /*!<  Interrupt Software Priority register 8 */
 } ITC_TypeDef;
 
 /** @addtogroup ITC_Registers_Reset_Value
@@ -1238,9 +1238,9 @@ typedef struct ITC_struct
   */
 typedef struct IWDG_struct
 {
-  __IO uint8_t KR;  /*!<  Low Speed Watchdog Key Register */
-  __IO uint8_t PR;  /*!<  Low Speed Watchdog Prescaler Register */
-  __IO uint8_t RLR; /*!<  Low Speed Watchdog Reload Register */
+    __IO uint8_t KR;  /*!<  Low Speed Watchdog Key Register */
+    __IO uint8_t PR;  /*!<  Low Speed Watchdog Prescaler Register */
+    __IO uint8_t RLR; /*!<  Low Speed Watchdog Reload Register */
 } IWDG_TypeDef;
 
 /** @addtogroup IWDG_Registers_Reset_Value
@@ -1261,10 +1261,10 @@ typedef struct IWDG_struct
   */
 typedef struct WFE_struct
 {
-  __IO uint8_t CR1; /*!<  Wait for event control register 1 */
-  __IO uint8_t CR2; /*!<  Wait for event control register 2 */
-  __IO uint8_t CR3; /*!<  Wait for event control register 3 */
-  __IO uint8_t CR4; /*!<  Wait for event control register 4 */
+    __IO uint8_t CR1; /*!<  Wait for event control register 1 */
+    __IO uint8_t CR2; /*!<  Wait for event control register 2 */
+    __IO uint8_t CR3; /*!<  Wait for event control register 3 */
+    __IO uint8_t CR4; /*!<  Wait for event control register 4 */
 } WFE_TypeDef;
 /**
   * @}
@@ -1327,17 +1327,17 @@ typedef struct WFE_struct
   */
 typedef struct OPT_struct
 {
-  __IO uint8_t ROP; /*!< Read-out protection*/
-  uint8_t RESERVED1;
-  __IO uint8_t UBC; /*!< User Boot code size*/
-  uint8_t RESERVED2;
-  uint8_t RESERVED3;
-  uint8_t RESERVED4;
-  uint8_t RESERVED5;
-  __IO uint8_t PCODESIZE;
-  __IO uint8_t WDG;       /*!< Independent and Window watchdog option */
-  __IO uint8_t XTSTARTUP; /*!< HSE and LSE option */
-  __IO uint8_t BOR;       /*!< Brownout option */
+    __IO uint8_t ROP; /*!< Read-out protection*/
+    uint8_t RESERVED1;
+    __IO uint8_t UBC; /*!< User Boot code size*/
+    uint8_t RESERVED2;
+    uint8_t RESERVED3;
+    uint8_t RESERVED4;
+    uint8_t RESERVED5;
+    __IO uint8_t PCODESIZE;
+    __IO uint8_t WDG;       /*!< Independent and Window watchdog option */
+    __IO uint8_t XTSTARTUP; /*!< HSE and LSE option */
+    __IO uint8_t BOR;       /*!< Brownout option */
 } OPT_TypeDef;
 
 /**
@@ -1350,8 +1350,8 @@ typedef struct OPT_struct
   */
 typedef struct RST_struct
 {
-  __IO uint8_t CR; /*!< Multiplex Reset Pad */
-  __IO uint8_t SR; /*!< Reset status register */
+    __IO uint8_t CR; /*!< Multiplex Reset Pad */
+    __IO uint8_t SR; /*!< Reset status register */
 
 } RST_TypeDef;
 /**
@@ -1389,8 +1389,8 @@ typedef struct RST_struct
   */
 typedef struct PWR_struct
 {
-  __IO uint8_t CSR1; /*!< PWR control status register 1 */
-  __IO uint8_t CSR2; /*!< PWR control status register 2 */
+    __IO uint8_t CSR1; /*!< PWR control status register 1 */
+    __IO uint8_t CSR2; /*!< PWR control status register 2 */
 
 } PWR_TypeDef;
 /**
@@ -1430,31 +1430,31 @@ typedef struct PWR_struct
   */
 typedef struct RI_struct
 {
-  uint8_t RESERVED;
-  __IO uint8_t ICR1;   /*!< Timer input capture routing register 1 */
-  __IO uint8_t ICR2;   /*!< Timer input capture routing register 2 */
-  __IO uint8_t IOIR1;  /*!< I/O input register 1 */
-  __IO uint8_t IOIR2;  /*!< I/O input register 2 */
-  __IO uint8_t IOIR3;  /*!< I/O input register 3 */
-  __IO uint8_t IOCMR1; /*!< I/O control mode register 1 */
-  __IO uint8_t IOCMR2; /*!< I/O control mode register 2 */
-  __IO uint8_t IOCMR3; /*!< I/O control mode register 3 */
-  __IO uint8_t IOSR1;  /*!< I/O switch register 1*/
-  __IO uint8_t IOSR2;  /*!< I/O switch register 2*/
-  __IO uint8_t IOSR3;  /*!< I/O switch register 3*/
-  __IO uint8_t IOGCR;  /*!< I/O group control register */
-  __IO uint8_t ASCR1;  /*!< Analog Switch Control register 1 */
-  __IO uint8_t ASCR2;  /*!< Analog Switch Control register 2 */
-  __IO uint8_t RCR;    /*!< Resistor control register  */
-  uint8_t RESERVED1[16];
-  __IO uint8_t CR;     /*!< Control Register  */
-  __IO uint8_t IOMR1;  /*!< IO Mask Register 1 */
-  __IO uint8_t IOMR2;  /*!< IO Mask Register 2 */
-  __IO uint8_t IOMR3;  /*!< IO Mask Register 3 */
-  __IO uint8_t IOMR4;  /*!< IO Mask Register 4*/
-  __IO uint8_t IOIR4;  /*!< I/O input register 4 */
-  __IO uint8_t IOCMR4; /*!< I/O control mode register 4 */
-  __IO uint8_t IOSR4;  /*!< I/O switch register 4 */
+    uint8_t RESERVED;
+    __IO uint8_t ICR1;   /*!< Timer input capture routing register 1 */
+    __IO uint8_t ICR2;   /*!< Timer input capture routing register 2 */
+    __IO uint8_t IOIR1;  /*!< I/O input register 1 */
+    __IO uint8_t IOIR2;  /*!< I/O input register 2 */
+    __IO uint8_t IOIR3;  /*!< I/O input register 3 */
+    __IO uint8_t IOCMR1; /*!< I/O control mode register 1 */
+    __IO uint8_t IOCMR2; /*!< I/O control mode register 2 */
+    __IO uint8_t IOCMR3; /*!< I/O control mode register 3 */
+    __IO uint8_t IOSR1;  /*!< I/O switch register 1*/
+    __IO uint8_t IOSR2;  /*!< I/O switch register 2*/
+    __IO uint8_t IOSR3;  /*!< I/O switch register 3*/
+    __IO uint8_t IOGCR;  /*!< I/O group control register */
+    __IO uint8_t ASCR1;  /*!< Analog Switch Control register 1 */
+    __IO uint8_t ASCR2;  /*!< Analog Switch Control register 2 */
+    __IO uint8_t RCR;    /*!< Resistor control register  */
+    uint8_t RESERVED1[16];
+    __IO uint8_t CR;     /*!< Control Register  */
+    __IO uint8_t IOMR1;  /*!< IO Mask Register 1 */
+    __IO uint8_t IOMR2;  /*!< IO Mask Register 2 */
+    __IO uint8_t IOMR3;  /*!< IO Mask Register 3 */
+    __IO uint8_t IOMR4;  /*!< IO Mask Register 4*/
+    __IO uint8_t IOIR4;  /*!< I/O input register 4 */
+    __IO uint8_t IOCMR4; /*!< I/O control mode register 4 */
+    __IO uint8_t IOSR4;  /*!< I/O switch register 4 */
 } RI_TypeDef;
 /**
   * @}
@@ -1616,14 +1616,14 @@ typedef struct RI_struct
   */
 typedef struct SPI_struct
 {
-  __IO uint8_t CR1;    /*!< SPI control register 1 */
-  __IO uint8_t CR2;    /*!< SPI control register 2 */
-  __IO uint8_t CR3;    /*!< SPI DMA and interrupt control register */
-  __IO uint8_t SR;     /*!< SPI status register */
-  __IO uint8_t DR;     /*!< SPI data I/O register */
-  __IO uint8_t CRCPR;  /*!< SPI CRC polynomial register */
-  __IO uint8_t RXCRCR; /*!< SPI Rx CRC register */
-  __IO uint8_t TXCRCR; /*!< SPI Tx CRC register */
+    __IO uint8_t CR1;    /*!< SPI control register 1 */
+    __IO uint8_t CR2;    /*!< SPI control register 2 */
+    __IO uint8_t CR3;    /*!< SPI DMA and interrupt control register */
+    __IO uint8_t SR;     /*!< SPI status register */
+    __IO uint8_t DR;     /*!< SPI data I/O register */
+    __IO uint8_t CRCPR;  /*!< SPI CRC polynomial register */
+    __IO uint8_t RXCRCR; /*!< SPI Rx CRC register */
+    __IO uint8_t TXCRCR; /*!< SPI Tx CRC register */
 } SPI_TypeDef;
 
 /** @addtogroup SPI_Registers_Reset_Value
@@ -1687,42 +1687,42 @@ typedef struct SPI_struct
   */
 typedef struct TIM1_struct
 {
-  __IO uint8_t CR1;   /*!< control register 1 */
-  __IO uint8_t CR2;   /*!< control register 2 */
-  __IO uint8_t SMCR;  /*!< Synchro mode control register */
-  __IO uint8_t ETR;   /*!< external trigger register */
-  __IO uint8_t DER;   /*!< DMA requests enable register */
-  __IO uint8_t IER;   /*!< interrupt enable register*/
-  __IO uint8_t SR1;   /*!< status register 1 */
-  __IO uint8_t SR2;   /*!< status register 2 */
-  __IO uint8_t EGR;   /*!< event generation register */
-  __IO uint8_t CCMR1; /*!< CC mode register 1 */
-  __IO uint8_t CCMR2; /*!< CC mode register 2 */
-  __IO uint8_t CCMR3; /*!< CC mode register 3 */
-  __IO uint8_t CCMR4; /*!< CC mode register 4 */
-  __IO uint8_t CCER1; /*!< CC enable register 1 */
-  __IO uint8_t CCER2; /*!< CC enable register 2 */
-  __IO uint8_t CNTRH; /*!< counter high */
-  __IO uint8_t CNTRL; /*!< counter low */
-  __IO uint8_t PSCRH; /*!< prescaler high */
-  __IO uint8_t PSCRL; /*!< prescaler low */
-  __IO uint8_t ARRH;  /*!< auto-reload register high */
-  __IO uint8_t ARRL;  /*!< auto-reload register low */
-  __IO uint8_t RCR;   /*!< Repetition Counter register */
-  __IO uint8_t CCR1H; /*!< capture/compare register 1 high */
-  __IO uint8_t CCR1L; /*!< capture/compare register 1 low */
-  __IO uint8_t CCR2H; /*!< capture/compare register 2 high */
-  __IO uint8_t CCR2L; /*!< capture/compare register 2 low */
-  __IO uint8_t CCR3H; /*!< capture/compare register 3 high */
-  __IO uint8_t CCR3L; /*!< capture/compare register 3 low */
-  __IO uint8_t CCR4H; /*!< capture/compare register 3 high */
-  __IO uint8_t CCR4L; /*!< capture/compare register 3 low */
-  __IO uint8_t BKR;   /*!< Break Register */
-  __IO uint8_t DTR;   /*!< dead-time register */
-  __IO uint8_t OISR;  /*!< Output idle register */
-  __IO uint8_t DCR1;  /*!< DMA control register 1 */
-  __IO uint8_t DCR2;  /*!< DMA control register 2 */
-  __IO uint8_t DMAR;  /*!< DMA Address for brust mode */
+    __IO uint8_t CR1;   /*!< control register 1 */
+    __IO uint8_t CR2;   /*!< control register 2 */
+    __IO uint8_t SMCR;  /*!< Synchro mode control register */
+    __IO uint8_t ETR;   /*!< external trigger register */
+    __IO uint8_t DER;   /*!< DMA requests enable register */
+    __IO uint8_t IER;   /*!< interrupt enable register*/
+    __IO uint8_t SR1;   /*!< status register 1 */
+    __IO uint8_t SR2;   /*!< status register 2 */
+    __IO uint8_t EGR;   /*!< event generation register */
+    __IO uint8_t CCMR1; /*!< CC mode register 1 */
+    __IO uint8_t CCMR2; /*!< CC mode register 2 */
+    __IO uint8_t CCMR3; /*!< CC mode register 3 */
+    __IO uint8_t CCMR4; /*!< CC mode register 4 */
+    __IO uint8_t CCER1; /*!< CC enable register 1 */
+    __IO uint8_t CCER2; /*!< CC enable register 2 */
+    __IO uint8_t CNTRH; /*!< counter high */
+    __IO uint8_t CNTRL; /*!< counter low */
+    __IO uint8_t PSCRH; /*!< prescaler high */
+    __IO uint8_t PSCRL; /*!< prescaler low */
+    __IO uint8_t ARRH;  /*!< auto-reload register high */
+    __IO uint8_t ARRL;  /*!< auto-reload register low */
+    __IO uint8_t RCR;   /*!< Repetition Counter register */
+    __IO uint8_t CCR1H; /*!< capture/compare register 1 high */
+    __IO uint8_t CCR1L; /*!< capture/compare register 1 low */
+    __IO uint8_t CCR2H; /*!< capture/compare register 2 high */
+    __IO uint8_t CCR2L; /*!< capture/compare register 2 low */
+    __IO uint8_t CCR3H; /*!< capture/compare register 3 high */
+    __IO uint8_t CCR3L; /*!< capture/compare register 3 low */
+    __IO uint8_t CCR4H; /*!< capture/compare register 3 high */
+    __IO uint8_t CCR4L; /*!< capture/compare register 3 low */
+    __IO uint8_t BKR;   /*!< Break Register */
+    __IO uint8_t DTR;   /*!< dead-time register */
+    __IO uint8_t OISR;  /*!< Output idle register */
+    __IO uint8_t DCR1;  /*!< DMA control register 1 */
+    __IO uint8_t DCR2;  /*!< DMA control register 2 */
+    __IO uint8_t DMAR;  /*!< DMA Address for brust mode */
 } TIM1_TypeDef;
 
 /** @addtogroup TIM1_Registers_Reset_Value
@@ -1921,29 +1921,29 @@ typedef struct TIM1_struct
   */
 typedef struct TIM_struct
 {
-  __IO uint8_t CR1;   /*!< control register 1   */
-  __IO uint8_t CR2;   /*!< control register 2   */
-  __IO uint8_t SMCR;  /*!< Synchro mode control register */
-  __IO uint8_t ETR;   /*!< external trigger register */
-  __IO uint8_t DER;   /*!< DMA requests enable register */
-  __IO uint8_t IER;   /*!< interrupt enable register*/
-  __IO uint8_t SR1;   /*!< status register 1   */
-  __IO uint8_t SR2;   /*!< status register 2   */
-  __IO uint8_t EGR;   /*!< event generation register */
-  __IO uint8_t CCMR1; /*!< CC mode register 1      */
-  __IO uint8_t CCMR2; /*!< CC mode register 2      */
-  __IO uint8_t CCER1; /*!< CC enable register 1     */
-  __IO uint8_t CNTRH; /*!< counterregister  high  */
-  __IO uint8_t CNTRL; /*!< counterregister  low   */
-  __IO uint8_t PSCR;  /*!< prescaler  register   */
-  __IO uint8_t ARRH;  /*!< auto-reload register high  */
-  __IO uint8_t ARRL;  /*!< auto-reload register low    */
-  __IO uint8_t CCR1H; /*!< capture/compare register 1 high   */
-  __IO uint8_t CCR1L; /*!< capture/compare register 1 low     */
-  __IO uint8_t CCR2H; /*!< capture/compare register 2 high   */
-  __IO uint8_t CCR2L; /*!< capture/compare register 2 low     */
-  __IO uint8_t BKR;   /*!< Break Register */
-  __IO uint8_t OISR;  /*!< Output idle register */
+    __IO uint8_t CR1;   /*!< control register 1   */
+    __IO uint8_t CR2;   /*!< control register 2   */
+    __IO uint8_t SMCR;  /*!< Synchro mode control register */
+    __IO uint8_t ETR;   /*!< external trigger register */
+    __IO uint8_t DER;   /*!< DMA requests enable register */
+    __IO uint8_t IER;   /*!< interrupt enable register*/
+    __IO uint8_t SR1;   /*!< status register 1   */
+    __IO uint8_t SR2;   /*!< status register 2   */
+    __IO uint8_t EGR;   /*!< event generation register */
+    __IO uint8_t CCMR1; /*!< CC mode register 1      */
+    __IO uint8_t CCMR2; /*!< CC mode register 2      */
+    __IO uint8_t CCER1; /*!< CC enable register 1     */
+    __IO uint8_t CNTRH; /*!< counterregister  high  */
+    __IO uint8_t CNTRL; /*!< counterregister  low   */
+    __IO uint8_t PSCR;  /*!< prescaler  register   */
+    __IO uint8_t ARRH;  /*!< auto-reload register high  */
+    __IO uint8_t ARRL;  /*!< auto-reload register low    */
+    __IO uint8_t CCR1H; /*!< capture/compare register 1 high   */
+    __IO uint8_t CCR1L; /*!< capture/compare register 1 low     */
+    __IO uint8_t CCR2H; /*!< capture/compare register 2 high   */
+    __IO uint8_t CCR2L; /*!< capture/compare register 2 low     */
+    __IO uint8_t BKR;   /*!< Break Register */
+    __IO uint8_t OISR;  /*!< Output idle register */
 } TIM_TypeDef;
 
 /** @addtogroup TIM2_TIM3_Registers_Reset_Value
@@ -2097,16 +2097,16 @@ typedef struct TIM_struct
   */
 typedef struct TIM4_struct
 {
-  __IO uint8_t CR1;  /*!< control register 1 */
-  __IO uint8_t CR2;  /*!< control register 2 */
-  __IO uint8_t SMCR; /*!< Synchro mode control register */
-  __IO uint8_t DER;  /*!< DMA requests enable register */
-  __IO uint8_t IER;  /*!< interrupt enable register  */
-  __IO uint8_t SR1;  /*!< status register 1    */
-  __IO uint8_t EGR;  /*!< event generation register */
-  __IO uint8_t CNTR; /*!< counter register  */
-  __IO uint8_t PSCR; /*!< prescaler register */
-  __IO uint8_t ARR;  /*!< auto-reload register */
+    __IO uint8_t CR1;  /*!< control register 1 */
+    __IO uint8_t CR2;  /*!< control register 2 */
+    __IO uint8_t SMCR; /*!< Synchro mode control register */
+    __IO uint8_t DER;  /*!< DMA requests enable register */
+    __IO uint8_t IER;  /*!< interrupt enable register  */
+    __IO uint8_t SR1;  /*!< status register 1    */
+    __IO uint8_t EGR;  /*!< event generation register */
+    __IO uint8_t CNTR; /*!< counter register  */
+    __IO uint8_t PSCR; /*!< prescaler register */
+    __IO uint8_t ARR;  /*!< auto-reload register */
 } TIM4_TypeDef;
 /** @addtogroup TIM4_Registers_Reset_Value
   * @{
@@ -2178,17 +2178,17 @@ typedef struct TIM4_struct
   */
 typedef struct USART_struct
 {
-  __IO uint8_t SR;   /*!<  USART status register  */
-  __IO uint8_t DR;   /*!<  USART data register     */
-  __IO uint8_t BRR1; /*!<  USART baud rate register   */
-  __IO uint8_t BRR2; /*!<  USART DIV mantissa[11:8] SCIDIV fraction */
-  __IO uint8_t CR1;  /*!<  USART control register 1     */
-  __IO uint8_t CR2;  /*!<  USART control register 2     */
-  __IO uint8_t CR3;  /*!<  USART control register 3      */
-  __IO uint8_t CR4;  /*!< USART control register 4      */
-  __IO uint8_t CR5;  /*!<  USART control register 5       */
-  __IO uint8_t GTR;  /*!<  USART guard time register     */
-  __IO uint8_t PSCR; /*!<  USART prescaler register     */
+    __IO uint8_t SR;   /*!<  USART status register  */
+    __IO uint8_t DR;   /*!<  USART data register     */
+    __IO uint8_t BRR1; /*!<  USART baud rate register   */
+    __IO uint8_t BRR2; /*!<  USART DIV mantissa[11:8] SCIDIV fraction */
+    __IO uint8_t CR1;  /*!<  USART control register 1     */
+    __IO uint8_t CR2;  /*!<  USART control register 2     */
+    __IO uint8_t CR3;  /*!<  USART control register 3      */
+    __IO uint8_t CR4;  /*!< USART control register 4      */
+    __IO uint8_t CR5;  /*!<  USART control register 5       */
+    __IO uint8_t GTR;  /*!<  USART guard time register     */
+    __IO uint8_t PSCR; /*!<  USART prescaler register     */
 } USART_TypeDef;
 
 /** @addtogroup USART_Registers_Reset_Value
@@ -2267,18 +2267,18 @@ typedef struct USART_struct
   */
 typedef struct ADC_struct
 {
-  __IO uint8_t CR1;      /*!< Control register 1    */
-  __IO uint8_t CR2;      /*!< Control register 2    */
-  __IO uint8_t CR3;      /*!<  Control register 3    */
-  __IO uint8_t SR;       /*!< Status register    */
-  __IO uint8_t DRH;      /*!< Data register MSB    */
-  __IO uint8_t DRL;      /*!< Data register LSB    */
-  __IO uint8_t HTRH;     /*!< High voltage reference register MSB    */
-  __IO uint8_t HTRL;     /*!< High voltage reference register LSB    */
-  __IO uint8_t LTRH;     /*!< Low voltage reference register MSB    */
-  __IO uint8_t LTRL;     /*!< Low voltage reference register LSB    */
-  __IO uint8_t SQR[4];   /*!< Channel select scan registers    */
-  __IO uint8_t TRIGR[4]; /*!< Trigger disable  registers  */
+    __IO uint8_t CR1;      /*!< Control register 1    */
+    __IO uint8_t CR2;      /*!< Control register 2    */
+    __IO uint8_t CR3;      /*!<  Control register 3    */
+    __IO uint8_t SR;       /*!< Status register    */
+    __IO uint8_t DRH;      /*!< Data register MSB    */
+    __IO uint8_t DRL;      /*!< Data register LSB    */
+    __IO uint8_t HTRH;     /*!< High voltage reference register MSB    */
+    __IO uint8_t HTRL;     /*!< High voltage reference register LSB    */
+    __IO uint8_t LTRH;     /*!< Low voltage reference register MSB    */
+    __IO uint8_t LTRL;     /*!< Low voltage reference register LSB    */
+    __IO uint8_t SQR[4];   /*!< Channel select scan registers    */
+    __IO uint8_t TRIGR[4]; /*!< Trigger disable  registers  */
 } ADC_TypeDef;
 
 /** @addtogroup ADC_Registers_Reset_Value
@@ -2364,53 +2364,53 @@ typedef struct ADC_struct
   */
 typedef struct DAC_struct
 {
-  __IO uint8_t CH1CR1;  /*!< DAC control register 1  */
-  __IO uint8_t CH1CR2;  /*!< DAC control register 2  */
-  __IO uint8_t CH2CR1;  /*!< DAC channel 2 control register 1  */
-  __IO uint8_t CH2CR2;  /*!< DAC channel 2 control register 2  */
-  __IO uint8_t SWTRIGR; /*!< DAC software trigger register */
-  __IO uint8_t SR;      /*!< DAC status register */
+    __IO uint8_t CH1CR1;  /*!< DAC control register 1  */
+    __IO uint8_t CH1CR2;  /*!< DAC control register 2  */
+    __IO uint8_t CH2CR1;  /*!< DAC channel 2 control register 1  */
+    __IO uint8_t CH2CR2;  /*!< DAC channel 2 control register 2  */
+    __IO uint8_t SWTRIGR; /*!< DAC software trigger register */
+    __IO uint8_t SR;      /*!< DAC status register */
 
-  /*Channel 1 registers*/
-  __IO uint8_t RESERVED0[2];
-  __IO uint8_t CH1RDHRH; /*!< DAC Channel 1 right aligned data holding register MSB */
-  __IO uint8_t CH1RDHRL; /*!< DAC Channel 1 right aligned data holding register LSB */
-  __IO uint8_t RESERVED1[2];
-  __IO uint8_t CH1LDHRH; /*!< DAC Channel 1 left aligned data holding register MSB */
-  __IO uint8_t CH1LDHRL; /*!< DAC Channel 1 left aligned data holding register LSB */
-  __IO uint8_t RESERVED2[2];
-  __IO uint8_t CH1DHR8; /*!< DAC Channel 1 8-bit data holding register */
+    /*Channel 1 registers*/
+    __IO uint8_t RESERVED0[2];
+    __IO uint8_t CH1RDHRH; /*!< DAC Channel 1 right aligned data holding register MSB */
+    __IO uint8_t CH1RDHRL; /*!< DAC Channel 1 right aligned data holding register LSB */
+    __IO uint8_t RESERVED1[2];
+    __IO uint8_t CH1LDHRH; /*!< DAC Channel 1 left aligned data holding register MSB */
+    __IO uint8_t CH1LDHRL; /*!< DAC Channel 1 left aligned data holding register LSB */
+    __IO uint8_t RESERVED2[2];
+    __IO uint8_t CH1DHR8; /*!< DAC Channel 1 8-bit data holding register */
 
-  /*Channel 2 registers*/
-  __IO uint8_t RESERVED3[3];
-  __IO uint8_t CH2RDHRH; /*!< DAC Channel 2 right aligned data holding register MSB */
-  __IO uint8_t CH2RDHRL; /*!< DAC Channel 2 right aligned data holding register LSB */
-  __IO uint8_t RESERVED4[2];
-  __IO uint8_t CH2LDHRH; /*!< DAC Channel 2 left aligned data holding register MSB */
-  __IO uint8_t CH2LDHRL; /*!< DAC Channel 2 left aligned data holding register LSB */
-  __IO uint8_t RESERVED5[2];
-  __IO uint8_t CH2DHR8; /*!< DAC Channel 2 8-bit data holding register */
+    /*Channel 2 registers*/
+    __IO uint8_t RESERVED3[3];
+    __IO uint8_t CH2RDHRH; /*!< DAC Channel 2 right aligned data holding register MSB */
+    __IO uint8_t CH2RDHRL; /*!< DAC Channel 2 right aligned data holding register LSB */
+    __IO uint8_t RESERVED4[2];
+    __IO uint8_t CH2LDHRH; /*!< DAC Channel 2 left aligned data holding register MSB */
+    __IO uint8_t CH2LDHRL; /*!< DAC Channel 2 left aligned data holding register LSB */
+    __IO uint8_t RESERVED5[2];
+    __IO uint8_t CH2DHR8; /*!< DAC Channel 2 8-bit data holding register */
 
-  /* Dual mode registers */
-  __IO uint8_t RESERVED6[3];
-  __IO uint8_t DCH1RDHRH; /*!< DAC Dual mode Channel 1 right aligned data holding register MSB */
-  __IO uint8_t DCH1RDHRL; /*!< DAC Dual mode Channel 1 right aligned data holding register LSB */
-  __IO uint8_t DCH2RDHRH; /*!< DAC Dual mode Channel 2 right aligned data holding register MSB */
-  __IO uint8_t DCH2RDHRL; /*!< DAC Dual mode Channel 2 right aligned data holding register LSB */
-  __IO uint8_t DCH1LDHRH; /*!< DAC Dual mode Channel 1 left aligned data holding register MSB */
-  __IO uint8_t DCH1LDHRL; /*!< DAC Dual mode Channel 1 left aligned data holding register LSB */
-  __IO uint8_t DCH2LDHRH; /*!< DAC Dual mode Channel 2 left aligned data holding register MSB */
-  __IO uint8_t DCH2LDHRL; /*!< DAC Dual mode Channel 2 left aligned data holding register LSB */
-  __IO uint8_t DCH1DHR8;  /*!< DAC Dual mode Channel 1 8-bit data holding register */
-  __IO uint8_t DCH2DHR8;  /*!< DAC Dual mode Channel 2 8-bit data holding register */
+    /* Dual mode registers */
+    __IO uint8_t RESERVED6[3];
+    __IO uint8_t DCH1RDHRH; /*!< DAC Dual mode Channel 1 right aligned data holding register MSB */
+    __IO uint8_t DCH1RDHRL; /*!< DAC Dual mode Channel 1 right aligned data holding register LSB */
+    __IO uint8_t DCH2RDHRH; /*!< DAC Dual mode Channel 2 right aligned data holding register MSB */
+    __IO uint8_t DCH2RDHRL; /*!< DAC Dual mode Channel 2 right aligned data holding register LSB */
+    __IO uint8_t DCH1LDHRH; /*!< DAC Dual mode Channel 1 left aligned data holding register MSB */
+    __IO uint8_t DCH1LDHRL; /*!< DAC Dual mode Channel 1 left aligned data holding register LSB */
+    __IO uint8_t DCH2LDHRH; /*!< DAC Dual mode Channel 2 left aligned data holding register MSB */
+    __IO uint8_t DCH2LDHRL; /*!< DAC Dual mode Channel 2 left aligned data holding register LSB */
+    __IO uint8_t DCH1DHR8;  /*!< DAC Dual mode Channel 1 8-bit data holding register */
+    __IO uint8_t DCH2DHR8;  /*!< DAC Dual mode Channel 2 8-bit data holding register */
 
-  /* DOR registers*/
-  __IO uint8_t RESERVED7[2];
-  __IO uint8_t CH1DORH; /*!< DAC Channel 1 data output register MSB */
-  __IO uint8_t CH1DORL; /*!< DAC Channel 1 data output register LSB */
-  __IO uint8_t RESERVED8[2];
-  __IO uint8_t CH2DORH; /*!< DAC Channel 2 data output register MSB */
-  __IO uint8_t CH2DORL; /*!< DAC Channel 2 data output register LSB */
+    /* DOR registers*/
+    __IO uint8_t RESERVED7[2];
+    __IO uint8_t CH1DORH; /*!< DAC Channel 1 data output register MSB */
+    __IO uint8_t CH1DORL; /*!< DAC Channel 1 data output register LSB */
+    __IO uint8_t RESERVED8[2];
+    __IO uint8_t CH2DORH; /*!< DAC Channel 2 data output register MSB */
+    __IO uint8_t CH2DORL; /*!< DAC Channel 2 data output register LSB */
 } DAC_TypeDef;
 
 /** @addtogroup DAC_Registers_Reset_Value
@@ -2487,22 +2487,22 @@ typedef struct DAC_struct
   */
 typedef struct DMA_struct
 {
-  __IO uint8_t GCSR; /*!<  Global configuration and status register  */
-  __IO uint8_t GIR1; /*!<  Global interrupt register 1  */
+    __IO uint8_t GCSR; /*!<  Global configuration and status register  */
+    __IO uint8_t GIR1; /*!<  Global interrupt register 1  */
 } DMA_TypeDef;
 /**
   * @}
   */
 typedef struct DMA_Channel_struct
 {
-  __IO uint8_t CCR;    /*!<  CHx Control register  */
-  __IO uint8_t CSPR;   /*!<  CHx Status & Priority register  */
-  __IO uint8_t CNBTR;  /*!<  CHx Number of Bytes to Tranfer register  */
-  __IO uint8_t CPARH;  /*!<  Peripheral Address High register  */
-  __IO uint8_t CPARL;  /*!<  Peripheral Address Low register  */
-  __IO uint8_t CM0EAR; /*!<  Memory 0 Extended Address register  (for channel3)*/
-  __IO uint8_t CM0ARH; /*!<  Memory 0 Address High register  */
-  __IO uint8_t CM0ARL; /*!<  Memory 0 Address Low register  */
+    __IO uint8_t CCR;    /*!<  CHx Control register  */
+    __IO uint8_t CSPR;   /*!<  CHx Status & Priority register  */
+    __IO uint8_t CNBTR;  /*!<  CHx Number of Bytes to Tranfer register  */
+    __IO uint8_t CPARH;  /*!<  Peripheral Address High register  */
+    __IO uint8_t CPARL;  /*!<  Peripheral Address Low register  */
+    __IO uint8_t CM0EAR; /*!<  Memory 0 Extended Address register  (for channel3)*/
+    __IO uint8_t CM0ARH; /*!<  Memory 0 Address High register  */
+    __IO uint8_t CM0ARL; /*!<  Memory 0 Address Low register  */
 } DMA_Channel_TypeDef;
 /**
   * @}
@@ -2585,8 +2585,8 @@ typedef struct DMA_Channel_struct
   */
 typedef struct WWDG_struct
 {
-  __IO uint8_t CR; /*!< Control Register */
-  __IO uint8_t WR; /*!< Window Register */
+    __IO uint8_t CR; /*!< Control Register */
+    __IO uint8_t WR; /*!< Window Register */
 } WWDG_TypeDef;
 
 /** @addtogroup WWDG_Registers_Reset_Value
@@ -2621,15 +2621,15 @@ typedef struct WWDG_struct
   */
 typedef struct LCD_struct
 {
-  __IO uint8_t CR1;      /*!< LCD control register 1 */
-  __IO uint8_t CR2;      /*!< LCD control register 2 */
-  __IO uint8_t CR3;      /*!< LCD control register 3 */
-  __IO uint8_t FRQ;      /*!< LCD frequency register */
-  __IO uint8_t PM[6];    /*!< LCD portmask registers*/
-  uint8_t RESERVED1[2];  /*!< Reserved */
-  __IO uint8_t RAM[22];  /*!< LCD RAM registers*/
-  uint8_t RESERVED2[13]; /*!< Reserved */
-  __IO uint8_t CR4;      /*!< LCD control register 4 */
+    __IO uint8_t CR1;      /*!< LCD control register 1 */
+    __IO uint8_t CR2;      /*!< LCD control register 2 */
+    __IO uint8_t CR3;      /*!< LCD control register 3 */
+    __IO uint8_t FRQ;      /*!< LCD frequency register */
+    __IO uint8_t PM[6];    /*!< LCD portmask registers*/
+    uint8_t RESERVED1[2];  /*!< Reserved */
+    __IO uint8_t RAM[22];  /*!< LCD RAM registers*/
+    uint8_t RESERVED2[13]; /*!< Reserved */
+    __IO uint8_t CR4;      /*!< LCD control register 4 */
 } LCD_TypeDef;
 /** @addtogroup LCD_Registers_Reset_Value
   * @{
@@ -2684,10 +2684,10 @@ typedef struct LCD_struct
   */
 typedef struct AES_struct
 {
-  __IO uint8_t CR;    /*!< AES control register     */
-  __IO uint8_t SR;    /*!< AES status register      */
-  __IO uint8_t DINR;  /*!< AES Data input register  */
-  __IO uint8_t DOUTR; /*!< AES Data output register */
+    __IO uint8_t CR;    /*!< AES control register     */
+    __IO uint8_t SR;    /*!< AES status register      */
+    __IO uint8_t DINR;  /*!< AES Data input register  */
+    __IO uint8_t DOUTR; /*!< AES Data output register */
 } AES_TypeDef;
 
 /** @addtogroup AES_Registers_Reset_Value
@@ -2847,41 +2847,41 @@ typedef struct AES_struct
 #define halt() _halt_()             /*!<Halt */
 #elif defined(_COSMIC_)
 #define enableInterrupts() \
-  {                        \
-    _asm("rim\n");         \
-  } /*!<enable interrupts */
+    {                      \
+        _asm("rim\n");     \
+    } /*!<enable interrupts */
 #define disableInterrupts() \
-  {                         \
-    _asm("sim\n");          \
-  } /*!<disable interrupts */
-#define rim()      \
-  {                \
-    _asm("rim\n"); \
-  } /*!<enable interrupts */
-#define sim()      \
-  {                \
-    _asm("sim\n"); \
-  } /*!<disable interrupts */
-#define nop()      \
-  {                \
-    _asm("nop\n"); \
-  } /*!<No Operation */
-#define trap()      \
-  {                 \
-    _asm("trap\n"); \
-  } /*!<Trap (soft IT) */
-#define wfi()      \
-  {                \
-    _asm("wfi\n"); \
-  } /*!<Wait For Interrupt */
-#define wfe()      \
-  {                \
-    _asm("wfe\n"); \
-  } /*!<Wait for event */
-#define halt()      \
-  {                 \
-    _asm("halt\n"); \
-  }   /*!<Halt */
+    {                       \
+        _asm("sim\n");      \
+    } /*!<disable interrupts */
+#define rim()          \
+    {                  \
+        _asm("rim\n"); \
+    } /*!<enable interrupts */
+#define sim()          \
+    {                  \
+        _asm("sim\n"); \
+    } /*!<disable interrupts */
+#define nop()          \
+    {                  \
+        _asm("nop\n"); \
+    } /*!<No Operation */
+#define trap()          \
+    {                   \
+        _asm("trap\n"); \
+    } /*!<Trap (soft IT) */
+#define wfi()          \
+    {                  \
+        _asm("wfi\n"); \
+    } /*!<Wait For Interrupt */
+#define wfe()          \
+    {                  \
+        _asm("wfe\n"); \
+    } /*!<Wait for event */
+#define halt()          \
+    {                   \
+        _asm("halt\n"); \
+    } /*!<Halt */
 #else /*_IAR*/
 #include <intrinsics.h>
 #define enableInterrupts() __enable_interrupt()   /* enable interrupts */
@@ -2911,11 +2911,11 @@ typedef struct AES_struct
 #define STRINGVECTOR(x) #x
 #define VECTOR_ID(x) STRINGVECTOR(vector = (x))
 #define INTERRUPT_HANDLER(a, b) \
-  _Pragma(VECTOR_ID((b) + 2))   \
-      __interrupt void(a)(void)
+    _Pragma(VECTOR_ID((b) + 2)) \
+        __interrupt void(a)(void)
 #define INTERRUPT_HANDLER_TRAP(a) \
-  _Pragma(VECTOR_ID(1))           \
-      __interrupt void(a)(void)
+    _Pragma(VECTOR_ID(1))         \
+        __interrupt void(a)(void)
 #endif /* _IAR_ */
 
 /*============================== Interrupt Handler declaration ========================*/
@@ -2955,8 +2955,8 @@ Comments :    The different parameters of commands are
 
 /*============================== Assert Macros ====================================*/
 #define IS_STATE_VALUE(STATE) \
-  (((STATE) == SET) ||        \
-   ((STATE) == RESET))
+    (((STATE) == SET) ||      \
+     ((STATE) == RESET))
 
 /*-----------------------------------------------------------------------------
 Method : II

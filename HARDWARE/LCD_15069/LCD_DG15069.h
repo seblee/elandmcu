@@ -3,7 +3,7 @@
 
 #include "stm8l15x_lcd.h"
 /*
-//×îÉÏ·½Í¨µÀºÅ¶ÔÓ¦RAMÇøµØÖ·
+//æœ€ä¸Šæ–¹é€šé“å·å¯¹åº”RAMåŒºåœ°å€
 typedef enum
 {
     LCD_NUM_1_RAM = LCD->RAM[LCD_RAMRegister_0],
@@ -15,7 +15,7 @@ typedef enum
     LCD_NUM_7_RAM = LCD->RAM[LCD_RAMRegister_],
     LCD_NUM_8_RAM = LCD->RAM[LCD_RAMRegister_0]
 }LCD_NUM_1_8_RAM_TypeDef;
-//×îÉÏ·½Í¨µÀºÅ¶ÔËùÔÚÎ»µØÖ·£¬ÀıÈç"1"ÔÚ LCD_NUM_1_RAM µÄµÚ0x04Î»ÖÃ
+//æœ€ä¸Šæ–¹é€šé“å·å¯¹æ‰€åœ¨ä½åœ°å€ï¼Œä¾‹å¦‚"1"åœ¨ LCD_NUM_1_RAM çš„ç¬¬0x04ä½ç½®
 typedef enum
 {
     LCD_NUM_1_BIT  = 0x04, 
@@ -29,7 +29,7 @@ typedef enum
 }LCD_NUM_1_8_BIT_TypeDef;
 
 
-//±¨¾¯Ö¸Ê¾¶ÔÓ¦RAMÇøµØÖ·
+//æŠ¥è­¦æŒ‡ç¤ºå¯¹åº”RAMåŒºåœ°å€
 typedef enum
 {
     LCD_FIRE_T1_RAM  = LCD->RAM[LCD_RAMRegister_0] 
@@ -41,7 +41,7 @@ typedef enum
     LCD_FIRE_T7_RAM  = LCD->RAM[LCD_RAMRegister_]
     LCD_FIRE_T8_RAM  = LCD->RAM[LCD_RAMRegister_0]
 }LCD_FIRE_T1_T8_RAM_TypeDef;
-//±¨¾¯Ö¸Ê¾ËùÔÚÎ»µØÖ·
+//æŠ¥è­¦æŒ‡ç¤ºæ‰€åœ¨ä½åœ°å€
 typedef enum
 {
     LCD_FIRE_T1_BIT  = 0x02, 
@@ -54,7 +54,7 @@ typedef enum
     LCD_FIRE_T8_BIT  = 0x10   
 }LCD_FIRE_T1_T8_BIT_TypeDef;
 
-//¹ÊÕÏÖ¸Ê¾¶ÔÓ¦RAMÇøµØÖ·
+//æ•…éšœæŒ‡ç¤ºå¯¹åº”RAMåŒºåœ°å€
 typedef enum
 {
     LCD_FAULT_T11_RAM  = LCD->RAM[LCD_RAMRegister_0], 
@@ -66,7 +66,7 @@ typedef enum
     LCD_FAULT_T17_RAM  = LCD->RAM[LCD_RAMRegister_],
     LCD_FAULT_T18_RAM  = LCD->RAM[LCD_RAMRegister_0]   
 }LCD_FAULT_T11_T18_RAM_TypeDef;
-//¹ÊÕÏÖ¸Ê¾ËùÔÚÎ»µØÖ·
+//æ•…éšœæŒ‡ç¤ºæ‰€åœ¨ä½åœ°å€
 typedef enum
 {
     LCD_FAULT_T11_BIT  = 0x01, 
@@ -81,113 +81,105 @@ typedef enum
 
 */
 
+//æœ€ä¸Šæ–¹é€šé“å·å¯¹åº”RAMåŒºåœ°å€
+#define LCD_NUM_1_RAM LCD->RAM[LCD_RAMRegister_0]
+#define LCD_NUM_2_RAM LCD->RAM[LCD_RAMRegister_]
+#define LCD_NUM_3_RAM LCD->RAM[LCD_RAMRegister_]
+#define LCD_NUM_4_RAM LCD->RAM[LCD_RAMRegister_]
+#define LCD_NUM_5_RAM LCD->RAM[LCD_RAMRegister_]
+#define LCD_NUM_6_RAM LCD->RAM[LCD_RAMRegister_]
+#define LCD_NUM_7_RAM LCD->RAM[LCD_RAMRegister_]
+#define LCD_NUM_8_RAM LCD->RAM[LCD_RAMRegister_0]
+//æœ€ä¸Šæ–¹é€šé“å·å¯¹æ‰€åœ¨ä½åœ°å€
+#define LCD_NUM_1_BIT 0x04
+#define LCD_NUM_2_BIT 0x04
+#define LCD_NUM_3_BIT 0x04
+#define LCD_NUM_4_BIT 0x04
+#define LCD_NUM_5_BIT 0x40
+#define LCD_NUM_6_BIT 0x40
+#define LCD_NUM_7_BIT 0x40
+#define LCD_NUM_8_BIT 0x40
 
-//×îÉÏ·½Í¨µÀºÅ¶ÔÓ¦RAMÇøµØÖ·
-#define LCD_NUM_1_RAM   LCD->RAM[LCD_RAMRegister_0] 
-#define LCD_NUM_2_RAM   LCD->RAM[LCD_RAMRegister_]
-#define LCD_NUM_3_RAM   LCD->RAM[LCD_RAMRegister_]
-#define LCD_NUM_4_RAM   LCD->RAM[LCD_RAMRegister_]
-#define LCD_NUM_5_RAM   LCD->RAM[LCD_RAMRegister_]
-#define LCD_NUM_6_RAM   LCD->RAM[LCD_RAMRegister_]
-#define LCD_NUM_7_RAM   LCD->RAM[LCD_RAMRegister_]
-#define LCD_NUM_8_RAM   LCD->RAM[LCD_RAMRegister_0]
-//×îÉÏ·½Í¨µÀºÅ¶ÔËùÔÚÎ»µØÖ·
-#define LCD_NUM_1_BIT  0x04
-#define LCD_NUM_2_BIT  0x04
-#define LCD_NUM_3_BIT  0x04
-#define LCD_NUM_4_BIT  0x04
-#define LCD_NUM_5_BIT  0x40
-#define LCD_NUM_6_BIT  0x40
-#define LCD_NUM_7_BIT  0x40
-#define LCD_NUM_8_BIT  0x40
-
-//±¨¾¯Ö¸Ê¾¶ÔÓ¦RAMÇøµØÖ·
-#define LCD_FIRE_T1_RAM   LCD->RAM[LCD_RAMRegister_0] 
-#define LCD_FIRE_T2_RAM   LCD->RAM[LCD_RAMRegister_]
-#define LCD_FIRE_T3_RAM   LCD->RAM[LCD_RAMRegister_]
-#define LCD_FIRE_T4_RAM   LCD->RAM[LCD_RAMRegister_]
-#define LCD_FIRE_T5_RAM   LCD->RAM[LCD_RAMRegister_]
-#define LCD_FIRE_T6_RAM   LCD->RAM[LCD_RAMRegister_]
-#define LCD_FIRE_T7_RAM   LCD->RAM[LCD_RAMRegister_]
-#define LCD_FIRE_T8_RAM   LCD->RAM[LCD_RAMRegister_0]
-//±¨¾¯Ö¸Ê¾ËùÔÚÎ»µØÖ·
-#define LCD_FIRE_T1_BIT   0x02 
-#define LCD_FIRE_T2_BIT   0x02
-#define LCD_FIRE_T3_BIT   0x02
-#define LCD_FIRE_T4_BIT   0x02
-#define LCD_FIRE_T5_BIT   0x10
-#define LCD_FIRE_T6_BIT   0x10
-#define LCD_FIRE_T7_BIT   0x10
-#define LCD_FIRE_T8_BIT   0x10 
-//¹ÊÕÏÖ¸Ê¾¶ÔÓ¦RAMÇøµØÖ·
-#define LCD_FAULT_TT1_RAM   LCD->RAM[LCD_RAMRegister_0] 
-#define LCD_FAULT_TT2_RAM   LCD->RAM[LCD_RAMRegister_]
-#define LCD_FAULT_TT3_RAM   LCD->RAM[LCD_RAMRegister_]
-#define LCD_FAULT_TT4_RAM   LCD->RAM[LCD_RAMRegister_]
-#define LCD_FAULT_TT5_RAM   LCD->RAM[LCD_RAMRegister_]
-#define LCD_FAULT_TT6_RAM   LCD->RAM[LCD_RAMRegister_]
-#define LCD_FAULT_TT7_RAM   LCD->RAM[LCD_RAMRegister_]
-#define LCD_FAULT_TT8_RAM   LCD->RAM[LCD_RAMRegister_0]
-//¹ÊÕÏÖ¸Ê¾ËùÔÚÎ»µØÖ·
-#define LCD_FAULT_T11_BIT  0x01 
-#define LCD_FAULT_T12_BIT  0x01
-#define LCD_FAULT_T13_BIT  0x01
-#define LCD_FAULT_T14_BIT  0x01
-#define LCD_FAULT_T15_BIT  0x08
-#define LCD_FAULT_T16_BIT  0x08
-#define LCD_FAULT_T17_BIT  0x08
-#define LCD_FAULT_T18_BIT  0x08 
+//æŠ¥è­¦æŒ‡ç¤ºå¯¹åº”RAMåŒºåœ°å€
+#define LCD_FIRE_T1_RAM LCD->RAM[LCD_RAMRegister_0]
+#define LCD_FIRE_T2_RAM LCD->RAM[LCD_RAMRegister_]
+#define LCD_FIRE_T3_RAM LCD->RAM[LCD_RAMRegister_]
+#define LCD_FIRE_T4_RAM LCD->RAM[LCD_RAMRegister_]
+#define LCD_FIRE_T5_RAM LCD->RAM[LCD_RAMRegister_]
+#define LCD_FIRE_T6_RAM LCD->RAM[LCD_RAMRegister_]
+#define LCD_FIRE_T7_RAM LCD->RAM[LCD_RAMRegister_]
+#define LCD_FIRE_T8_RAM LCD->RAM[LCD_RAMRegister_0]
+//æŠ¥è­¦æŒ‡ç¤ºæ‰€åœ¨ä½åœ°å€
+#define LCD_FIRE_T1_BIT 0x02
+#define LCD_FIRE_T2_BIT 0x02
+#define LCD_FIRE_T3_BIT 0x02
+#define LCD_FIRE_T4_BIT 0x02
+#define LCD_FIRE_T5_BIT 0x10
+#define LCD_FIRE_T6_BIT 0x10
+#define LCD_FIRE_T7_BIT 0x10
+#define LCD_FIRE_T8_BIT 0x10
+//æ•…éšœæŒ‡ç¤ºå¯¹åº”RAMåŒºåœ°å€
+#define LCD_FAULT_TT1_RAM LCD->RAM[LCD_RAMRegister_0]
+#define LCD_FAULT_TT2_RAM LCD->RAM[LCD_RAMRegister_]
+#define LCD_FAULT_TT3_RAM LCD->RAM[LCD_RAMRegister_]
+#define LCD_FAULT_TT4_RAM LCD->RAM[LCD_RAMRegister_]
+#define LCD_FAULT_TT5_RAM LCD->RAM[LCD_RAMRegister_]
+#define LCD_FAULT_TT6_RAM LCD->RAM[LCD_RAMRegister_]
+#define LCD_FAULT_TT7_RAM LCD->RAM[LCD_RAMRegister_]
+#define LCD_FAULT_TT8_RAM LCD->RAM[LCD_RAMRegister_0]
+//æ•…éšœæŒ‡ç¤ºæ‰€åœ¨ä½åœ°å€
+#define LCD_FAULT_T11_BIT 0x01
+#define LCD_FAULT_T12_BIT 0x01
+#define LCD_FAULT_T13_BIT 0x01
+#define LCD_FAULT_T14_BIT 0x01
+#define LCD_FAULT_T15_BIT 0x08
+#define LCD_FAULT_T16_BIT 0x08
+#define LCD_FAULT_T17_BIT 0x08
+#define LCD_FAULT_T18_BIT 0x08
 
 /*
-    ÒÔÏÂÖ¸Ê¾ µ¥¶À¿ØÖÆ£¬²»Éè¼Æ×¨ÓÃÉèÖÃº¯Êı
+    ä»¥ä¸‹æŒ‡ç¤º å•ç‹¬æ§åˆ¶ï¼Œä¸è®¾è®¡ä¸“ç”¨è®¾ç½®å‡½æ•°
 */
-//ºº×Ö"µØÖ·"¶ÔÓ¦RAMÇøµØÖ·
-#define LCD_ADD_HZ_T9_RAM   LCD->RAM[LCD_RAMRegister_]
+//æ±‰å­—"åœ°å€"å¯¹åº”RAMåŒºåœ°å€
+#define LCD_ADD_HZ_T9_RAM LCD->RAM[LCD_RAMRegister_]
 
-//ºº×Ö"ãĞÖµ"¶ÔÓ¦RAMÇøµØÖ·
-#define LCD_VPT_HZ_T10_RAM   LCD->RAM[LCD_RAMRegister_0]
+//æ±‰å­—"é˜ˆå€¼"å¯¹åº”RAMåŒºåœ°å€
+#define LCD_VPT_HZ_T10_RAM LCD->RAM[LCD_RAMRegister_0]
 
-//ºº×Ö"¹ÊÕÏ±¨¾¯"¶ÔÓ¦RAMÇøµØÖ·
-#define LCD_FAULT_FIRE_HZ_T19_RAM   LCD->RAM[LCD_RAMRegister_1] 
+//æ±‰å­—"æ•…éšœæŠ¥è­¦"å¯¹åº”RAMåŒºåœ°å€
+#define LCD_FAULT_FIRE_HZ_T19_RAM LCD->RAM[LCD_RAMRegister_1]
 
-//ÎÂ¶Èµ¥Î»"¡æ"¶ÔÓ¦RAMÇøµØÖ·
-#define LCD_TEMP_UNIT_T20_RAM   LCD->RAM[LCD_RAMRegister_]
+//æ¸©åº¦å•ä½"â„ƒ"å¯¹åº”RAMåŒºåœ°å€
+#define LCD_TEMP_UNIT_T20_RAM LCD->RAM[LCD_RAMRegister_]
 
-//µçÑ¹µ¥Î»"V"¶ÔÓ¦RAMÇøµØÖ·
-#define LCD_V_UNIT_T21_RAM   LCD->RAM[LCD_RAMRegister_]
+//ç”µå‹å•ä½"V"å¯¹åº”RAMåŒºåœ°å€
+#define LCD_V_UNIT_T21_RAM LCD->RAM[LCD_RAMRegister_]
 
-//µçÁ÷µ¥Î»"A"¶ÔÓ¦RAMÇøµØÖ·
-#define LCD_A_UNIT_T23_RAM   LCD->RAM[LCD_RAMRegister_0]
+//ç”µæµå•ä½"A"å¯¹åº”RAMåŒºåœ°å€
+#define LCD_A_UNIT_T23_RAM LCD->RAM[LCD_RAMRegister_0]
 
-//µçÁ÷µ¥Î»"m"¶ÔÓ¦RAMÇøµØÖ·
-#define LCD_M_UNIT_T22_RAM   LCD->RAM[LCD_RAMRegister_]
-
-
+//ç”µæµå•ä½"m"å¯¹åº”RAMåŒºåœ°å€
+#define LCD_M_UNIT_T22_RAM LCD->RAM[LCD_RAMRegister_]
 
 #define LCD_FIRE_SET(N)
 #define LCD_FIRE_CLEAR(N)
-#define LCD_FAULT_SET(N) 
-#define LCD_FAULT_CLEAR(N) 
+#define LCD_FAULT_SET(N)
+#define LCD_FAULT_CLEAR(N)
 
+/*åŠŸèƒ½å‡½æ•°å£°æ˜*/
+void DG15069Init(void);       //æ®µå¼æ¶²æ™¶åˆå§‹åŒ–
+void ShowLcdAll(void);        //ç‚¹äº®LCDæ‰€æœ‰åŒºåŸŸ
+void ShowNum(u8 Num);         //æ˜¾ç¤ºä¸Šæ–¹é€šé“å·ä¿¡æ¯
+void ClearNum(u8 Num);        //æ¸…é™¤ä¸Šæ–¹æŸé€šé“å·ä¿¡æ¯
+void ShowFire(u8 fireNum);    //æ˜¾ç¤ºæŸé€šé“ç«è­¦ä¿¡æ¯
+void ClearFire(u8 fireNum);   //æ¸…é™¤æŸé€šé“ç«è­¦ä¿¡æ¯
+void ShowFault(u8 faultNum);  //æ˜¾ç¤ºæŸé€šé“æ•…éšœä¿¡æ¯
+void ClearFault(u8 faultNum); //æ¸…é™¤æŸé€šé“æ•…éšœä¿¡æ¯
 
-/*¹¦ÄÜº¯ÊıÉùÃ÷*/
-void DG15069Init(void);//¶ÎÊ½Òº¾§³õÊ¼»¯
-void ShowLcdAll(void);//µãÁÁLCDËùÓĞÇøÓò
-void ShowNum(u8 Num);  //ÏÔÊ¾ÉÏ·½Í¨µÀºÅĞÅÏ¢
-void ClearNum(u8 Num);  //Çå³ıÉÏ·½Ä³Í¨µÀºÅĞÅÏ¢
-void ShowFire(u8 fireNum);  //ÏÔÊ¾Ä³Í¨µÀ»ğ¾¯ĞÅÏ¢
-void ClearFire(u8 fireNum);  //Çå³ıÄ³Í¨µÀ»ğ¾¯ĞÅÏ¢
-void ShowFault(u8 faultNum);//ÏÔÊ¾Ä³Í¨µÀ¹ÊÕÏĞÅÏ¢
-void ClearFault(u8 faultNum);//Çå³ıÄ³Í¨µÀ¹ÊÕÏĞÅÏ¢
-
-
-void ShowData(u8 chDat,u8 dat);//¸üĞÂÏÔÊ¾Í¨µÀºÅºÍÊı¾İ
-void SetParameter(void);//ÉèÖÃ²ÎÊı½çÃæ£¬5Sºó×Ô¶¯ÍË³ö
-void SetADD(void);//ÉèÖÃµØÖ·½çÃæ
-void SetTempVPT(void);//ÉèÖÃÎÂ¶ÈãĞÖµ½çÃæ
-void SetLeakVPT(void);//ÉèÖÃÂ©µçÁ÷ãĞÖµ½çÃæ
-
-
-
+void ShowData(u8 chDat, u8 dat); //æ›´æ–°æ˜¾ç¤ºé€šé“å·å’Œæ•°æ®
+void SetParameter(void);         //è®¾ç½®å‚æ•°ç•Œé¢ï¼Œ5Såè‡ªåŠ¨é€€å‡º
+void SetADD(void);               //è®¾ç½®åœ°å€ç•Œé¢
+void SetTempVPT(void);           //è®¾ç½®æ¸©åº¦é˜ˆå€¼ç•Œé¢
+void SetLeakVPT(void);           //è®¾ç½®æ¼ç”µæµé˜ˆå€¼ç•Œé¢
 
 #endif

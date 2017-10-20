@@ -2,22 +2,21 @@
 #define __LED_H_
 #include "stm8l15x_gpio.h"
 
-//LEDµÆ "LED1"¶Ë¿ÚÎ»ÖÃ¶¨Òå
-#define KEY_LED1_GPIO_TypeDef   GPIOG
-#define KEY_LED1_GPIO_PIN       GPIO_Pin_0
-//°´¼ü "LED2"¶Ë¿ÚÎ»ÖÃ¶¨Òå
-#define KEY_LED2_GPIO_TypeDef   GPIOG
-#define KEY_LED2_GPIO_PIN       GPIO_Pin_1
-//°´¼ü "LED3"¶Ë¿ÚÎ»ÖÃ¶¨Òå
-#define KEY_LED3_GPIO_TypeDef   GPIOG
-#define KEY_LED3_GPIO_PIN       GPIO_Pin_2
+//LEDç¯ "LED1"ç«¯å£ä½ç½®å®šä¹‰
+#define KEY_LED1_GPIO_TypeDef GPIOG
+#define KEY_LED1_GPIO_PIN GPIO_Pin_0
+//æŒ‰é”® "LED2"ç«¯å£ä½ç½®å®šä¹‰
+#define KEY_LED2_GPIO_TypeDef GPIOG
+#define KEY_LED2_GPIO_PIN GPIO_Pin_1
+//æŒ‰é”® "LED3"ç«¯å£ä½ç½®å®šä¹‰
+#define KEY_LED3_GPIO_TypeDef GPIOG
+#define KEY_LED3_GPIO_PIN GPIO_Pin_2
 
 #define LED1 0x01
 #define LED2 0x02
 #define LED3 0x03
 
-
-void LedInit(void);//LED³õÊ¼»¯
-void LedDispose(void);//LED´¦Àí
+void LedInit(void);    //LEDåˆå§‹åŒ–
+void LedDispose(void); //LEDå¤„ç†
 
 #endif

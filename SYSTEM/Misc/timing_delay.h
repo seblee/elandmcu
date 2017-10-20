@@ -17,7 +17,7 @@
   *
   * <h2><center>&copy; COPYRIGHT 2011 STMicroelectronics</center></h2>
   ******************************************************************************
-  */ 
+  */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __TIMING_DELAY_H
@@ -32,6 +32,7 @@
 /* Exported variables --------------------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
 void Delay(__IO uint32_t nTime);
+void Delay_By_nop(__IO uint16_t nCount);
 void TimingDelay_Decrement(void);
 void TimingDelay_Init(void);
 

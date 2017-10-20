@@ -7,71 +7,71 @@ const u8 NumberMap[10]=
 };
 */
 
-/*¹¦ÄÜº¯ÊıÊµÏÖ*/
-void DG15069Init(void)//¶ÎÊ½Òº¾§³õÊ¼»¯
+/*åŠŸèƒ½å‡½æ•°å®ç°*/
+void DG15069Init(void) //æ®µå¼æ¶²æ™¶åˆå§‹åŒ–
 {
-    LCD_DeInit();//LCDÏà¹Ø¼Ä´æÆ÷»Ö¸´Ä¬ÈÏÖµ  
+    LCD_DeInit(); //LCDç›¸å…³å¯„å­˜å™¨æ¢å¤é»˜è®¤å€¼
     /* Enable LCD/RTC clock */
     CLK_PeripheralClockConfig(CLK_Peripheral_RTC, ENABLE);
     CLK_PeripheralClockConfig(CLK_Peripheral_LCD, ENABLE);
-   
-    #ifdef USE_LSE
+
+#ifdef USE_LSE
     CLK_RTCClockConfig(CLK_RTCCLKSource_LSE, CLK_RTCCLKDiv_1);
-    #else
+#else
     CLK_RTCClockConfig(CLK_RTCCLKSource_LSI, CLK_RTCCLKDiv_1);
-    #endif
-   
+#endif
+
     /* Initialize the LCD */
-    LCD_Init(LCD_Prescaler_1, LCD_Divider_31, LCD_Duty_1_4, 
-                           LCD_Bias_1_3, LCD_VoltageSource_External);
-    
+    LCD_Init(LCD_Prescaler_1, LCD_Divider_31, LCD_Duty_1_4,
+             LCD_Bias_1_3, LCD_VoltageSource_External);
+
     /* Mask register
     For declare the segements used.
     in the Discovery we use 0 to 15 segments. */
     LCD_PortMaskConfig(LCD_PortMaskRegister_0, 0xFF);
     LCD_PortMaskConfig(LCD_PortMaskRegister_1, 0xFF);
-   // LCD_PortMaskConfig(LCD_PortMaskRegister_2, 0xff);
-    
+    // LCD_PortMaskConfig(LCD_PortMaskRegister_2, 0xff);
+
     /* To set contrast to mean value */
-   // LCD_ContrastConfig(LCD_Contrast_3V0);
+    // LCD_ContrastConfig(LCD_Contrast_3V0);
     LCD_ContrastConfig(LCD_Contrast_Level_4);
-    
+
     LCD_DeadTimeConfig(LCD_DeadTime_0);
     LCD_PulseOnDurationConfig(LCD_PulseOnDuration_1);
-    
-    /* Enable LCD peripheral */ 
+
+    /* Enable LCD peripheral */
     LCD_Cmd(ENABLE);
 }
-/*µãÁÁLCDËùÓĞÇøÓò*/
+/*ç‚¹äº®LCDæ‰€æœ‰åŒºåŸŸ*/
 void ShowLcdAll(void)
 {
-    
-    LCD_WriteRAM(LCD_RAMRegister_0,0xff);
 
-    LCD_WriteRAM(LCD_RAMRegister_1,0xff);
+    LCD_WriteRAM(LCD_RAMRegister_0, 0xff);
 
-    LCD_WriteRAM(LCD_RAMRegister_3,0xff);
-    LCD_WriteRAM(LCD_RAMRegister_4,0xff); 
-    LCD_WriteRAM(LCD_RAMRegister_5,0xff);
-    LCD_WriteRAM(LCD_RAMRegister_7,0xff);
-    LCD_WriteRAM(LCD_RAMRegister_8,0xff); 
-    LCD_WriteRAM(LCD_RAMRegister_10,0xff);
-    LCD_WriteRAM(LCD_RAMRegister_11,0xff);
-    LCD_WriteRAM(LCD_RAMRegister_12,0xff); 
+    LCD_WriteRAM(LCD_RAMRegister_1, 0xff);
+
+    LCD_WriteRAM(LCD_RAMRegister_3, 0xff);
+    LCD_WriteRAM(LCD_RAMRegister_4, 0xff);
+    LCD_WriteRAM(LCD_RAMRegister_5, 0xff);
+    LCD_WriteRAM(LCD_RAMRegister_7, 0xff);
+    LCD_WriteRAM(LCD_RAMRegister_8, 0xff);
+    LCD_WriteRAM(LCD_RAMRegister_10, 0xff);
+    LCD_WriteRAM(LCD_RAMRegister_11, 0xff);
+    LCD_WriteRAM(LCD_RAMRegister_12, 0xff);
 }
 /*
-    ¹¦ÄÜ£ºÓÃÓÚÏÔÊ¾ÉÏ·½Í¨µÀºÅĞÅÏ¢
-    ²ÎÊı£ºÍ¨µÀºÅ 1-8 
+    åŠŸèƒ½ï¼šç”¨äºæ˜¾ç¤ºä¸Šæ–¹é€šé“å·ä¿¡æ¯
+    å‚æ•°ï¼šé€šé“å· 1-8 
 */
-void ShowNum(u8 Num)  //ÏÔÊ¾ÉÏ·½Í¨µÀºÅĞÅÏ¢
+void ShowNum(u8 Num) //æ˜¾ç¤ºä¸Šæ–¹é€šé“å·ä¿¡æ¯
 {
-    if((8<Num)||(1>Num))//Í¨µÀºÅÅĞ¶Ï£¬³¬³ö·¶Î§£¬Ö±½Ó·µ»Ø
+    if ((8 < Num) || (1 > Num)) //é€šé“å·åˆ¤æ–­ï¼Œè¶…å‡ºèŒƒå›´ï¼Œç›´æ¥è¿”å›
         return;
-    switch(Num)
+    switch (Num)
     {
     case 1:
-        LCD->RAM[LCD_RAMRegister_0] = LCD->RAM[LCD_RAMRegister_0]||LCD_NUM_1_BIT;
-        break; 
+        LCD->RAM[LCD_RAMRegister_0] = LCD->RAM[LCD_RAMRegister_0] || LCD_NUM_1_BIT;
+        break;
     case 2:
         break;
     case 3:
@@ -89,20 +89,19 @@ void ShowNum(u8 Num)  //ÏÔÊ¾ÉÏ·½Í¨µÀºÅĞÅÏ¢
     default:
         break;
     }
-  
 }
 /*
-    ¹¦ÄÜ£ºÓÃÓÚÇå³ıÉÏ·½Í¨µÀºÅĞÅÏ¢
-    ²ÎÊı£ºÍ¨µÀºÅ 1-8 
+    åŠŸèƒ½ï¼šç”¨äºæ¸…é™¤ä¸Šæ–¹é€šé“å·ä¿¡æ¯
+    å‚æ•°ï¼šé€šé“å· 1-8 
 */
-void ClearNum(u8 Num)  //Çå³ıÉÏ·½Ä³Í¨µÀºÅĞÅÏ¢
+void ClearNum(u8 Num) //æ¸…é™¤ä¸Šæ–¹æŸé€šé“å·ä¿¡æ¯
 {
-    if((8<Num)||(1>Num))//Í¨µÀºÅÅĞ¶Ï£¬³¬³ö·¶Î§£¬Ö±½Ó·µ»Ø
+    if ((8 < Num) || (1 > Num)) //é€šé“å·åˆ¤æ–­ï¼Œè¶…å‡ºèŒƒå›´ï¼Œç›´æ¥è¿”å›
         return;
-    switch(Num)
+    switch (Num)
     {
     case 1:
-        break; 
+        break;
     case 2:
         break;
     case 3:
@@ -123,110 +122,108 @@ void ClearNum(u8 Num)  //Çå³ıÉÏ·½Ä³Í¨µÀºÅĞÅÏ¢
 }
 
 /*
-    ¹¦ÄÜ£ºÓÃÓÚÏÔÊ¾Ä³Í¨µÀµÄ¹ÊÕÏĞÅÏ¢
-    ²ÎÊı£ºÍ¨µÀºÅ 1-8 
+    åŠŸèƒ½ï¼šç”¨äºæ˜¾ç¤ºæŸé€šé“çš„æ•…éšœä¿¡æ¯
+    å‚æ•°ï¼šé€šé“å· 1-8 
 */
-void ShowFault(u8 faultNum)//ÏÔÊ¾Ä³Í¨µÀ¹ÊÕÏĞÅÏ¢
+void ShowFault(u8 faultNum) //æ˜¾ç¤ºæŸé€šé“æ•…éšœä¿¡æ¯
 {
-    if((8<faultNum)||(1>faultNum))//Í¨µÀºÅÅĞ¶Ï£¬³¬³ö·¶Î§£¬Ö±½Ó·µ»Ø
+    if ((8 < faultNum) || (1 > faultNum)) //é€šé“å·åˆ¤æ–­ï¼Œè¶…å‡ºèŒƒå›´ï¼Œç›´æ¥è¿”å›
         return;
-    switch(faultNum)
+    switch (faultNum)
     {
     case 1:
-        
-        break; 
-    case 2:
-        break;
-    case 3:
-        break;
-    case 4:
-        break;
-    case 5:
-        break;
-    case 6:
-        break;
-    case 7:
-        break;
-    case 8:
-        break;
-    default:
-        break;
-    }
-    
-}
-/*
-    ¹¦ÄÜ£ºÓÃÓÚÇå³ıÄ³Í¨µÀµÄ¹ÊÕÏĞÅÏ¢
-    ²ÎÊı£ºÍ¨µÀºÅ 1-8 
-*/
-void ClearFault(u8 faultNum)//Çå³ıÄ³Í¨µÀ¹ÊÕÏĞÅÏ¢
-{
-    if((8<faultNum)||(1>faultNum))//Í¨µÀºÅÅĞ¶Ï£¬³¬³ö·¶Î§£¬Ö±½Ó·µ»Ø
-        return;
-    switch(faultNum)
-    {
-    case 1:
-        break; 
-    case 2:
-        break;
-    case 3:
-        break;
-    case 4:
-        break;
-    case 5:
-        break;
-    case 6:
-        break;
-    case 7:
-        break;
-    case 8:
-        break;
-    default:
-        break;
-    }
-}
-/*
-    ¹¦ÄÜ£ºÓÃÓÚÏÔÊ¾Ä³Í¨µÀµÄ»ğ¾¯ĞÅÏ¢
-    ²ÎÊı£ºÍ¨µÀºÅ 1-8 
-*/
-void ShowFire(u8 fireNum)  //ÏÔÊ¾Ä³Í¨µÀ»ğ¾¯ĞÅÏ¢
-{
-    if((8<fireNum)||(1>fireNum))//Í¨µÀºÅÅĞ¶Ï£¬³¬³ö·¶Î§£¬Ö±½Ó·µ»Ø
-        return;
-    switch(fireNum)
-    {
-    case 1:
-        break; 
-    case 2:
-        break;
-    case 3:
-        break;
-    case 4:
-        break;
-    case 5:
-        break;
-    case 6:
-        break;
-    case 7:
-        break;
-    case 8:
-        break;
-    default:
-        break;
-    }
 
+        break;
+    case 2:
+        break;
+    case 3:
+        break;
+    case 4:
+        break;
+    case 5:
+        break;
+    case 6:
+        break;
+    case 7:
+        break;
+    case 8:
+        break;
+    default:
+        break;
+    }
 }
 /*
-    ¹¦ÄÜ£ºÓÃÓÚÇå³ıÄ³Í¨µÀµÄ»ğ¾¯ĞÅÏ¢
-    ²ÎÊı£ºÍ¨µÀºÅ 1-8 
+    åŠŸèƒ½ï¼šç”¨äºæ¸…é™¤æŸé€šé“çš„æ•…éšœä¿¡æ¯
+    å‚æ•°ï¼šé€šé“å· 1-8 
 */
-void ClearFire(u8 fireNum)  //Çå³ıÄ³Í¨µÀ»ğ¾¯ĞÅÏ¢
+void ClearFault(u8 faultNum) //æ¸…é™¤æŸé€šé“æ•…éšœä¿¡æ¯
 {
-    if((8<fireNum)||(1>fireNum))//Í¨µÀºÅÅĞ¶Ï£¬³¬³ö·¶Î§£¬Ö±½Ó·µ»Ø
+    if ((8 < faultNum) || (1 > faultNum)) //é€šé“å·åˆ¤æ–­ï¼Œè¶…å‡ºèŒƒå›´ï¼Œç›´æ¥è¿”å›
         return;
-    switch(fireNum)
+    switch (faultNum)
     {
     case 1:
-        break; 
+        break;
+    case 2:
+        break;
+    case 3:
+        break;
+    case 4:
+        break;
+    case 5:
+        break;
+    case 6:
+        break;
+    case 7:
+        break;
+    case 8:
+        break;
+    default:
+        break;
+    }
+}
+/*
+    åŠŸèƒ½ï¼šç”¨äºæ˜¾ç¤ºæŸé€šé“çš„ç«è­¦ä¿¡æ¯
+    å‚æ•°ï¼šé€šé“å· 1-8 
+*/
+void ShowFire(u8 fireNum) //æ˜¾ç¤ºæŸé€šé“ç«è­¦ä¿¡æ¯
+{
+    if ((8 < fireNum) || (1 > fireNum)) //é€šé“å·åˆ¤æ–­ï¼Œè¶…å‡ºèŒƒå›´ï¼Œç›´æ¥è¿”å›
+        return;
+    switch (fireNum)
+    {
+    case 1:
+        break;
+    case 2:
+        break;
+    case 3:
+        break;
+    case 4:
+        break;
+    case 5:
+        break;
+    case 6:
+        break;
+    case 7:
+        break;
+    case 8:
+        break;
+    default:
+        break;
+    }
+}
+/*
+    åŠŸèƒ½ï¼šç”¨äºæ¸…é™¤æŸé€šé“çš„ç«è­¦ä¿¡æ¯
+    å‚æ•°ï¼šé€šé“å· 1-8 
+*/
+void ClearFire(u8 fireNum) //æ¸…é™¤æŸé€šé“ç«è­¦ä¿¡æ¯
+{
+    if ((8 < fireNum) || (1 > fireNum)) //é€šé“å·åˆ¤æ–­ï¼Œè¶…å‡ºèŒƒå›´ï¼Œç›´æ¥è¿”å›
+        return;
+    switch (fireNum)
+    {
+    case 1:
+        break;
     case 2:
         break;
     case 3:

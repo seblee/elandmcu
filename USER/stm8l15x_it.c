@@ -30,6 +30,8 @@
 #include "stm8l15x_it.h"
 
 #include "timing_delay.h"
+#include "timer.h"
+#include "usart.h"
 /** @addtogroup STM8L15x_StdPeriph_Template
   * @{
   */
@@ -363,6 +365,8 @@ INTERRUPT_HANDLER(TIM4_UPD_OVF_TRG_IRQHandler, 25)
     /* In order to detect unexpected events during development,
        it is recommended to set a breakpoint on the following instruction.
     */
+    TIM4_UPD_OVF();
+    TIM4_ClearITPendingBit(TIM4_IT_Update);
 }
 /**
   * @brief SPI1 Interrupt routine.
@@ -398,6 +402,7 @@ INTERRUPT_HANDLER(USART1_RX_TIM5_CC_IRQHandler, 28)
     /* In order to detect unexpected events during development,
        it is recommended to set a breakpoint on the following instruction.
     */
+    USART1_RX_Service();
 }
 
 /**

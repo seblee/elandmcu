@@ -259,10 +259,11 @@
           <name>CCIncludePath2</name>
           <state>$PROJ_DIR$</state>
           <state>$PROJ_DIR$\..\STM8L15x_StdPeriph_Driver\inc</state>
-          <state>$PROJ_DIR$\..\HARDWARE\KEY</state>
-          <state>$PROJ_DIR$\..\HARDWARE\LED</state>
-          <state>$PROJ_DIR$\..\HARDWARE\LCD_15069</state>
           <state>$PROJ_DIR$\..\SYSTEM\Misc</state>
+          <state>$PROJ_DIR$\..\SYSTEM\SYS</state>
+          <state>$PROJ_DIR$\..\HARDWARE\USART</state>
+          <state>$PROJ_DIR$\..\HARDWARE\TIMER</state>
+          <state>$PROJ_DIR$\..\HARDWARE\GPIO</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -1595,6 +1596,36 @@
   </configuration>
   <group>
     <name>HARDWARE</name>
+    <group>
+      <name>GPIO</name>
+      <file>
+        <name>$PROJ_DIR$\..\HARDWARE\GPIO\gpio.c</name>
+      </file>
+    </group>
+    <group>
+      <name>IWDG</name>
+      <file>
+        <name>$PROJ_DIR$\..\HARDWARE\IWDG\iwdg.c</name>
+      </file>
+    </group>
+    <group>
+      <name>RGBLED</name>
+      <file>
+        <name>$PROJ_DIR$\..\HARDWARE\RGBLED\rgbled.c</name>
+      </file>
+    </group>
+    <group>
+      <name>TIMER</name>
+      <file>
+        <name>$PROJ_DIR$\..\HARDWARE\TIMER\timer.c</name>
+      </file>
+    </group>
+    <group>
+      <name>USART</name>
+      <file>
+        <name>$PROJ_DIR$\..\HARDWARE\USART\usart.c</name>
+      </file>
+    </group>
   </group>
   <group>
     <name>STM8L15x_StdPeriph_Driver</name>
@@ -1689,6 +1720,12 @@
       <name>Misc</name>
       <file>
         <name>$PROJ_DIR$\..\SYSTEM\Misc\timing_delay.c</name>
+      </file>
+    </group>
+    <group>
+      <name>SYS</name>
+      <file>
+        <name>$PROJ_DIR$\..\SYSTEM\SYS\syscfg.c</name>
       </file>
     </group>
   </group>
