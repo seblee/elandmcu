@@ -264,6 +264,7 @@
           <state>$PROJ_DIR$\..\HARDWARE\USART</state>
           <state>$PROJ_DIR$\..\HARDWARE\TIMER</state>
           <state>$PROJ_DIR$\..\HARDWARE\GPIO</state>
+          <state>$PROJ_DIR$\..\HARDWARE\RGBLED</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>

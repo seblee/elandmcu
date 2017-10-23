@@ -32,7 +32,7 @@
 /* Exported variables --------------------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
 void Delay(__IO uint32_t nTime);
-void Delay_By_nop(__IO uint16_t nCount);
+void Delay_By_nop(__IO uint32_t nCount);
 void TimingDelay_Decrement(void);
 void TimingDelay_Init(void);
 
