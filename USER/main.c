@@ -16,6 +16,8 @@
 #include "timer.h"
 #include "rgbled.h"
 #include "timing_delay.h"
+#include "iwdg.h"
+#include "lcd_eland.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -37,26 +39,41 @@ void main(void)
 {
     disableInterrupts();
     SysClock_Init();
-    //TIM4_Init();
+    TIM4_Init();
     enableInterrupts();
-    GPIO_SetBits(LED_BACK_PORT, LED_BACK_PIN);
+    IWDG_Config();
+    RGBLED_CFG();
+    TIM3_SetCompare1(TIM3_PERIOD);
+    TIM3_SetCompare2(TIM3_PERIOD);
+    TIM5_SetCompare1(TIM5_PERIOD);
+    TIM5_SetCompare2(TIM5_PERIOD);
+    LCD_ELAND_Init();
+    LCD_ELAND_Display_All();
+
+    // LCD->CR4 |= LCD_CR4_PAGECOM;
+    // LCD->RAM[LCD_RAMRegister_0] = 0xff;
+
     /* Infinite loop */
     while (1)
     {
-        /* Toggle LEDs LD1..LD4 */
-        GPIO_SetBits(LED_RED_PORT, LED_RED_PIN);
-        Delay_By_nop(0xFFFFF);
-        GPIO_ResetBits(LED_RED_PORT, LED_RED_PIN);
+        /* Reload IWDG counter */
+        IWDG_ReloadCounter();
+        // while (1)
+        // {
+        // }
 
-        GPIO_SetBits(LED_GREEN_PORT, LED_GREEN_PIN);
-        Delay_By_nop(0xFFFFF);
-        GPIO_ResetBits(LED_GREEN_PORT, LED_GREEN_PIN);
+        if (TIM3_CCR1_Val < (TIM3_PERIOD + 1))
+            TIM3_CCR1_Val++;
+        else
+            TIM3_CCR1_Val = 0;
+        // TIM3_SetCompare1(TIM3_CCR1_Val);
+        if (TIM5_CCR2_Val < (TIM5_PERIOD + 1))
+            TIM5_CCR2_Val++;
+        else
+            TIM5_CCR2_Val = 0;
+        //TIM5_SetCompare1(TIM5_CCR2_Val);
 
-        GPIO_SetBits(LED_BLUE_PORT, LED_BLUE_PIN);
-        Delay_By_nop(0xFFFFF);
-        GPIO_ResetBits(LED_BLUE_PORT, LED_BLUE_PIN);
-
-        Delay_By_nop(0xFFFFF);
+        Delay_By_nop(0xff);
     }
 }
 

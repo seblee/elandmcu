@@ -9,9 +9,17 @@
  * @brief   :
  ****************************************************************************
 **/
-#include "timer.h"
 
-#define TIM4_PERIOD 0xf9
+/* Private include -----------------------------------------------------------*/
+#include "timer.h"
+/* Private typedef -----------------------------------------------------------*/
+/* Private define ------------------------------------------------------------*/
+#define TIM4_PERIOD 124
+/* Private macro -------------------------------------------------------------*/
+/* Private variables ---------------------------------------------------------*/
+/* Private function prototypes -----------------------------------------------*/
+
+/* Private functions ---------------------------------------------------------*/
 /**
  ****************************************************************************
  * @Function : void TIM4_Init(void)
@@ -27,7 +35,7 @@ void TIM4_Init(void)
     CLK_PeripheralClockConfig(CLK_Peripheral_TIM4, ENABLE);
     /* TIM4 Peripheral Configuration */
     /* Time Base configuration */
-    TIM4_TimeBaseInit(TIM4_Prescaler_64, TIM4_PERIOD);
+    TIM4_TimeBaseInit(TIM4_Prescaler_128, TIM4_PERIOD);
     /* TIM4 update interrupt enable */
     TIM4_ITConfig(TIM4_IT_Update, ENABLE);
     /* TIM4 counter enable */

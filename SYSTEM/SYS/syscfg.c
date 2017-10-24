@@ -1,15 +1,28 @@
-#include "syscfg.h"
 /**
  ****************************************************************************
  * @Warning :Without permission from the author,Not for commercial use
  * @File    :syscfg.c
  * @Author  :Xiaowine
- * @date    :2017/10/19
+ * @date    :2017/10/23
  * @version :V 1.0.0
  *************************************************
  * @brief   :
  ****************************************************************************
-**/
+ **/
+/* Private include -----------------------------------------------------------*/
+#include "syscfg.h"
+
+/* Private typedef -----------------------------------------------------------*/
+
+/* Private define ------------------------------------------------------------*/
+
+/* Private macro -------------------------------------------------------------*/
+
+/* Private variables ---------------------------------------------------------*/
+
+/* Private function prototypes -----------------------------------------------*/
+
+/* Private functions ---------------------------------------------------------*/
 
 /**
  ****************************************************************************
@@ -33,6 +46,7 @@ void SysClock_Init(void)
     CLK_SYSCLKSourceSwitchCmd(ENABLE);
     CLK_SYSCLKDivConfig(CLK_SYSCLKDiv_1); //設置分頻
 #endif
+
 #ifndef RTC_LSE
     CLK_LSICmd(ENABLE); // 使能内部LSI OSC（38KHz）
     while (CLK_GetFlagStatus(CLK_FLAG_LSIRDY) == RESET)

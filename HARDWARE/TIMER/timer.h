@@ -11,7 +11,7 @@
 **/
 #ifndef __TIMER_H
 #define __TIMER_H
-#include "stm8l15x_conf.h"
+#include "syscfg.h"
 
 void TIM4_Init(void);
 void TIM4_UPD_OVF(void);

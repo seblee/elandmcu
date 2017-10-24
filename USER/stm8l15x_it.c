@@ -32,6 +32,7 @@
 #include "timing_delay.h"
 #include "timer.h"
 #include "usart.h"
+#include "rtc.h"
 /** @addtogroup STM8L15x_StdPeriph_Template
   * @{
   */
@@ -116,6 +117,7 @@ INTERRUPT_HANDLER(RTC_CSSLSE_IRQHandler, 4)
     /* In order to detect unexpected events during development,
        it is recommended to set a breakpoint on the following instruction.
     */
+    ELAND_RTC_ALARM_ISR();
 }
 /**
   * @brief External IT PORTE/F and PVD Interrupt routine.

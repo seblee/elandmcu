@@ -1955,6 +1955,12 @@
       </file>
     </group>
     <group>
+      <name>LCD_ELAND</name>
+      <file>
+        <name>$PROJ_DIR$\..\HARDWARE\LCD_ELAND\lcd_eland.c</name>
+      </file>
+    </group>
+    <group>
       <name>RGBLED</name>
       <file>
         <name>$PROJ_DIR$\..\HARDWARE\RGBLED\rgbled.c</name>
@@ -2066,6 +2072,12 @@
       <name>Misc</name>
       <file>
         <name>$PROJ_DIR$\..\SYSTEM\Misc\timing_delay.c</name>
+      </file>
+    </group>
+    <group>
+      <name>RTC</name>
+      <file>
+        <name>$PROJ_DIR$\..\SYSTEM\RTC\rtc.c</name>
       </file>
     </group>
     <group>

@@ -11,7 +11,7 @@
 **/
 #ifndef __USART_H_
 #define __USART_H_
-#include "stm8l15x_conf.h"
+#include "syscfg.h"
 
 void UART1_INIT(void);
 void USART1_RX_Service(void);

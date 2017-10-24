@@ -261,10 +261,12 @@
           <state>$PROJ_DIR$\..\STM8L15x_StdPeriph_Driver\inc</state>
           <state>$PROJ_DIR$\..\SYSTEM\Misc</state>
           <state>$PROJ_DIR$\..\SYSTEM\SYS</state>
+          <state>$PROJ_DIR$\..\SYSTEM\RTC</state>
           <state>$PROJ_DIR$\..\HARDWARE\USART</state>
           <state>$PROJ_DIR$\..\HARDWARE\TIMER</state>
-          <state>$PROJ_DIR$\..\HARDWARE\GPIO</state>
           <state>$PROJ_DIR$\..\HARDWARE\RGBLED</state>
+          <state>$PROJ_DIR$\..\HARDWARE\LCD_ELAND</state>
+          <state>$PROJ_DIR$\..\HARDWARE\IWDG</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -1599,6 +1601,9 @@
     <name>HARDWARE</name>
     <group>
       <name>GPIO</name>
+      <excluded>
+        <configuration>Debug</configuration>
+      </excluded>
       <file>
         <name>$PROJ_DIR$\..\HARDWARE\GPIO\gpio.c</name>
       </file>
@@ -1607,6 +1612,12 @@
       <name>IWDG</name>
       <file>
         <name>$PROJ_DIR$\..\HARDWARE\IWDG\iwdg.c</name>
+      </file>
+    </group>
+    <group>
+      <name>LCD_ELAND</name>
+      <file>
+        <name>$PROJ_DIR$\..\HARDWARE\LCD_ELAND\lcd_eland.c</name>
       </file>
     </group>
     <group>
@@ -1721,6 +1732,12 @@
       <name>Misc</name>
       <file>
         <name>$PROJ_DIR$\..\SYSTEM\Misc\timing_delay.c</name>
+      </file>
+    </group>
+    <group>
+      <name>RTC</name>
+      <file>
+        <name>$PROJ_DIR$\..\SYSTEM\RTC\rtc.c</name>
       </file>
     </group>
     <group>

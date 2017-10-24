@@ -15,20 +15,26 @@
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
-#define TIM3_PERIOD
+
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
+__IO uint16_t TIM3_CCR1_Val = 0;
+__IO uint16_t TIM3_CCR2_Val = 0;
 
+__IO uint16_t TIM5_CCR1_Val = 500;
+__IO uint16_t TIM5_CCR2_Val = 0;
 /* Private function prototypes -----------------------------------------------*/
 static void RGBLED_GPIO_Cfg(void);
+static void TIM3_Config(void);
+static void TIM5_Config(void);
 /* Private functions ---------------------------------------------------------*/
 
 /**
  ****************************************************************************
  * @Function : void RGBLED_CFG(void)
  * @File     : rgbled.c
- * @Program  : NONE
+ * @Program  : none
  * @Created  : 2017/10/20 by Xiaowine
  * @Program  : PI0 TIM3---channel 1
  *             PI3 TIM3---channel 2
@@ -38,7 +44,9 @@ static void RGBLED_GPIO_Cfg(void);
 **/
 void RGBLED_CFG(void)
 {
-    RGBLED_GPIO_Cfg();
+  RGBLED_GPIO_Cfg();
+  TIM3_Config();
+  TIM5_Config();
 }
 
 /**
@@ -55,13 +63,72 @@ void RGBLED_CFG(void)
 **/
 static void RGBLED_GPIO_Cfg(void)
 {
-    GPIO_Init(GPIOI, GPIO_Pin_0 | GPIO_Pin_3, GPIO_Mode_Out_PP_Low_Fast);
-    GPIO_Init(GPIOH, GPIO_Pin_6 | GPIO_Pin_7, GPIO_Mode_Out_PP_Low_Fast);
+  /*!< TIM3 Channel 1 (PB1) remapping to PI0 */
+  SYSCFG_REMAPPinConfig(REMAP_Pin_TIM3Channel1, ENABLE);
+  /*!< TIM3 Channel 2 (PD0) remapping to PI3 */
+  SYSCFG_REMAPPinConfig(REMAP_Pin_TIM3Channel2, ENABLE);
+
+  GPIO_Init(GPIOI, GPIO_Pin_0 | GPIO_Pin_3, GPIO_Mode_Out_PP_Low_Fast);
+
+  GPIO_Init(GPIOH, GPIO_Pin_6 | GPIO_Pin_7, GPIO_Mode_Out_PP_Low_Fast);
 }
 static void TIM3_Config(void)
 {
-    /* Enable TIM3 clock */
-    CLK_PeripheralClockConfig(CLK_Peripheral_TIM3, ENABLE);
+  /* Enable TIM3 clock */
+  CLK_PeripheralClockConfig(CLK_Peripheral_TIM3, ENABLE);
+  /*
+  - TIM1CLK = 2 MHz
+  - TIM1 counter clock = TIM1CLK / TIM1_PRESCALER+1 = 2 MHz/1+1 = 1 MHz
+  */
+  /* Time base configuration */
+  TIM3_TimeBaseInit(TIM3_Prescaler_16, TIM3_CounterMode_Up, TIM3_PERIOD);
+  /*
+  - The TIM1 CCR1 register value is equal to 32768:
+  - CC1 update rate = TIM1 counter clock / CCR1_Val = 30.51 Hz,
+  - So the TIM1 Channel 1 generates a periodic signal with a frequency equal to 15.25 Hz.
+  */
+  /* Toggle Mode configuration: Channel1 */
+  TIM3_OC1Init(TIM3_OCMode_PWM1, TIM3_OutputState_Enable, TIM3_CCR1_Val, TIM3_OCPolarity_High, TIM3_OCIdleState_Reset);
+  TIM3_OC1PreloadConfig(ENABLE); //输出比较1通道预加载使能
+  /*
+  - The TIM1 CCR2 register is equal to 16384:
+  - CC2 update rate = TIM1 counter clock / CCR2_Val = 61.03 Hz
+  - So the TIM1 channel 2 generates a periodic signal with a frequency equal to 30.51 Hz.
+  */
+  /* Toggle Mode configuration: Channel2 */
+  TIM3_OC2Init(TIM3_OCMode_PWM1, TIM3_OutputState_Enable, TIM3_CCR2_Val, TIM3_OCPolarity_High, TIM3_OCIdleState_Reset);
+  TIM3_OC2PreloadConfig(ENABLE); //输出比较1通道预加载使能
 
-    TIM3_TimeBaseInit(TIM3_Prescaler_128, TIM3_CounterMode_Up, );
+  TIM3_CtrlPWMOutputs(ENABLE); //PWM输出使能
+  TIM3_Cmd(ENABLE);            //使能
+}
+static void TIM5_Config(void)
+{
+  /* Enable TIM5 clock */
+  CLK_PeripheralClockConfig(CLK_Peripheral_TIM5, ENABLE);
+  /*
+  - TIM1CLK = 2 MHz
+  - TIM1 counter clock = TIM1CLK / TIM1_PRESCALER+1 = 2 MHz/1+1 = 1 MHz
+  */
+  /* Time base configuration */
+  TIM5_TimeBaseInit(TIM5_Prescaler_16, TIM5_CounterMode_Up, TIM5_PERIOD);
+  /*
+  - The TIM1 CCR1 register value is equal to 32768:
+  - CC1 update rate = TIM1 counter clock / CCR1_Val = 30.51 Hz,
+  - So the TIM1 Channel 1 generates a periodic signal with a frequency equal to 15.25 Hz.
+  */
+  /* Toggle Mode configuration: Channel1 */
+  TIM5_OC1Init(TIM5_OCMode_PWM1, TIM5_OutputState_Enable, TIM5_CCR1_Val, TIM5_OCPolarity_High, TIM5_OCIdleState_Reset);
+  TIM5_OC1PreloadConfig(ENABLE); //输出比较1通道预加载使能 TIM5_OCIdleState_Set
+  /*
+  - The TIM1 CCR2 register is equal to 16384:
+  - CC2 update rate = TIM1 counter clock / CCR2_Val = 61.03 Hz
+  - So the TIM1 channel 2 generates a periodic signal with a frequency equal to 30.51 Hz.
+  */
+  /* Toggle Mode configuration: Channel2 */
+  // TIM5_OC2Init(TIM5_OCMode_PWM1, TIM5_OutputState_Enable, TIM5_CCR2_Val, TIM5_OCPolarity_High, TIM5_OCIdleState_Reset);
+  // TIM5_OC2PreloadConfig(ENABLE); //输出比较2通道预加载使能
+
+  TIM5_CtrlPWMOutputs(ENABLE); //PWM输出使能
+  TIM5_Cmd(ENABLE);            //使能
 }
