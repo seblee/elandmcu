@@ -2,7 +2,7 @@
  ****************************************************************************
  * @Warning :Without permission from the author,Not for commercial use
  * @File    :syscfg.h
- * @Author  :Xiaowine
+ * @Author  :seblee
  * @date    :2017/10/23
  * @version :V 1.0.0
  *************************************************

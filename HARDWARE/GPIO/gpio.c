@@ -3,7 +3,7 @@
  ****************************************************************************
  * @Warning :Without permission from the author,Not for commercial use
  * @File    :gpio.c
- * @Author  :Xiaowine
+ * @Author  :seblee
  * @date    :2017/10/20
  * @version :V 1.0.0
  *************************************************
@@ -30,7 +30,7 @@
  * @Function : void GPIO_Config(void)
  * @File     : gpio.c
  * @Program  : none
- * @Created  : 2017/10/20 by Xiaowine
+ * @Created  : 2017/10/20 by seblee
  * @Brief    : cfg LED  KEY ....
  * @Version  : V1.0
 **/

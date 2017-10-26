@@ -2,7 +2,7 @@
  ****************************************************************************
  * @Warning :Without permission from the author,Not for commercial use
  * @File    :syscfg.c
- * @Author  :Xiaowine
+ * @Author  :seblee
  * @date    :2017/10/23
  * @version :V 1.0.0
  *************************************************
@@ -29,7 +29,7 @@
  * @Function : void SysClock_Init(void)
  * @File     : syscfg.c
  * @Program  :
- * @Created  : 2017/10/19 by Xiaowine
+ * @Created  : 2017/10/19 by seblee
  * @Brief    : 初始化系統時鐘
  * @Version  : V1.0
 **/

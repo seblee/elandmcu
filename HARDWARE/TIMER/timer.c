@@ -2,7 +2,7 @@
  ****************************************************************************
  * @Warning :Without permission from the author,Not for commercial use
  * @File    :timer.c
- * @Author  :Xiaowine
+ * @Author  :seblee
  * @date    :2017/10/19
  * @version :V 1.0.0
  *************************************************
@@ -30,7 +30,7 @@ __IO u32 Timer_Counter_1ms = 0;
  * @Function : void TIM4_Init(void)
  * @File     : timer.c
  * @Program  : none
- * @Created  : 2017/10/19 by Xiaowine
+ * @Created  : 2017/10/19 by seblee
  * @Brief    : system timer init
  * @Version  : V1.0
 **/
@@ -51,7 +51,7 @@ void TIM4_Init(void)
  * @Function : void TIM4_UPD_OVF(void)
  * @File     : timer.c
  * @Program  :
- * @Created  : 2017/10/19 by Xiaowine
+ * @Created  : 2017/10/19 by seblee
  * @Brief    : Tim4 interrupt service function
  * @Version  : V1.0
 **/

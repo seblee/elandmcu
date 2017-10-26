@@ -2,7 +2,7 @@
  ****************************************************************************
  * @Warning :Without permission from the author,Not for commercial use
  * @File    :key.c
- * @Author  :Xiaowine
+ * @Author  :seblee
  * @date    :2017/10/25
  * @version :V 1.0.0
  *************************************************
@@ -31,7 +31,7 @@ u8 Count = 0; //按鍵長按狀態
  * @Function : void KeyInit(void)
  * @File     : key.c
  * @Program  : none
- * @Created  : 2017/10/25 by Xiaowine
+ * @Created  : 2017/10/25 by seblee
  * @Brief    : init key gpio
  * @Version  : V1.0
 **/
@@ -51,7 +51,7 @@ void ElandKeyInit(void) //按键初始化
  * @Function : u8 Eland_PinState_Read(void)
  * @File     : key.c
  * @Program  : none
- * @Created  : 2017/10/25 by Xiaowine
+ * @Created  : 2017/10/25 by seblee
  * @Brief    : read pin state
  * @Version  : V1.0
 **/
@@ -59,19 +59,19 @@ u8 Eland_PinState_Read(void)
 {
     u8 Cache = 0;
     if (GPIO_ReadInputDataBit(ELAND_KEY_SET_PORT, ELAND_KEY_SET_PIN))
-        Cache |= 0x01; //時刻設置
+        Cache |= KEY_Set; //時刻設置
     if (GPIO_ReadInputDataBit(ELAND_KEY_SOFT_RESET_PORT, ELAND_KEY_SOFT_RESET_PIN))
-        Cache |= 0x02; //軟件復位
+        Cache |= KEY_Reset; //軟件復位
     if (GPIO_ReadInputDataBit(ELAND_KEY_ADD_PORT, ELAND_KEY_ADD_PIN))
-        Cache |= 0x04; //時間＋
+        Cache |= KEY_Add; //時間＋
     if (GPIO_ReadInputDataBit(ELAND_KEY_MINUS_PORT, ELAND_KEY_MINUS_PIN))
-        Cache |= 0x08; //時間－
+        Cache |= KEY_Minus; //時間－
     if (GPIO_ReadInputDataBit(ELAND_KEY_MON_PORT, ELAND_KEY_MON_PIN))
-        Cache |= 0x10; //mon時間
+        Cache |= KEY_MON; //mon時間
     if (GPIO_ReadInputDataBit(ELAND_KEY_ALARM_PORT, ELAND_KEY_ALARM_PIN))
-        Cache |= 0x20; //鬧鐘
+        Cache |= KEY_Alarm; //鬧鐘
     if (GPIO_ReadInputDataBit(ELAND_KEY_WIFI_PORT, ELAND_KEY_WIFI_PIN))
-        Cache |= 0x40; //wifi模式
+        Cache |= KEY_Wifi; //wifi模式
     return Cache;
 }
 /**
@@ -79,7 +79,7 @@ u8 Eland_PinState_Read(void)
  * @Function : void Eland_KeyState_Read(void)
  * @File     : key.c
  * @Program  : none
- * @Created  : 2017/10/25 by Xiaowine
+ * @Created  : 2017/10/25 by seblee
  * @Brief    : key state read
  * @Version  : V1.0
 **/

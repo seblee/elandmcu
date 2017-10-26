@@ -2,7 +2,7 @@
  ****************************************************************************
  * @Warning :Without permission from the author,Not for commercial use
  * @File    :iwdg.c
- * @Author  :Xiaowine
+ * @Author  :seblee
  * @date    :2017/10/20
  * @version :V 1.0.0
  *************************************************
@@ -15,7 +15,7 @@
  * @Function : void IWDG_Config(void)
  * @File     : iwdg.c
  * @Program  : none
- * @Created  : 2017/10/20 by Xiaowine
+ * @Created  : 2017/10/20 by seblee
  * @Brief    : iwdg configration
  * @Version  : V1.0
 **/

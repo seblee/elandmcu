@@ -2,7 +2,7 @@
  ****************************************************************************
  * @Warning :Without permission from the author,Not for commercial use
  * @File    :rgbled.c
- * @Author  :Xiaowine
+ * @Author  :seblee
  * @date    :2017/10/20
  * @version :V 1.0.0
  *************************************************
@@ -35,7 +35,7 @@ static void TIM5_Config(void);
  * @Function : void RGBLED_CFG(void)
  * @File     : rgbled.c
  * @Program  : none
- * @Created  : 2017/10/20 by Xiaowine
+ * @Created  : 2017/10/20 by seblee
  * @Program  : PI0 TIM3---channel 1
  *             PI3 TIM3---channel 2
  *             PH7 TIM5---channel 2
@@ -54,7 +54,7 @@ void RGBLED_CFG(void)
  * @Function : static void RGBLED_GPIO_Cfg(void)
  * @File     : rgbled.c
  * @Program  : none
- * @Created  : 2017/10/20 by Xiaowine
+ * @Created  : 2017/10/20 by seblee
  * @Program  : PI0 TIM3---channel 1
  *             PI3 TIM3---channel 2
  *             PH7 TIM5---channel 2

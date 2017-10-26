@@ -2,7 +2,7 @@
  ****************************************************************************
  * @Warning :Without permission from the author,Not for commercial use
  * @File    :lcd_eland.c
- * @Author  :Xiaowine
+ * @Author  :seblee
  * @date    :2017/10/23
  * @version :V 1.0.0
  *************************************************
@@ -28,7 +28,7 @@
  * @Function : void LCD_ELAND_Init(void)
  * @File     : lcd_eland.c
  * @Program  : none
- * @Created  : 2017/10/23 by Xiaowine
+ * @Created  : 2017/10/23 by seblee
  * @Brief    : init lcd driver
  * @Version  : V1.0
 **/
@@ -66,14 +66,14 @@ void LCD_ELAND_Init(void)
 }
 /**
  ****************************************************************************
- * @Function : void ELAND_LCD_Clear(void)
+ * @Function : void LCD_ELAND_Clear(void)
  * @File     : lcd_eland.c
  * @Program  : none
- * @Created  : 2017/10/24 by Xiaowine
+ * @Created  : 2017/10/24 by seblee
  * @Brief    : clear lcd
  * @Version  : V1.0
 **/
-void ELAND_LCD_Clear(void)
+void LCD_ELAND_Clear(void)
 {
     uint8_t counter = 0x00;
 
@@ -95,14 +95,14 @@ void ELAND_LCD_Clear(void)
 }
 /**
  ****************************************************************************
- * @Function : void LCD_ELAND_Display_All(void)
+ * @Function : void LCD_ELAND_Write_All(void)
  * @File     : lcd_eland.c
  * @Program  : none
- * @Created  : 2017/10/24 by Xiaowine
+ * @Created  : 2017/10/24 by seblee
  * @Brief    : dispaly all
  * @Version  : V1.0
 **/
-void LCD_ELAND_Display_All(void)
+void LCD_ELAND_Write_All(void)
 {
     uint8_t counter = 0x00;
 
@@ -128,11 +128,11 @@ void LCD_ELAND_Display_All(void)
  * @File     : lcd_eland.c
  * @Program  : COMx：witch com  0~7
  *             SEGn：witch segial pin 0~39
- * @Created  : 2017/10/26 by Xiaowine
+ * @Created  : 2017/10/26 by seblee
  * @Brief    : pixel write
  * @Version  : V1.0
 **/
-void LCD_Eland_Pixel_Write(u8 COMx, u8 SEGn)
+void LCD_Eland_Pixel_Write(LCD_COMx_TypeDef COMx, u8 SEGn)
 {
     u16 Cache = 0;
 
@@ -141,7 +141,7 @@ void LCD_Eland_Pixel_Write(u8 COMx, u8 SEGn)
     else
         Cache = 112 + (COMx % 4) * 16 + (SEGn - 28);
 
-    if (COMx < 4)
+    if (COMx < COM_4)
         LCD->CR4 &= (uint8_t)(~LCD_CR4_PAGECOM);
     else
         LCD->CR4 |= LCD_CR4_PAGECOM;
@@ -154,11 +154,11 @@ void LCD_Eland_Pixel_Write(u8 COMx, u8 SEGn)
  * @File     : lcd_eland.c
  * @Program  : COMx：witch com  0~7
  *             SEGn：witch segial pin 0~39
- * @Created  : 2017/10/26 by Xiaowine
+ * @Created  : 2017/10/26 by seblee
  * @Brief    : pixel clear
  * @Version  : V1.0
 **/
-void LCD_Eland_Pixel_Clear(u8 COMx, u8 SEGn)
+void LCD_Eland_Pixel_Clear(LCD_COMx_TypeDef COMx, u8 SEGn)
 {
     u16 Cache = 0;
 
@@ -167,10 +167,192 @@ void LCD_Eland_Pixel_Clear(u8 COMx, u8 SEGn)
     else
         Cache = 112 + (COMx % 4) * 16 + (SEGn - 28);
 
-    if (COMx < 4)
+    if (COMx < COM_4)
         LCD->CR4 &= (uint8_t)(~LCD_CR4_PAGECOM);
     else
         LCD->CR4 |= LCD_CR4_PAGECOM;
 
     LCD->RAM[(Cache / 8)] &= (~(1 << (Cache % 8)));
+}
+/**
+ ****************************************************************************
+ * @Function : void LCD_Eland_COMx_Write(LCD_COMx_TypeDef COMx)
+ * @File     : lcd_eland.c
+ * @Program  : COMx:witch com  0~7
+ * @Created  : 2017/10/26 by seblee
+ * @Brief    : write total line
+ * @Version  : V1.0
+**/
+void LCD_Eland_COMx_Write(LCD_COMx_TypeDef COMx)
+{
+    switch (COMx)
+    {
+    case COM_0:
+        LCD->CR4 &= (uint8_t)(~LCD_CR4_PAGECOM);
+        LCD->RAM[LCD_RAMRegister_0] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_1] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_2] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_3] |= 0x0f;
+        LCD->RAM[LCD_RAMRegister_14] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_15] |= 0x0f;
+
+        break;
+    case COM_1:
+        LCD->CR4 &= (uint8_t)(~LCD_CR4_PAGECOM);
+        LCD->RAM[LCD_RAMRegister_3] |= 0xf0;
+        LCD->RAM[LCD_RAMRegister_4] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_5] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_6] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_16] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_17] |= 0x0f;
+        break;
+    case COM_2:
+        LCD->CR4 &= (uint8_t)(~LCD_CR4_PAGECOM);
+        LCD->RAM[LCD_RAMRegister_7] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_8] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_9] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_10] |= 0x0f;
+        LCD->RAM[LCD_RAMRegister_18] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_19] |= 0x0f;
+        break;
+    case COM_3:
+        LCD->CR4 &= (uint8_t)(~LCD_CR4_PAGECOM);
+        LCD->RAM[LCD_RAMRegister_10] |= 0xf0;
+        LCD->RAM[LCD_RAMRegister_11] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_12] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_13] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_20] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_21] |= 0x0f;
+        break;
+    case COM_4:
+        LCD->CR4 |= LCD_CR4_PAGECOM;
+        LCD->RAM[LCD_RAMRegister_0] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_1] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_2] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_3] |= 0x0f;
+        LCD->RAM[LCD_RAMRegister_14] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_15] |= 0x0f;
+
+        break;
+    case COM_5:
+        LCD->CR4 |= LCD_CR4_PAGECOM;
+        LCD->RAM[LCD_RAMRegister_3] |= 0xf0;
+        LCD->RAM[LCD_RAMRegister_4] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_5] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_6] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_16] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_17] |= 0x0f;
+        break;
+    case COM_6:
+        LCD->CR4 |= LCD_CR4_PAGECOM;
+        LCD->RAM[LCD_RAMRegister_7] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_8] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_9] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_10] |= 0x0f;
+        LCD->RAM[LCD_RAMRegister_18] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_19] |= 0x0f;
+        break;
+    case COM_7:
+        LCD->CR4 |= LCD_CR4_PAGECOM;
+        LCD->RAM[LCD_RAMRegister_10] |= 0xf0;
+        LCD->RAM[LCD_RAMRegister_11] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_12] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_13] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_20] |= 0xff;
+        LCD->RAM[LCD_RAMRegister_21] |= 0x0f;
+        break;
+    default:
+        break;
+    }
+}
+/**
+ ****************************************************************************
+ * @Function : void LCD_Eland_COMx_Clear(LCD_COMx_TypeDef COMx)
+ * @File     : lcd_eland.c
+ * @Program  : COMx:witch com  0~7
+ * @Created  : 2017/10/26 by seblee
+ * @Brief    : clear total line
+ * @Version  : V1.0
+**/
+void LCD_Eland_COMx_Clear(LCD_COMx_TypeDef COMx)
+{
+    switch (COMx)
+    {
+    case COM_0:
+        LCD->CR4 &= (uint8_t)(~LCD_CR4_PAGECOM);
+        LCD->RAM[LCD_RAMRegister_0] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_1] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_2] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_3] &= 0xf0;
+        LCD->RAM[LCD_RAMRegister_14] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_15] &= 0xf0;
+
+        break;
+    case COM_1:
+        LCD->CR4 &= (uint8_t)(~LCD_CR4_PAGECOM);
+        LCD->RAM[LCD_RAMRegister_3] &= 0x0f;
+        LCD->RAM[LCD_RAMRegister_4] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_5] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_6] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_16] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_17] &= 0xf0;
+        break;
+    case COM_2:
+        LCD->CR4 &= (uint8_t)(~LCD_CR4_PAGECOM);
+        LCD->RAM[LCD_RAMRegister_7] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_8] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_9] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_10] &= 0xf0;
+        LCD->RAM[LCD_RAMRegister_18] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_19] &= 0xf0;
+        break;
+    case COM_3:
+        LCD->CR4 &= (uint8_t)(~LCD_CR4_PAGECOM);
+        LCD->RAM[LCD_RAMRegister_10] &= 0x0f;
+        LCD->RAM[LCD_RAMRegister_11] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_12] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_13] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_20] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_21] &= 0xf0;
+        break;
+    case COM_4:
+        LCD->CR4 |= LCD_CR4_PAGECOM;
+        LCD->RAM[LCD_RAMRegister_0] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_1] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_2] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_3] &= 0xf0;
+        LCD->RAM[LCD_RAMRegister_14] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_15] &= 0xf0;
+
+        break;
+    case COM_5:
+        LCD->CR4 |= LCD_CR4_PAGECOM;
+        LCD->RAM[LCD_RAMRegister_3] &= 0x0f;
+        LCD->RAM[LCD_RAMRegister_4] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_5] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_6] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_16] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_17] &= 0xf0;
+        break;
+    case COM_6:
+        LCD->CR4 |= LCD_CR4_PAGECOM;
+        LCD->RAM[LCD_RAMRegister_7] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_8] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_9] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_10] &= 0xf0;
+        LCD->RAM[LCD_RAMRegister_18] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_19] &= 0xf0;
+        break;
+    case COM_7:
+        LCD->CR4 |= LCD_CR4_PAGECOM;
+        LCD->RAM[LCD_RAMRegister_10] &= 0x0f;
+        LCD->RAM[LCD_RAMRegister_11] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_12] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_13] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_20] &= 0x00;
+        LCD->RAM[LCD_RAMRegister_21] &= 0xf0;
+        break;
+    default:
+        break;
+    }
 }

@@ -2,7 +2,7 @@
  ****************************************************************************
  * @Warning :Without permission from the author,Not for commercial use
  * @File    :uart.c
- * @Author  :Xiaowine
+ * @Author  :seblee
  * @date    :2017/10/20
  * @version :V 1.0.0
  *************************************************
@@ -22,7 +22,7 @@ static void stm8_uart1_init(u32 USART_BaudRate,
  * @Function : void UART1_INIT(void)
  * @File     : uart.c
  * @Program  : none
- * @Created  : 2017/10/20 by Xiaowine
+ * @Created  : 2017/10/20 by seblee
  * @Brief    : serial 1 init
  * @Version  : V1.0
 **/
@@ -46,7 +46,7 @@ void UART1_INIT(void)
  * @Function : void stm8_uart_init(CLK_Peripheral_TypeDef UARTx,u32 USART_BaudRate,USART_WordLength_TypeDef USART_WordLength, USART_StopBits_TypeDef USART_StopBits,USART_Parity_TypeDef USART_Parity,USART_Mode_TypeDef USART_Mode )
  * @File     : usart.c
  * @Program  :
- * @Created  : 2017/10/20 by Xiaowine
+ * @Created  : 2017/10/20 by seblee
  * @Brief    : USART init
  * @Version  : V1.0
 **/
@@ -82,7 +82,7 @@ static void stm8_uart1_init(u32 USART_BaudRate,
  * @Function : void USART1_RX_Service(void)
  * @File     : usart.c
  * @Program  : Cache received data
- * @Created  : 2017/10/20 by Xiaowine
+ * @Created  : 2017/10/20 by seblee
  * @Brief    : receive service function
  * @Version  : V1.0
 **/

@@ -2,7 +2,7 @@
  ****************************************************************************
  * @Warning :Without permission from the author,Not for commercial use
  * @File    :rtc.c
- * @Author  :Xiaowine
+ * @Author  :seblee
  * @date    :2017/10/23
  * @version :V 1.0.0
  *************************************************
@@ -33,7 +33,7 @@ void Calendar_Init(void);
  * @Function : void RTC_Init(void)
  * @File     : rtc.c
  * @Program  : none
- * @Created  : 2017/10/23 by Xiaowine
+ * @Created  : 2017/10/23 by seblee
  * @Brief    : init rtc
  * @Version  : V1.0
 **/
@@ -88,7 +88,7 @@ void Calendar_Init(void)
  * @Function : void RTC_Time_Set(_eland_date_time time)
  * @File     : rtc.c
  * @Program  : time to set
- * @Created  : 2017/10/23 by Xiaowine
+ * @Created  : 2017/10/23 by seblee
  * @Brief    : set time
  * @Version  : V1.0
 **/
@@ -112,7 +112,7 @@ void RTC_Time_Set(_eland_date_time time)
  * @Function : void ELAND_RTC_Read(_eland_date_time *time)
  * @File     : rtc.c
  * @Program  : time register
- * @Created  : 2017/10/23 by Xiaowine
+ * @Created  : 2017/10/23 by seblee
  * @Brief    : read rtc time
  * @Version  : V1.0
 **/
@@ -139,7 +139,7 @@ void ELAND_RTC_Read(_eland_date_time *time)
  * @Function : void ELAND_RTC_ALARM_ISR(void)
  * @File     : rtc.c
  * @Program  : none
- * @Created  : 2017/10/23 by Xiaowine
+ * @Created  : 2017/10/23 by seblee
  * @Brief    : RTC ALARM Interupt Service
  * @Version  : V1.0
 **/

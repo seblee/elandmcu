@@ -2,7 +2,7 @@
  ****************************************************************************
  * @Warning :Without permission from the author,Not for commercial use
  * @File    :key.h
- * @Author  :Xiaowine
+ * @Author  :seblee
  * @date    :2017/10/25
  * @version :V 1.0.0
  *************************************************
@@ -16,7 +16,15 @@
 #include "stm8l15x_gpio.h"
 
 /* Private typedef -----------------------------------------------------------*/
-
+typedef enum {
+    KEY_Set = (uint8_t)0x01,   /*!< 時刻設置 */
+    KEY_Reset = (uint8_t)0x02, /*!< 軟件復位 */
+    KEY_Add = (uint8_t)0x04,   /*!< 時間＋   */
+    KEY_Minus = (uint8_t)0x08, /*!< 時間－   */
+    KEY_MON = (uint8_t)0x10,   /*!< mon時間  */
+    KEY_Alarm = (uint8_t)0x20, /*!< 鬧鐘     */
+    KEY_Wifi = (uint8_t)0x40,  /*!< wifi模式 */
+} KEY_State_TypeDef;
 /* Private define ------------------------------------------------------------*/
 //時刻設置
 #define ELAND_KEY_SET_PORT GPIOI

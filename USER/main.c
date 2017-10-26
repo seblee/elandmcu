@@ -2,7 +2,7 @@
  ****************************************************************************
  * @Warning :Without permission from the author,Not for commercial use
  * @File    :main.c
- * @Author  :Xiaowine
+ * @Author  :seblee
  * @date    :2017/10/20
  * @version :V 1.0.0
  *************************************************
@@ -32,7 +32,7 @@
  * @Function : void main(void)
  * @File     : main.c
  * @Program  : none
- * @Created  : 2017/10/20 by Xiaowine
+ * @Created  : 2017/10/20 by seblee
  * @Brief    : main function
  * @Version  : V1.0
 **/
@@ -49,7 +49,7 @@ void main(void)
     TIM5_SetCompare1(TIM5_PERIOD);
     TIM5_SetCompare2(TIM5_PERIOD);
     LCD_ELAND_Init();
-    LCD_ELAND_Display_All();
+    LCD_ELAND_Write_All();
     ElandKeyInit();
 
     /* Infinite loop */
