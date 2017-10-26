@@ -122,3 +122,55 @@ void LCD_ELAND_Display_All(void)
         LCD->RAM[counter] = 0xff;
     }
 }
+/**
+ ****************************************************************************
+ * @Function : void LCD_Eland_Pixel_Write(u8 COMx,u8 SEGn)
+ * @File     : lcd_eland.c
+ * @Program  : COMx：witch com  0~7
+ *             SEGn：witch segial pin 0~39
+ * @Created  : 2017/10/26 by Xiaowine
+ * @Brief    : pixel write
+ * @Version  : V1.0
+**/
+void LCD_Eland_Pixel_Write(u8 COMx, u8 SEGn)
+{
+    u16 Cache = 0;
+
+    if (SEGn < 28)
+        Cache = 28 * (COMx % 4) + SEGn;
+    else
+        Cache = 112 + (COMx % 4) * 16 + (SEGn - 28);
+
+    if (COMx < 4)
+        LCD->CR4 &= (uint8_t)(~LCD_CR4_PAGECOM);
+    else
+        LCD->CR4 |= LCD_CR4_PAGECOM;
+
+    LCD->RAM[(Cache / 8)] |= (1 << (Cache % 8));
+}
+/**
+ ****************************************************************************
+ * @Function : void LCD_Eland_Pixel_Clear(u8 COMx, u8 SEGn)
+ * @File     : lcd_eland.c
+ * @Program  : COMx：witch com  0~7
+ *             SEGn：witch segial pin 0~39
+ * @Created  : 2017/10/26 by Xiaowine
+ * @Brief    : pixel clear
+ * @Version  : V1.0
+**/
+void LCD_Eland_Pixel_Clear(u8 COMx, u8 SEGn)
+{
+    u16 Cache = 0;
+
+    if (SEGn < 28)
+        Cache = 28 * (COMx % 4) + SEGn;
+    else
+        Cache = 112 + (COMx % 4) * 16 + (SEGn - 28);
+
+    if (COMx < 4)
+        LCD->CR4 &= (uint8_t)(~LCD_CR4_PAGECOM);
+    else
+        LCD->CR4 |= LCD_CR4_PAGECOM;
+
+    LCD->RAM[(Cache / 8)] &= (~(1 << (Cache % 8)));
+}

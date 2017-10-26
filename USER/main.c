@@ -44,10 +44,10 @@ void main(void)
     enableInterrupts();
     IWDG_Config();
     RGBLED_CFG();
-    TIM3_SetCompare1(0);
-    TIM3_SetCompare2(0);
-    TIM5_SetCompare1(0);
-    TIM5_SetCompare2(0);
+    TIM3_SetCompare1(TIM3_PERIOD);
+    TIM3_SetCompare2(TIM3_PERIOD);
+    TIM5_SetCompare1(TIM5_PERIOD);
+    TIM5_SetCompare2(TIM5_PERIOD);
     LCD_ELAND_Init();
     LCD_ELAND_Display_All();
     ElandKeyInit();
