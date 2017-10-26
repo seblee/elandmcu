@@ -22,7 +22,7 @@
 __IO uint16_t TIM3_CCR1_Val = 0;
 __IO uint16_t TIM3_CCR2_Val = 0;
 
-__IO uint16_t TIM5_CCR1_Val = 500;
+__IO uint16_t TIM5_CCR1_Val = 0;
 __IO uint16_t TIM5_CCR2_Val = 0;
 /* Private function prototypes -----------------------------------------------*/
 static void RGBLED_GPIO_Cfg(void);
@@ -126,8 +126,8 @@ static void TIM5_Config(void)
   - So the TIM1 channel 2 generates a periodic signal with a frequency equal to 30.51 Hz.
   */
   /* Toggle Mode configuration: Channel2 */
-  // TIM5_OC2Init(TIM5_OCMode_PWM1, TIM5_OutputState_Enable, TIM5_CCR2_Val, TIM5_OCPolarity_High, TIM5_OCIdleState_Reset);
-  // TIM5_OC2PreloadConfig(ENABLE); //输出比较2通道预加载使能
+  TIM5_OC2Init(TIM5_OCMode_PWM1, TIM5_OutputState_Enable, TIM5_CCR2_Val, TIM5_OCPolarity_High, TIM5_OCIdleState_Reset);
+  TIM5_OC2PreloadConfig(ENABLE); //输出比较2通道预加载使能
 
   TIM5_CtrlPWMOutputs(ENABLE); //PWM输出使能
   TIM5_Cmd(ENABLE);            //使能

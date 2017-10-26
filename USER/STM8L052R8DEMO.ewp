@@ -267,6 +267,7 @@
           <state>$PROJ_DIR$\..\HARDWARE\RGBLED</state>
           <state>$PROJ_DIR$\..\HARDWARE\LCD_ELAND</state>
           <state>$PROJ_DIR$\..\HARDWARE\IWDG</state>
+          <state>$PROJ_DIR$\..\HARDWARE\KEY</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -1612,6 +1613,12 @@
       <name>IWDG</name>
       <file>
         <name>$PROJ_DIR$\..\HARDWARE\IWDG\iwdg.c</name>
+      </file>
+    </group>
+    <group>
+      <name>KEY</name>
+      <file>
+        <name>$PROJ_DIR$\..\HARDWARE\KEY\key.c</name>
       </file>
     </group>
     <group>
