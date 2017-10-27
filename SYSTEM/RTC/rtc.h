@@ -50,6 +50,7 @@ typedef struct
 /* Private variables ---------------------------------------------------------*/
 
 /* Private function prototypes -----------------------------------------------*/
+void ELAND_RTC_Init(void); 
 void ELAND_RTC_ALARM_ISR(void);
 /* Private functions ---------------------------------------------------------*/
 

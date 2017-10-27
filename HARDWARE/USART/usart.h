@@ -1,9 +1,9 @@
 /**
  ****************************************************************************
  * @Warning :Without permission from the author,Not for commercial use
- * @File    :uart.h
+ * @File    :usart.h
  * @Author  :seblee
- * @date    :2017/10/20
+ * @date    :2017/10/27
  * @version :V 1.0.0
  *************************************************
  * @brief   :
@@ -11,9 +11,21 @@
 **/
 #ifndef __USART_H_
 #define __USART_H_
+/* Private include -----------------------------------------------------------*/
 #include "syscfg.h"
 
-void UART1_INIT(void);
+/* Private typedef -----------------------------------------------------------*/
+
+/* Private define ------------------------------------------------------------*/
+
+/* Private macro -------------------------------------------------------------*/
+
+/* Private variables ---------------------------------------------------------*/
+
+/* Private function prototypes -----------------------------------------------*/
+void UART1_Init(void);
 void USART1_RX_Service(void);
 
-#endif
+/* Private functions ---------------------------------------------------------*/
+
+#endif /*__USART_H_*/

@@ -14,6 +14,20 @@
 /* Private include -----------------------------------------------------------*/
 #include "syscfg.h"
 /* Private typedef -----------------------------------------------------------*/
+/* Private typedef -----------------------------------------------------------*/
+typedef enum {
+    ELAND_NONE,
+    ELAND_BLUE,
+    ELAND_WHITE_BLUE,
+    ELAND_PURPLE,
+    ELAND_RED,
+    ELAND_PINK,
+    ELAND_ORANGE,
+    ELAND_YELLOW,
+    ELAND_YELLOW_GREEN,
+    ELAND_GREEN,
+    ELAND_WHITE,
+} __eland_color_t;
 
 /* Private define ------------------------------------------------------------*/
 #define TIM3_PERIOD 1000
@@ -37,8 +51,11 @@ extern __IO uint16_t TIM3_CCR2_Val;
 extern __IO uint16_t TIM5_CCR1_Val;
 extern __IO uint16_t TIM5_CCR2_Val;
 /* Private function prototypes -----------------------------------------------*/
+void RGBLED_CFG(void);
+void RGBLED_Input_RGB(u8 Red, u8 Green, u8 Blue);
+void RGBLED_Color_Set(__eland_color_t color);
+void RGBLED_RGBCode_Set(u32 ColorCode);
 
 /* Private functions ---------------------------------------------------------*/
-void RGBLED_CFG(void);
 
 #endif /*__RGBLED_H_*/

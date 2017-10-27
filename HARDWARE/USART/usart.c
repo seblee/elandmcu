@@ -1,32 +1,44 @@
 /**
  ****************************************************************************
  * @Warning :Without permission from the author,Not for commercial use
- * @File    :uart.c
+ * @File    :usart.c
  * @Author  :seblee
- * @date    :2017/10/20
+ * @date    :2017/10/27
  * @version :V 1.0.0
  *************************************************
  * @brief   :
  ****************************************************************************
 **/
+/* Private include -----------------------------------------------------------*/
 #include "usart.h"
 
-/************/
+/* Private typedef -----------------------------------------------------------*/
+
+/* Private define ------------------------------------------------------------*/
+
+/* Private macro -------------------------------------------------------------*/
+
+/* Private variables ---------------------------------------------------------*/
+
+/* Private function prototypes -----------------------------------------------*/
 static void stm8_uart1_init(u32 USART_BaudRate,
                             USART_WordLength_TypeDef USART_WordLength,
                             USART_StopBits_TypeDef USART_StopBits,
                             USART_Parity_TypeDef USART_Parity,
                             USART_Mode_TypeDef USART_Mode);
+
+/* Private functions ---------------------------------------------------------*/
+
 /**
  ****************************************************************************
- * @Function : void UART1_INIT(void)
+ * @Function : void UART1_Init(void)
  * @File     : uart.c
  * @Program  : none
  * @Created  : 2017/10/20 by seblee
  * @Brief    : serial 1 init
  * @Version  : V1.0
 **/
-void UART1_INIT(void)
+void UART1_Init(void)
 {
     stm8_uart1_init(115200, USART_WordLength_8b, USART_StopBits_1, USART_Parity_No, (USART_Mode_TypeDef)(USART_Mode_Tx | USART_Mode_Rx));
 
@@ -90,5 +102,5 @@ void USART1_RX_Service(void)
 {
     u8 Cache;
     Cache = USART_ReceiveData8(USART1);
-    Cache = Cache;
+    USART_SendData8(USART1, Cache);
 }
