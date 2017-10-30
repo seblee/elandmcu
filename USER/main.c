@@ -41,7 +41,7 @@
 void main(void)
 {
     u8 temp;
-    __eland_color_t color = ELAND_NONE;
+    __eland_color_t color = ELAND_BLACK;
     disableInterrupts();
     /* System clock */
     SysClock_Init();
@@ -68,7 +68,7 @@ void main(void)
         {
             temp = 0;
             if (color == ELAND_WHITE)
-                color = ELAND_NONE;
+                color = ELAND_BLACK;
             else
                 color++;
             RGBLED_Color_Set(color);

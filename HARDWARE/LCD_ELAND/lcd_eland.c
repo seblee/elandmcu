@@ -11,6 +11,7 @@
 **/
 /* Private include -----------------------------------------------------------*/
 #include "lcd_eland.h"
+#include "usart.h"
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
@@ -18,9 +19,50 @@
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
+/**
+================================================================================
+                              GLASS LCD MAPPING
+================================================================================
 
+          L----A----B
+          |         |
+         K|         |C
+          |         |
+          J----M----D
+          |         |
+         I|         |E
+          |         |
+          H----G----F
+
+
+A LCD __Digital_Coding_t is based on the following matrix:
+             000B    CALK    EDMJ    FGHI
+  SEG(n)    { 0 ,     K ,     J ,     I }
+  SEG(n+1)  { 0 ,     L ,     M ,     H }
+  SEG(n+2)  { 0 ,     A ,     D ,     G }
+  SEG(n+3)  { B ,     C ,     E ,     F }
+
+The character A for example is:
+-----------------------------------------------------------
+             COM0    COM1     COM2    COM3
+  SEG(n)    { 0 ,     0 ,      0 ,     1 }
+  SEG(n+1)  { 0 ,     0 ,      1 ,     0 }
+  SEG(n+2)  { 0 ,     0 ,      0 ,     1 }
+  SEG(n+3)  { 0 ,     0 ,      0 ,     1 }
+   --------------------------------------------------------
+           =  0       0        2       5  hex
+
+   => 'A' = 0x002536
+
+  @endverbatim
+  */
+CONST uint16_t NumberMap[10] = {
+    /* 0       1       2       3       4   */
+    0X1FDF, 0X18C8, 0X1F7E, 0X1EFE, 0X18FB,
+    /* 5       6       7       8       9   */
+    0X1EF7, 0X1FF7, 0X18CE, 0XFFFF, 0X1EFF};
 /* Private function prototypes -----------------------------------------------*/
-
+static __Digital_Coding_t LCD_Eland_Digital_Convert(LCD_Coding_Dirtction_t direction uint8_t Data);
 /* Private functions ---------------------------------------------------------*/
 
 /**
@@ -78,7 +120,7 @@ void LCD_ELAND_Clear(void)
     uint8_t counter = 0x00;
 
     /* Enable the write access on the LCD RAM First banck */
-    LCD->CR4 &= (uint8_t)(~LCD_CR4_PAGECOM);
+    LCD_PageSelect(LCD_PageSelection_FirstPage);
 
     for (counter = 0x0; counter < 0x16; counter++)
     {
@@ -86,7 +128,7 @@ void LCD_ELAND_Clear(void)
     }
 
     /* Enable the write access on the LCD RAM second banck */
-    LCD->CR4 |= LCD_CR4_PAGECOM;
+    LCD_PageSelect(LCD_PageSelection_SecondPage);
 
     for (counter = 0x0; counter < 0x16; counter++)
     {
@@ -107,7 +149,7 @@ void LCD_ELAND_Write_All(void)
     uint8_t counter = 0x00;
 
     /* Enable the write access on the LCD RAM First banck */
-    LCD->CR4 &= (uint8_t)(~LCD_CR4_PAGECOM);
+    LCD_PageSelect(LCD_PageSelection_FirstPage);
 
     for (counter = 0x0; counter < 0x10; counter++)
     {
@@ -115,7 +157,7 @@ void LCD_ELAND_Write_All(void)
     }
 
     /* Enable the write access on the LCD RAM second banck */
-    LCD->CR4 |= LCD_CR4_PAGECOM;
+    LCD_PageSelect(LCD_PageSelection_SecondPage);
 
     for (counter = 0x0; counter < 0x10; counter++)
     {
@@ -142,9 +184,9 @@ void LCD_Eland_Pixel_Write(LCD_COMx_TypeDef COMx, u8 SEGn)
         Cache = 112 + (COMx % 4) * 16 + (SEGn - 28);
 
     if (COMx < COM_4)
-        LCD->CR4 &= (uint8_t)(~LCD_CR4_PAGECOM);
+        LCD_PageSelect(LCD_PageSelection_FirstPage);
     else
-        LCD->CR4 |= LCD_CR4_PAGECOM;
+        LCD_PageSelect(LCD_PageSelection_SecondPage);
 
     LCD->RAM[(Cache / 8)] |= (1 << (Cache % 8));
 }
@@ -168,9 +210,9 @@ void LCD_Eland_Pixel_Clear(LCD_COMx_TypeDef COMx, u8 SEGn)
         Cache = 112 + (COMx % 4) * 16 + (SEGn - 28);
 
     if (COMx < COM_4)
-        LCD->CR4 &= (uint8_t)(~LCD_CR4_PAGECOM);
+        LCD_PageSelect(LCD_PageSelection_FirstPage);
     else
-        LCD->CR4 |= LCD_CR4_PAGECOM;
+        LCD_PageSelect(LCD_PageSelection_SecondPage);
 
     LCD->RAM[(Cache / 8)] &= (~(1 << (Cache % 8)));
 }
@@ -188,7 +230,7 @@ void LCD_Eland_COMx_Write(LCD_COMx_TypeDef COMx)
     switch (COMx)
     {
     case COM_0:
-        LCD->CR4 &= (uint8_t)(~LCD_CR4_PAGECOM);
+        LCD_PageSelect(LCD_PageSelection_FirstPage);
         LCD->RAM[LCD_RAMRegister_0] |= 0xff;
         LCD->RAM[LCD_RAMRegister_1] |= 0xff;
         LCD->RAM[LCD_RAMRegister_2] |= 0xff;
@@ -198,7 +240,7 @@ void LCD_Eland_COMx_Write(LCD_COMx_TypeDef COMx)
 
         break;
     case COM_1:
-        LCD->CR4 &= (uint8_t)(~LCD_CR4_PAGECOM);
+        LCD_PageSelect(LCD_PageSelection_FirstPage);
         LCD->RAM[LCD_RAMRegister_3] |= 0xf0;
         LCD->RAM[LCD_RAMRegister_4] |= 0xff;
         LCD->RAM[LCD_RAMRegister_5] |= 0xff;
@@ -207,7 +249,7 @@ void LCD_Eland_COMx_Write(LCD_COMx_TypeDef COMx)
         LCD->RAM[LCD_RAMRegister_17] |= 0x0f;
         break;
     case COM_2:
-        LCD->CR4 &= (uint8_t)(~LCD_CR4_PAGECOM);
+        LCD_PageSelect(LCD_PageSelection_FirstPage);
         LCD->RAM[LCD_RAMRegister_7] |= 0xff;
         LCD->RAM[LCD_RAMRegister_8] |= 0xff;
         LCD->RAM[LCD_RAMRegister_9] |= 0xff;
@@ -216,7 +258,7 @@ void LCD_Eland_COMx_Write(LCD_COMx_TypeDef COMx)
         LCD->RAM[LCD_RAMRegister_19] |= 0x0f;
         break;
     case COM_3:
-        LCD->CR4 &= (uint8_t)(~LCD_CR4_PAGECOM);
+        LCD_PageSelect(LCD_PageSelection_FirstPage);
         LCD->RAM[LCD_RAMRegister_10] |= 0xf0;
         LCD->RAM[LCD_RAMRegister_11] |= 0xff;
         LCD->RAM[LCD_RAMRegister_12] |= 0xff;
@@ -225,7 +267,7 @@ void LCD_Eland_COMx_Write(LCD_COMx_TypeDef COMx)
         LCD->RAM[LCD_RAMRegister_21] |= 0x0f;
         break;
     case COM_4:
-        LCD->CR4 |= LCD_CR4_PAGECOM;
+        LCD_PageSelect(LCD_PageSelection_SecondPage);
         LCD->RAM[LCD_RAMRegister_0] |= 0xff;
         LCD->RAM[LCD_RAMRegister_1] |= 0xff;
         LCD->RAM[LCD_RAMRegister_2] |= 0xff;
@@ -235,7 +277,7 @@ void LCD_Eland_COMx_Write(LCD_COMx_TypeDef COMx)
 
         break;
     case COM_5:
-        LCD->CR4 |= LCD_CR4_PAGECOM;
+        LCD_PageSelect(LCD_PageSelection_SecondPage);
         LCD->RAM[LCD_RAMRegister_3] |= 0xf0;
         LCD->RAM[LCD_RAMRegister_4] |= 0xff;
         LCD->RAM[LCD_RAMRegister_5] |= 0xff;
@@ -244,7 +286,7 @@ void LCD_Eland_COMx_Write(LCD_COMx_TypeDef COMx)
         LCD->RAM[LCD_RAMRegister_17] |= 0x0f;
         break;
     case COM_6:
-        LCD->CR4 |= LCD_CR4_PAGECOM;
+        LCD_PageSelect(LCD_PageSelection_SecondPage);
         LCD->RAM[LCD_RAMRegister_7] |= 0xff;
         LCD->RAM[LCD_RAMRegister_8] |= 0xff;
         LCD->RAM[LCD_RAMRegister_9] |= 0xff;
@@ -253,7 +295,7 @@ void LCD_Eland_COMx_Write(LCD_COMx_TypeDef COMx)
         LCD->RAM[LCD_RAMRegister_19] |= 0x0f;
         break;
     case COM_7:
-        LCD->CR4 |= LCD_CR4_PAGECOM;
+        LCD_PageSelect(LCD_PageSelection_SecondPage);
         LCD->RAM[LCD_RAMRegister_10] |= 0xf0;
         LCD->RAM[LCD_RAMRegister_11] |= 0xff;
         LCD->RAM[LCD_RAMRegister_12] |= 0xff;
@@ -279,7 +321,7 @@ void LCD_Eland_COMx_Clear(LCD_COMx_TypeDef COMx)
     switch (COMx)
     {
     case COM_0:
-        LCD->CR4 &= (uint8_t)(~LCD_CR4_PAGECOM);
+        LCD_PageSelect(LCD_PageSelection_FirstPage);
         LCD->RAM[LCD_RAMRegister_0] &= 0x00;
         LCD->RAM[LCD_RAMRegister_1] &= 0x00;
         LCD->RAM[LCD_RAMRegister_2] &= 0x00;
@@ -289,7 +331,7 @@ void LCD_Eland_COMx_Clear(LCD_COMx_TypeDef COMx)
 
         break;
     case COM_1:
-        LCD->CR4 &= (uint8_t)(~LCD_CR4_PAGECOM);
+        LCD_PageSelect(LCD_PageSelection_FirstPage);
         LCD->RAM[LCD_RAMRegister_3] &= 0x0f;
         LCD->RAM[LCD_RAMRegister_4] &= 0x00;
         LCD->RAM[LCD_RAMRegister_5] &= 0x00;
@@ -298,7 +340,7 @@ void LCD_Eland_COMx_Clear(LCD_COMx_TypeDef COMx)
         LCD->RAM[LCD_RAMRegister_17] &= 0xf0;
         break;
     case COM_2:
-        LCD->CR4 &= (uint8_t)(~LCD_CR4_PAGECOM);
+        LCD_PageSelect(LCD_PageSelection_FirstPage);
         LCD->RAM[LCD_RAMRegister_7] &= 0x00;
         LCD->RAM[LCD_RAMRegister_8] &= 0x00;
         LCD->RAM[LCD_RAMRegister_9] &= 0x00;
@@ -307,7 +349,7 @@ void LCD_Eland_COMx_Clear(LCD_COMx_TypeDef COMx)
         LCD->RAM[LCD_RAMRegister_19] &= 0xf0;
         break;
     case COM_3:
-        LCD->CR4 &= (uint8_t)(~LCD_CR4_PAGECOM);
+        LCD_PageSelect(LCD_PageSelection_FirstPage);
         LCD->RAM[LCD_RAMRegister_10] &= 0x0f;
         LCD->RAM[LCD_RAMRegister_11] &= 0x00;
         LCD->RAM[LCD_RAMRegister_12] &= 0x00;
@@ -316,7 +358,7 @@ void LCD_Eland_COMx_Clear(LCD_COMx_TypeDef COMx)
         LCD->RAM[LCD_RAMRegister_21] &= 0xf0;
         break;
     case COM_4:
-        LCD->CR4 |= LCD_CR4_PAGECOM;
+        LCD_PageSelect(LCD_PageSelection_SecondPage);
         LCD->RAM[LCD_RAMRegister_0] &= 0x00;
         LCD->RAM[LCD_RAMRegister_1] &= 0x00;
         LCD->RAM[LCD_RAMRegister_2] &= 0x00;
@@ -326,7 +368,7 @@ void LCD_Eland_COMx_Clear(LCD_COMx_TypeDef COMx)
 
         break;
     case COM_5:
-        LCD->CR4 |= LCD_CR4_PAGECOM;
+        LCD_PageSelect(LCD_PageSelection_SecondPage);
         LCD->RAM[LCD_RAMRegister_3] &= 0x0f;
         LCD->RAM[LCD_RAMRegister_4] &= 0x00;
         LCD->RAM[LCD_RAMRegister_5] &= 0x00;
@@ -335,7 +377,7 @@ void LCD_Eland_COMx_Clear(LCD_COMx_TypeDef COMx)
         LCD->RAM[LCD_RAMRegister_17] &= 0xf0;
         break;
     case COM_6:
-        LCD->CR4 |= LCD_CR4_PAGECOM;
+        LCD_PageSelect(LCD_PageSelection_SecondPage);
         LCD->RAM[LCD_RAMRegister_7] &= 0x00;
         LCD->RAM[LCD_RAMRegister_8] &= 0x00;
         LCD->RAM[LCD_RAMRegister_9] &= 0x00;
@@ -344,7 +386,7 @@ void LCD_Eland_COMx_Clear(LCD_COMx_TypeDef COMx)
         LCD->RAM[LCD_RAMRegister_19] &= 0xf0;
         break;
     case COM_7:
-        LCD->CR4 |= LCD_CR4_PAGECOM;
+        LCD_PageSelect(LCD_PageSelection_SecondPage);
         LCD->RAM[LCD_RAMRegister_10] &= 0x0f;
         LCD->RAM[LCD_RAMRegister_11] &= 0x00;
         LCD->RAM[LCD_RAMRegister_12] &= 0x00;
@@ -355,4 +397,102 @@ void LCD_Eland_COMx_Clear(LCD_COMx_TypeDef COMx)
     default:
         break;
     }
+}
+/**
+ ****************************************************************************
+ * @Function : void LCD_Eland_Num_Set(LCD_Digital_Serial_t Serial, u8 data)
+ * @File     : lcd_eland.c
+ * @Program  : Serial:witch num to set
+ *             data:what to set
+ * @Created  : 2017/10/30 by seblee
+ * @Brief    : set number
+ * @Version  : V1.0
+**/
+void LCD_Eland_Num_Set(LCD_Digital_Serial_t Serial, u8 data)
+{
+    __Digital_Coding_t Cache;
+    if (Serial < Serial_08) //Serial_01 ~ 07
+    {
+        Cache = LCD_Eland_Digital_Convert(POSITIVE, data);
+        LCD_PageSelect(LCD_PageSelection_FirstPage);
+
+        LCD->RAM[Serial / 2] &= ((Serial % 2) ? 0x7f : 0xf7);
+        if (Cache.Digital_B != 0)
+            LCD->RAM[Serial / 2] |= ((Serial % 2) ? 0x80 : 0x08);
+
+        LCD->RAM[((Serial + 1) / 2) + 3] &= ((Serial + 1) % 2) ? 0x0f : 0xf0;
+        LCD->RAM[((Serial + 1) / 2) + 3] |= (Cache.Digital_CALK << (((Serial + 1) % 2) ? 4 : 0));
+
+        LCD->RAM[(Serial / 2) + 7] &= (Serial % 2) ? 0x0f : 0xf0;
+        LCD->RAM[(Serial / 2) + 7] |= (Cache.Digital_EDMJ << ((Serial % 2) ? 4 : 0));
+
+        LCD->RAM[((Serial + 1) / 2) + 10] &= ((Serial + 1) % 2) ? 0x0f : 0xf0;
+        LCD->RAM[((Serial + 1) / 2) + 10] |= (Cache.Digital_FGHI << (((Serial + 1) % 2) ? 4 : 0));
+    }
+    else if (Serial < Serial_11) //Serial_08 ~ 10
+    {
+        Cache = LCD_Eland_Digital_Convert(POSITIVE, data);
+        LCD_PageSelect(LCD_PageSelection_FirstPage);
+
+        LCD->RAM[(Serial + 1) / 2 + 10] &= (((Serial + 1) % 2) ? 0x7f : 0xf7);
+        if (Cache.Digital_B != 0)
+            LCD->RAM[(Serial + 1) / 2 + 10] |= (((Serial + 1) % 2) ? 0x80 : 0x08);
+
+        LCD->RAM[(Serial / 2) + 12] &= (Serial % 2) ? 0x0f : 0xf0;
+        LCD->RAM[(Serial / 2) + 12] |= (Cache.Digital_CALK << ((Serial % 2) ? 4 : 0));
+
+        LCD->RAM[(Serial / 2) + 14] &= (Serial % 2) ? 0x0f : 0xf0;
+        LCD->RAM[(Serial / 2) + 14] |= (Cache.Digital_EDMJ << ((Serial % 2) ? 4 : 0));
+
+        LCD->RAM[(Serial / 2) + 16] &= (Serial % 2) ? 0x0f : 0xf0;
+        LCD->RAM[(Serial / 2) + 16] |= (Cache.Digital_FGHI << ((Serial % 2) ? 4 : 0));
+    }
+    else if (Serial < Serial_17) //Serial_08 ~ 10
+    {
+        Cache = LCD_Eland_Digital_Convert(NEGATIVE, data);
+        LCD_PageSelect(LCD_PageSelection_SecondPage);
+
+        if (Serial == Serial_11)
+        {
+            LCD->RAM[12] &= 0XFB;
+            if (Cache.Digital_B != 0)
+                LCD->RAM[12] |= 0x04;
+        }
+        else
+        {
+        }
+    }
+}
+
+/**
+ ****************************************************************************
+ * @Function : static __Digital_Coding_t LCD_Eland_Digital_Convert(LCD_Coding_Dirtction_t direction uint8_t Data)
+ * @File     : lcd_eland.c
+ * @Program  : Data:
+ * @Created  : 2017/10/30 by seblee
+ * @Brief    : Data to Digital
+ * @Version  : V1.0
+**/
+static __Digital_Coding_t LCD_Eland_Digital_Convert(LCD_Coding_Dirtction_t direction uint8_t Data)
+{
+    __Digital_Coding_t Cache;
+    uint16_t Num_Cache = 0;
+    uint8_t i;
+    if (direction == POSITIVE)
+        Cache.WORD = NumberMap[Data];
+    else if (direction == NEGATIVE)
+    {
+        Num_Cache |= (NumberMap[Data] & 0xf000); //Digital_B
+        for (i = 0; i < 4; i++)
+        {
+            if (NumberMap[Data] & (0x0001 << i)) //Digital_CALK
+                Num_Cache |= (0x0008 >> i);
+            if (NumberMap[Data] & (0x0010 << i)) //Digital_EDMJ
+                Num_Cache |= (0x0080 >> i);
+            if (NumberMap[Data] & (0x0100 << i)) //Digital_FGHI
+                Num_Cache |= (0x0800 >> i);
+        }
+        Cache.WORD = Num_Cache;
+    }
+    return Cache;
 }

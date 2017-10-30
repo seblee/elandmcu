@@ -24,6 +24,46 @@ typedef enum {
     COM_6 = (uint8_t)0x06, /*!< COM 6  */
     COM_7 = (uint8_t)0x07, /*!< COM 7  */
 } LCD_COMx_TypeDef;
+
+typedef enum {
+    Serial_01,
+    Serial_02,
+    Serial_03,
+    Serial_04,
+    Serial_05,
+    Serial_06,
+    Serial_07,
+    Serial_08,
+    Serial_09,
+    Serial_10,
+    Serial_11,
+    Serial_12,
+    Serial_13,
+    Serial_14,
+    Serial_15,
+    Serial_16,
+    Serial_17,
+    Serial_18,
+    Serial_19,
+    Serial_20,
+} LCD_Digital_Serial_t;
+
+typedef union {
+    uint16_t WORD;
+    uint8_t BYTE[2];
+    struct
+    {
+        unsigned char Digital_FGHI : 4; //word 8-11   Data[0] 0-3
+        unsigned char Digital_B : 4;    //word 12-15  Data[0] 4-7
+        unsigned char Digital_CALK : 4; //word 0-3    Data[1] 0-3
+        unsigned char Digital_EDMJ : 4; //word 4-7    Data[1] 4-7
+    };
+} __Digital_Coding_t;
+typedef enum {
+    POSITIVE,
+    NEGATIVE,
+} LCD_Coding_Dirtction_t;
+
 /* Private define ------------------------------------------------------------*/
 
 /* Private macro -------------------------------------------------------------*/

@@ -16,7 +16,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private typedef -----------------------------------------------------------*/
 typedef enum {
-    ELAND_NONE,
+    ELAND_BLACK,
     ELAND_BLUE,
     ELAND_WHITE_BLUE,
     ELAND_PURPLE,

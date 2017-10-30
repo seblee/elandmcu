@@ -25,6 +25,7 @@
 /* Private function prototypes -----------------------------------------------*/
 void UART1_Init(void);
 void USART1_RX_Service(void);
+void USARTx_Send_Data(USART_TypeDef *USARTx, uint8_t *P_data, uint16_t length);
 
 /* Private functions ---------------------------------------------------------*/
 

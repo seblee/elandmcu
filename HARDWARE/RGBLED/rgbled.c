@@ -162,7 +162,7 @@ void RGBLED_Color_Set(__eland_color_t color)
 {
     switch (color)
     {
-    case ELAND_NONE:
+    case ELAND_BLACK:
         RGBLED_Input_RGB(0, 0, 0);
         break;
     case ELAND_BLUE:
