@@ -34,7 +34,6 @@
           |         |
           H----G----F
 
-
 A LCD __Digital_Coding_t is based on the following matrix:
              000B    CALK    EDMJ    FGHI
   SEG(n)    { 0 ,     K ,     J ,     I }
@@ -51,10 +50,7 @@ The character A for example is:
   SEG(n+3)  { 0 ,     0 ,      0 ,     1 }
    --------------------------------------------------------
            =  0       0        2       5  hex
-
-   => 'A' = 0x002536
-
-  @endverbatim
+           
   */
 CONST uint16_t NumberMap[10] = {
     /* 0       1       2       3       4   */
@@ -420,23 +416,23 @@ void LCD_Eland_Num_Set(LCD_Digital_Serial_t Serial, u8 data)
         if (Cache.Digital_B != 0)
             LCD->RAM[Serial / 2] |= ((Serial % 2) ? 0x80 : 0x08);
 
-        LCD->RAM[((Serial + 1) / 2) + 3] &= ((Serial + 1) % 2) ? 0x0f : 0xf0;
-        LCD->RAM[((Serial + 1) / 2) + 3] |= (Cache.Digital_CALK << (((Serial + 1) % 2) ? 4 : 0));
+        LCD->RAM[(Serial + 7) / 2] &= ((Serial + 7) % 2) ? 0x0f : 0xf0;
+        LCD->RAM[(Serial + 7) / 2] |= (Cache.Digital_CALK << (((Serial + 7) % 2) ? 4 : 0));
 
-        LCD->RAM[(Serial / 2) + 7] &= (Serial % 2) ? 0x0f : 0xf0;
-        LCD->RAM[(Serial / 2) + 7] |= (Cache.Digital_EDMJ << ((Serial % 2) ? 4 : 0));
+        LCD->RAM[(Serial + 14) / 2] &= (Serial % 2) ? 0x0f : 0xf0;
+        LCD->RAM[(Serial + 14) / 2] |= (Cache.Digital_EDMJ << ((Serial % 2) ? 4 : 0));
 
-        LCD->RAM[((Serial + 1) / 2) + 10] &= ((Serial + 1) % 2) ? 0x0f : 0xf0;
-        LCD->RAM[((Serial + 1) / 2) + 10] |= (Cache.Digital_FGHI << (((Serial + 1) % 2) ? 4 : 0));
+        LCD->RAM[(Serial + 21) / 2] &= ((Serial + 21) % 2) ? 0x0f : 0xf0;
+        LCD->RAM[(Serial + 21) / 2] |= (Cache.Digital_FGHI << (((Serial + 21) % 2) ? 4 : 0));
     }
     else if (Serial < Serial_11) //Serial_08 ~ 10
     {
         Cache = LCD_Eland_Digital_Convert(POSITIVE, data);
         LCD_PageSelect(LCD_PageSelection_FirstPage);
 
-        LCD->RAM[(Serial + 1) / 2 + 10] &= (((Serial + 1) % 2) ? 0x7f : 0xf7);
+        LCD->RAM[(Serial + 21) / 2] &= (((Serial + 21) % 2) ? 0x7f : 0xf7);
         if (Cache.Digital_B != 0)
-            LCD->RAM[(Serial + 1) / 2 + 10] |= (((Serial + 1) % 2) ? 0x80 : 0x08);
+            LCD->RAM[(Serial + 21) / 2] |= (((Serial + 21) % 2) ? 0x80 : 0x08);
 
         LCD->RAM[(Serial / 2) + 12] &= (Serial % 2) ? 0x0f : 0xf0;
         LCD->RAM[(Serial / 2) + 12] |= (Cache.Digital_CALK << ((Serial % 2) ? 4 : 0));
@@ -460,18 +456,18 @@ void LCD_Eland_Num_Set(LCD_Digital_Serial_t Serial, u8 data)
         }
         else
         {
-            LCD->RAM[(37 - Serial) / 2] &= ((Serial % 2) ? 0xfe : 0xef);
+            LCD->RAM[(36 - Serial) / 2] &= ((Serial % 2) ? 0xfe : 0xef);
             if (Cache.Digital_B != 0)
-                LCD->RAM[(37 - Serial) / 2] |= ((Serial % 2) ? 0x01 : 0x10);
+                LCD->RAM[(36 - Serial) / 2] |= ((Serial % 2) ? 0x01 : 0x10);
         }
-        LCD->RAM[(16 - Serial) / 2] &= (Serial % 2) ? 0x0f : 0xf0;
-        LCD->RAM[(16 - Serial) / 2] |= (Cache.Digital_CALK << ((Serial % 2) ? 4 : 0));
+        LCD->RAM[(29 - Serial) / 2] &= (Serial % 2) ? 0xf0 : 0x0f;
+        LCD->RAM[(29 - Serial) / 2] |= (Cache.Digital_CALK << ((Serial % 2) ? 0 : 4));
 
-        LCD->RAM[(23 - Serial) / 2] &= (Serial % 2) ? 0xf0 : 0x0f;
-        LCD->RAM[(23 - Serial) / 2] |= (Cache.Digital_EDMJ << ((Serial % 2) ? 0 : 4));
+        LCD->RAM[(22 - Serial) / 2] &= (Serial % 2) ? 0x0f : 0xf0;
+        LCD->RAM[(22 - Serial) / 2] |= (Cache.Digital_EDMJ << ((Serial % 2) ? 4 : 0));
 
-        LCD->RAM[(40 - Serial) / 2] &= (Serial % 2) ? 0x0f : 0xf0;
-        LCD->RAM[(40 - Serial) / 2] |= (Cache.Digital_FGHI << ((Serial % 2) ? 4 : 0));
+        LCD->RAM[(15 - Serial) / 2] &= (Serial % 2) ? 0xf0 : 0x0f;
+        LCD->RAM[(15 - Serial) / 2] |= (Cache.Digital_FGHI << ((Serial % 2) ? 0 : 4));
     }
     else if (Serial < Serial_20) //Serial_17 ~ 19
     {
@@ -482,14 +478,14 @@ void LCD_Eland_Num_Set(LCD_Digital_Serial_t Serial, u8 data)
         if (Cache.Digital_B != 0)
             LCD->RAM[(59 - Serial) / 2] |= ((Serial % 2) ? 0x01 : 0x10);
 
-        LCD->RAM[(47 - Serial) / 2] &= (Serial % 2) ? 0xf0 : 0x0f;
-        LCD->RAM[(47 - Serial) / 2] |= (Cache.Digital_CALK << ((Serial % 2) ? 0 : 4));
+        LCD->RAM[(46 - Serial) / 2] &= (Serial % 2) ? 0x0f : 0xf0;
+        LCD->RAM[(46 - Serial) / 2] |= (Cache.Digital_CALK << ((Serial % 2) ? 4 : 0));
 
-        LCD->RAM[(51 - Serial) / 2] &= (Serial % 2) ? 0xf0 : 0x0f;
-        LCD->RAM[(51 - Serial) / 2] |= (Cache.Digital_EDMJ << ((Serial % 2) ? 0 : 4));
+        LCD->RAM[(50 - Serial) / 2] &= (Serial % 2) ? 0x0f : 0xf0;
+        LCD->RAM[(50 - Serial) / 2] |= (Cache.Digital_EDMJ << ((Serial % 2) ? 4 : 0));
 
-        LCD->RAM[(55 - Serial) / 2] &= (Serial % 2) ? 0xf0 : 0x0f;
-        LCD->RAM[(55 - Serial) / 2] |= (Cache.Digital_FGHI << ((Serial % 2) ? 0 : 4));
+        LCD->RAM[(54 - Serial) / 2] &= (Serial % 2) ? 0x0f : 0xf0;
+        LCD->RAM[(54 - Serial) / 2] |= (Cache.Digital_FGHI << ((Serial % 2) ? 4 : 0));
     }
     else if (Serial == Serial_20) //Serial_20
     {
