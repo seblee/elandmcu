@@ -447,7 +447,7 @@ void LCD_Eland_Num_Set(LCD_Digital_Serial_t Serial, u8 data)
         LCD->RAM[(Serial / 2) + 16] &= (Serial % 2) ? 0x0f : 0xf0;
         LCD->RAM[(Serial / 2) + 16] |= (Cache.Digital_FGHI << ((Serial % 2) ? 4 : 0));
     }
-    else if (Serial < Serial_17) //Serial_08 ~ 10
+    else if (Serial < Serial_17) //Serial_11 ~ 16
     {
         Cache = LCD_Eland_Digital_Convert(NEGATIVE, data);
         LCD_PageSelect(LCD_PageSelection_SecondPage);
@@ -460,7 +460,54 @@ void LCD_Eland_Num_Set(LCD_Digital_Serial_t Serial, u8 data)
         }
         else
         {
+            LCD->RAM[(37 - Serial) / 2] &= ((Serial % 2) ? 0xfe : 0xef);
+            if (Cache.Digital_B != 0)
+                LCD->RAM[(37 - Serial) / 2] |= ((Serial % 2) ? 0x01 : 0x10);
         }
+        LCD->RAM[(16 - Serial) / 2] &= (Serial % 2) ? 0x0f : 0xf0;
+        LCD->RAM[(16 - Serial) / 2] |= (Cache.Digital_CALK << ((Serial % 2) ? 4 : 0));
+
+        LCD->RAM[(23 - Serial) / 2] &= (Serial % 2) ? 0xf0 : 0x0f;
+        LCD->RAM[(23 - Serial) / 2] |= (Cache.Digital_EDMJ << ((Serial % 2) ? 0 : 4));
+
+        LCD->RAM[(40 - Serial) / 2] &= (Serial % 2) ? 0x0f : 0xf0;
+        LCD->RAM[(40 - Serial) / 2] |= (Cache.Digital_FGHI << ((Serial % 2) ? 4 : 0));
+    }
+    else if (Serial < Serial_20) //Serial_17 ~ 19
+    {
+        Cache = LCD_Eland_Digital_Convert(NEGATIVE, data);
+        LCD_PageSelect(LCD_PageSelection_SecondPage);
+
+        LCD->RAM[(59 - Serial) / 2] &= ((Serial % 2) ? 0xfe : 0xef);
+        if (Cache.Digital_B != 0)
+            LCD->RAM[(59 - Serial) / 2] |= ((Serial % 2) ? 0x01 : 0x10);
+
+        LCD->RAM[(47 - Serial) / 2] &= (Serial % 2) ? 0xf0 : 0x0f;
+        LCD->RAM[(47 - Serial) / 2] |= (Cache.Digital_CALK << ((Serial % 2) ? 0 : 4));
+
+        LCD->RAM[(51 - Serial) / 2] &= (Serial % 2) ? 0xf0 : 0x0f;
+        LCD->RAM[(51 - Serial) / 2] |= (Cache.Digital_EDMJ << ((Serial % 2) ? 0 : 4));
+
+        LCD->RAM[(55 - Serial) / 2] &= (Serial % 2) ? 0xf0 : 0x0f;
+        LCD->RAM[(55 - Serial) / 2] |= (Cache.Digital_FGHI << ((Serial % 2) ? 0 : 4));
+    }
+    else if (Serial == Serial_20) //Serial_20
+    {
+        Cache = LCD_Eland_Digital_Convert(NEGATIVE, data);
+        LCD_PageSelect(LCD_PageSelection_SecondPage);
+
+        LCD->RAM[13] &= 0xef;
+        if (Cache.Digital_B != 0)
+            LCD->RAM[13] |= 0x10;
+
+        LCD->RAM[10] &= 0xf0;
+        LCD->RAM[10] |= Cache.Digital_CALK;
+
+        LCD->RAM[6] &= 0x0f;
+        LCD->RAM[6] |= (Cache.Digital_EDMJ << 4);
+
+        LCD->RAM[3] &= 0xf0;
+        LCD->RAM[3] |= Cache.Digital_FGHI;
     }
 }
 
