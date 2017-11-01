@@ -1941,6 +1941,12 @@
     </settings>
   </configuration>
   <group>
+    <name>ELAND</name>
+    <file>
+      <name>$PROJ_DIR$\..\ELAND\eland_usart.c</name>
+    </file>
+  </group>
+  <group>
     <name>HARDWARE</name>
     <group>
       <name>GPIO</name>

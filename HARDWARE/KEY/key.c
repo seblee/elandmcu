@@ -19,8 +19,9 @@
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-u8 Trg = 0;   //按鍵單次狀態
-u8 Count = 0; //按鍵長按狀態
+uint16_t Key_Trg = 0;     //按鍵單次狀態
+uint16_t Key_Count = 0;   //按鍵長按狀態
+uint16_t Key_Restain = 0; //按鍵按捺狀態
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -43,19 +44,21 @@ void ElandKeyInit(void) //按键初始化
     GPIO_Init(ELAND_KEY_ADD_PORT, ELAND_KEY_ADD_PIN, GPIO_Mode_In_FL_No_IT);               //時間＋
     GPIO_Init(ELAND_KEY_MINUS_PORT, ELAND_KEY_MINUS_PIN, GPIO_Mode_In_FL_No_IT);           //時間－
     GPIO_Init(ELAND_KEY_MON_PORT, ELAND_KEY_MON_PIN, GPIO_Mode_In_FL_No_IT);               //mon時間
-    GPIO_Init(ELAND_KEY_ALARM_PORT, ELAND_KEY_ALARM_PIN, GPIO_Mode_In_FL_No_IT);           //鬧鐘
+    GPIO_Init(ELAND_KEY_ALARM_MODE_PORT, ELAND_KEY_ALARM_MODE_PIN, GPIO_Mode_In_FL_No_IT); //鬧鐘模式
     GPIO_Init(ELAND_KEY_WIFI_PORT, ELAND_KEY_WIFI_PIN, GPIO_Mode_In_FL_No_IT);             //wifi模式
+    GPIO_Init(ELAND_KEY_SNOOZE_PORT, ELAND_KEY_SNOOZE_PIN, GPIO_Mode_In_FL_No_IT);         //貪睡
+    GPIO_Init(ELAND_KEY_ALARM_PORT, ELAND_KEY_ALARM_PIN, GPIO_Mode_In_FL_No_IT);           //鬧鐘
 }
 /**
  ****************************************************************************
- * @Function : u8 Eland_PinState_Read(void)
+ * @Function : uint16_t Eland_PinState_Read(void)
  * @File     : key.c
  * @Program  : none
  * @Created  : 2017/10/25 by seblee
  * @Brief    : read pin state
  * @Version  : V1.0
 **/
-u8 Eland_PinState_Read(void)
+uint16_t Eland_PinState_Read(void)
 {
     u8 Cache = 0;
     if (GPIO_ReadInputDataBit(ELAND_KEY_SET_PORT, ELAND_KEY_SET_PIN))
@@ -68,10 +71,14 @@ u8 Eland_PinState_Read(void)
         Cache |= KEY_Minus; //時間－
     if (GPIO_ReadInputDataBit(ELAND_KEY_MON_PORT, ELAND_KEY_MON_PIN))
         Cache |= KEY_MON; //mon時間
-    if (GPIO_ReadInputDataBit(ELAND_KEY_ALARM_PORT, ELAND_KEY_ALARM_PIN))
-        Cache |= KEY_Alarm; //鬧鐘
+    if (GPIO_ReadInputDataBit(ELAND_KEY_ALARM_MODE_PORT, ELAND_KEY_ALARM_MODE_PIN))
+        Cache |= KEY_AlarmMode; //鬧鐘模式
     if (GPIO_ReadInputDataBit(ELAND_KEY_WIFI_PORT, ELAND_KEY_WIFI_PIN))
         Cache |= KEY_Wifi; //wifi模式
+    if (GPIO_ReadInputDataBit(ELAND_KEY_WIFI_PORT, ELAND_KEY_WIFI_PIN))
+        Cache |= KEY_Snooze; //貪睡
+    if (GPIO_ReadInputDataBit(ELAND_KEY_WIFI_PORT, ELAND_KEY_WIFI_PIN))
+        Cache |= KEY_Alarm; //鬧鐘
     return Cache;
 }
 /**
@@ -85,14 +92,14 @@ u8 Eland_PinState_Read(void)
 **/
 void Eland_KeyState_Read(void)
 {
-    static u8 KeyValue_last = 0;
-    u8 KeyValue_present, ReadData;
+    static uint16_t KeyValue_last = 0;
+    uint16_t KeyValue_present, ReadData;
     KeyValue_present = Eland_PinState_Read(); //key当前值
     if (KeyValue_present == KeyValue_last)    //去抖20ms
     {
         ReadData = KeyValue_present ^ 0x7f;
-        Trg = ReadData & (ReadData ^ Count);
-        Count = ReadData;
+        Key_Trg = ReadData & (ReadData ^ Key_Count);
+        Key_Count = ReadData;
     }
     KeyValue_last = KeyValue_present;
 }

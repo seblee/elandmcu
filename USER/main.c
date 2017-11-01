@@ -53,7 +53,7 @@ void main(void)
     LCD_ELAND_Init();
     RGBLED_CFG();
 
-    TIM5_SetCompare1(0);
+    TIM5_SetCompare1(TIM5_PERIOD);
     LCD_ELAND_Write_All();
     ElandKeyInit();
     //RGBLED_Color_Set(ELAND_WHITE);

@@ -58,7 +58,7 @@ CONST uint16_t NumberMap[10] = {
     /* 5       6       7       8       9   */
     0X1EF7, 0X1FF7, 0X18CE, 0XFFFF, 0X1EFF};
 /* Private function prototypes -----------------------------------------------*/
-static __Digital_Coding_t LCD_Eland_Digital_Convert(LCD_Coding_Dirtction_t direction uint8_t Data);
+static __Digital_Coding_t LCD_Eland_Digital_Convert(LCD_Coding_Dirtction_t direction, uint8_t Data);
 /* Private functions ---------------------------------------------------------*/
 
 /**
@@ -509,14 +509,14 @@ void LCD_Eland_Num_Set(LCD_Digital_Serial_t Serial, u8 data)
 
 /**
  ****************************************************************************
- * @Function : static __Digital_Coding_t LCD_Eland_Digital_Convert(LCD_Coding_Dirtction_t direction uint8_t Data)
+ * @Function : static __Digital_Coding_t LCD_Eland_Digital_Convert(LCD_Coding_Dirtction_t direction, uint8_t Data)
  * @File     : lcd_eland.c
  * @Program  : Data:
  * @Created  : 2017/10/30 by seblee
  * @Brief    : Data to Digital
  * @Version  : V1.0
 **/
-static __Digital_Coding_t LCD_Eland_Digital_Convert(LCD_Coding_Dirtction_t direction uint8_t Data)
+static __Digital_Coding_t LCD_Eland_Digital_Convert(LCD_Coding_Dirtction_t direction, uint8_t Data)
 {
     __Digital_Coding_t Cache;
     uint16_t Num_Cache = 0;

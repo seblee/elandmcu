@@ -1,34 +1,41 @@
 /**
  ****************************************************************************
  * @Warning :Without permission from the author,Not for commercial use
- * @File    :syscfg.h
+ * @File    :eland_usart.h
  * @Author  :seblee
- * @date    :2017/10/23
+ * @date    :2017/11/1
  * @version :V 1.0.0
  *************************************************
  * @brief   :
  ****************************************************************************
 **/
-#ifndef __SYSCFG_H_
-#define __SYSCFG_H_
+#ifndef __ELAND_USART_H_
+#define __ELAND_USART_H_
 /* Private include -----------------------------------------------------------*/
-#include "stm8l15x.h"
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "syscfg.h"
 /* Private typedef -----------------------------------------------------------*/
+typedef enum {
+    KEY_READ_02 = 0X02,
+    TIME_SET_03,
+    TIME_READ_04,
+} __msg_function_t;
+
+typedef enum {
+    FrameHeadSataus,
+    FrameDataStatus,
+    FrameTrailSataus,
+    FrameEndStatus,
+} __msg_state_t;
 
 /* Private define ------------------------------------------------------------*/
-#define RTC_LSE
-#define CLK_SUE_HSI
-
+#define Uart_Packet_Header (uint8_t)(0x55)
+#define Uart_Packet_Trail (uint8_t)(0xaa)
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
 
 /* Private function prototypes -----------------------------------------------*/
-void SysClock_Init(void);
-
+void ReceiveUsart(u8 Cache);
 /* Private functions ---------------------------------------------------------*/
 
-#endif /*__SYSCFG_H_*/
+#endif /*__ELAND_USART_H_*/

@@ -11,7 +11,7 @@
 **/
 /* Private include -----------------------------------------------------------*/
 #include "usart.h"
-
+#include "eland_usart.h"
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
@@ -102,7 +102,7 @@ void USART1_RX_Service(void)
 {
     u8 Cache;
     Cache = USART_ReceiveData8(USART1);
-    USART_SendData8(USART1, Cache);
+    ReceiveUsart(Cache);
 }
 /**
  ****************************************************************************
