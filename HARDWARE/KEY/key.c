@@ -24,7 +24,7 @@ uint16_t Key_Count = 0;   //按鍵長按狀態
 uint16_t Key_Restain = 0; //按鍵按捺狀態
 
 /* Private function prototypes -----------------------------------------------*/
-
+static void Eland_Key_Long_Press_State(void);
 /* Private functions ---------------------------------------------------------*/
 
 /**
@@ -75,9 +75,9 @@ uint16_t Eland_PinState_Read(void)
         Cache |= KEY_AlarmMode; //鬧鐘模式
     if (GPIO_ReadInputDataBit(ELAND_KEY_WIFI_PORT, ELAND_KEY_WIFI_PIN))
         Cache |= KEY_Wifi; //wifi模式
-    if (GPIO_ReadInputDataBit(ELAND_KEY_WIFI_PORT, ELAND_KEY_WIFI_PIN))
+    if (GPIO_ReadInputDataBit(ELAND_KEY_SNOOZE_PORT, ELAND_KEY_SNOOZE_PIN))
         Cache |= KEY_Snooze; //貪睡
-    if (GPIO_ReadInputDataBit(ELAND_KEY_WIFI_PORT, ELAND_KEY_WIFI_PIN))
+    if (GPIO_ReadInputDataBit(ELAND_KEY_ALARM_PORT, ELAND_KEY_ALARM_PIN))
         Cache |= KEY_Alarm; //鬧鐘
     return Cache;
 }
@@ -102,4 +102,34 @@ void Eland_KeyState_Read(void)
         Key_Count = ReadData;
     }
     KeyValue_last = KeyValue_present;
+    Eland_Key_Long_Press_State();
+}
+/**
+ ****************************************************************************
+ * @Function : void Eland_Key_Long_Press_State(void)
+ * @File     : key.c
+ * @Program  : none
+ * @Created  : 2017/11/2 by seblee
+ * @Brief    : check long press state 20ms 訪問一次
+ * @Version  : V1.0
+**/
+static void Eland_Key_Long_Press_State(void)
+{
+    static uint8_t KEY_Timer[9];
+    uint8_t i;
+    for (i = 0; i < 9; i++)
+    {
+        if (Key_Count & (1 << i))
+        {
+            if (KEY_Timer[i] < LONG_PRESS_TIMES)
+                KEY_Timer[i]++;
+            else
+                Key_Restain |= (1 << i);
+        }
+        else
+        {
+            KEY_Timer[i] = 0;
+            Key_Restain &= (~(1 << i));
+        }
+    }
 }

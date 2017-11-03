@@ -58,6 +58,7 @@ typedef enum {
 #define ELAND_KEY_ALARM_PORT GPIOC
 #define ELAND_KEY_ALARM_PIN GPIO_Pin_1
 
+#define LONG_PRESS_TIMES 100 //10×20ms=2s
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/

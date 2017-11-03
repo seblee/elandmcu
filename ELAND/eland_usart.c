@@ -115,7 +115,7 @@ static void OprationFrame(void)
  * @Function : void MODH_Read_02H(void)
  * @File     : eland_usart.c
  * @Program  : H02 header fun len 鍵值狀態(2Byte) 長按狀態(2Byte)  tral
- *                    55   02  04   xx xx             xx xx        0xaa
+ *                    55   02  04   xx xx             xx xx       0xaa
  * @Created  : 2017/11/1 by seblee
  * @Brief    : oprate KEY_READ_02
  * @Version  : V1.0
@@ -132,7 +132,6 @@ static void MODH_Read_02H(void)
     *(SendBuf + 5) = (uint8_t)(Key_Restain >> 8);
     *(SendBuf + 6) = (uint8_t)(Key_Restain & 0xff);
     *(SendBuf + 7) = Uart_Packet_Trail;
-
     USARTx_Send_Data(USART1, SendBuf, 8);
     free(SendBuf);
 }
