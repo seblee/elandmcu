@@ -50,7 +50,7 @@ The character A for example is:
   SEG(n+3)  { 0 ,     0 ,      0 ,     1 }
    --------------------------------------------------------
            =  0       0        2       5  hex
-           
+
   */
 CONST uint16_t NumberMap[10] = {
     /* 0       1       2       3       4   */
@@ -99,6 +99,7 @@ void LCD_ELAND_Init(void)
     LCD_ContrastConfig(LCD_Contrast_Level_7);
 
     LCD_PulseOnDurationConfig(LCD_PulseOnDuration_7);
+    LCD_DeadTimeConfig(LCD_DeadTime_0);
 
     LCD_Cmd(ENABLE); /*!< Enable LCD peripheral */
 }
@@ -147,7 +148,7 @@ void LCD_ELAND_Write_All(void)
     /* Enable the write access on the LCD RAM First banck */
     LCD_PageSelect(LCD_PageSelection_FirstPage);
 
-    for (counter = 0x0; counter < 0x10; counter++)
+    for (counter = 0x0; counter < 0x16; counter++)
     {
         LCD->RAM[counter] = 0xff;
     }
@@ -155,7 +156,7 @@ void LCD_ELAND_Write_All(void)
     /* Enable the write access on the LCD RAM second banck */
     LCD_PageSelect(LCD_PageSelection_SecondPage);
 
-    for (counter = 0x0; counter < 0x10; counter++)
+    for (counter = 0x0; counter < 0x16; counter++)
     {
         LCD->RAM[counter] = 0xff;
     }
@@ -434,14 +435,14 @@ void LCD_Eland_Num_Set(LCD_Digital_Serial_t Serial, u8 data)
         if (Cache.Digital_B != 0)
             LCD->RAM[(Serial + 21) / 2] |= (((Serial + 21) % 2) ? 0x80 : 0x08);
 
-        LCD->RAM[(Serial / 2) + 12] &= (Serial % 2) ? 0x0f : 0xf0;
-        LCD->RAM[(Serial / 2) + 12] |= (Cache.Digital_CALK << ((Serial % 2) ? 4 : 0));
+        LCD->RAM[(Serial + 25) / 2] &= (Serial % 2) ? 0xf0 : 0x0f;
+        LCD->RAM[(Serial + 25) / 2] |= (Cache.Digital_CALK << ((Serial % 2) ? 0 : 4));
 
-        LCD->RAM[(Serial / 2) + 14] &= (Serial % 2) ? 0x0f : 0xf0;
-        LCD->RAM[(Serial / 2) + 14] |= (Cache.Digital_EDMJ << ((Serial % 2) ? 4 : 0));
+        LCD->RAM[(Serial + 29) / 2] &= (Serial % 2) ? 0xf0 : 0x0f;
+        LCD->RAM[(Serial + 29) / 2] |= (Cache.Digital_EDMJ << ((Serial % 2) ? 0 : 4));
 
-        LCD->RAM[(Serial / 2) + 16] &= (Serial % 2) ? 0x0f : 0xf0;
-        LCD->RAM[(Serial / 2) + 16] |= (Cache.Digital_FGHI << ((Serial % 2) ? 4 : 0));
+        LCD->RAM[(Serial + 33) / 2] &= (Serial % 2) ? 0xf0 : 0x0f;
+        LCD->RAM[(Serial + 33) / 2] |= (Cache.Digital_FGHI << ((Serial % 2) ? 0 : 4));
     }
     else if (Serial < Serial_17) //Serial_11 ~ 16
     {
@@ -456,9 +457,9 @@ void LCD_Eland_Num_Set(LCD_Digital_Serial_t Serial, u8 data)
         }
         else
         {
-            LCD->RAM[(36 - Serial) / 2] &= ((Serial % 2) ? 0xfe : 0xef);
+            LCD->RAM[(36 - Serial) / 2] &= ((Serial % 2) ? 0xef : 0xfe);
             if (Cache.Digital_B != 0)
-                LCD->RAM[(36 - Serial) / 2] |= ((Serial % 2) ? 0x01 : 0x10);
+                LCD->RAM[(36 - Serial) / 2] |= ((Serial % 2) ? 0x10 : 0x01);
         }
         LCD->RAM[(29 - Serial) / 2] &= (Serial % 2) ? 0xf0 : 0x0f;
         LCD->RAM[(29 - Serial) / 2] |= (Cache.Digital_CALK << ((Serial % 2) ? 0 : 4));
@@ -474,18 +475,18 @@ void LCD_Eland_Num_Set(LCD_Digital_Serial_t Serial, u8 data)
         Cache = LCD_Eland_Digital_Convert(NEGATIVE, data);
         LCD_PageSelect(LCD_PageSelection_SecondPage);
 
-        LCD->RAM[(59 - Serial) / 2] &= ((Serial % 2) ? 0xfe : 0xef);
+        LCD->RAM[(58 - Serial) / 2] &= ((Serial % 2) ? 0xef : 0xfe);
         if (Cache.Digital_B != 0)
-            LCD->RAM[(59 - Serial) / 2] |= ((Serial % 2) ? 0x01 : 0x10);
+            LCD->RAM[(58 - Serial) / 2] |= ((Serial % 2) ? 0x10 : 0x01);
 
-        LCD->RAM[(46 - Serial) / 2] &= (Serial % 2) ? 0x0f : 0xf0;
-        LCD->RAM[(46 - Serial) / 2] |= (Cache.Digital_CALK << ((Serial % 2) ? 4 : 0));
+        LCD->RAM[(54 - Serial) / 2] &= (Serial % 2) ? 0x0f : 0xf0;
+        LCD->RAM[(54 - Serial) / 2] |= (Cache.Digital_CALK << ((Serial % 2) ? 4 : 0));
 
         LCD->RAM[(50 - Serial) / 2] &= (Serial % 2) ? 0x0f : 0xf0;
         LCD->RAM[(50 - Serial) / 2] |= (Cache.Digital_EDMJ << ((Serial % 2) ? 4 : 0));
 
-        LCD->RAM[(54 - Serial) / 2] &= (Serial % 2) ? 0x0f : 0xf0;
-        LCD->RAM[(54 - Serial) / 2] |= (Cache.Digital_FGHI << ((Serial % 2) ? 4 : 0));
+        LCD->RAM[(46 - Serial) / 2] &= (Serial % 2) ? 0x0f : 0xf0;
+        LCD->RAM[(46 - Serial) / 2] |= (Cache.Digital_FGHI << ((Serial % 2) ? 4 : 0));
     }
     else if (Serial == Serial_20) //Serial_20
     {
@@ -538,4 +539,139 @@ static __Digital_Coding_t LCD_Eland_Digital_Convert(LCD_Coding_Dirtction_t direc
         Cache.WORD = Num_Cache;
     }
     return Cache;
+}
+/**
+ ****************************************************************************
+ * @Function : void LCD_Eland_Week_Set(u8 type,u8 day)
+ * @File     : lcd_eland.c
+ * @Program  : type: TIME_WEEK/ALARM_WEEK
+ *             day : The day of the week
+ * @Created  : 2017/11/4 by seblee
+ * @Brief    : set week day
+ * @Version  : V1.0
+**/
+void LCD_Eland_Week_Set(LCD_Week_Type_t type, LCD_Week_Day_t day)
+{
+    uint8_t i;
+    if (type == TIME_WEEK)
+    {
+        LCD_PageSelect(LCD_PageSelection_FirstPage);
+        for (i = 0; i < 3; i++)
+            LCD->RAM[i] &= 0xbf;
+        LCD->RAM[3] &= 0xfb;
+        LCD->RAM[14] &= 0xbb;
+        LCD->RAM[15] &= 0xfb;
+        if (day < WEDNESDAY)
+            LCD->RAM[day] |= 0x40;
+        else if (day < THURSDAY)
+            LCD->RAM[3] |= 0x04;
+        else if (day <= SATURDAY)
+            LCD->RAM[day / 2 + 12] |= (0x04 << ((day % 2) ? 4 : 0));
+    }
+    else if (type == ALARM_WEEK)
+    {
+        LCD_PageSelect(LCD_PageSelection_SecondPage);
+        LCD->RAM[10] &= 0xdf;
+        LCD->RAM[11] &= 0x99;
+        LCD->RAM[20] &= 0x7f;
+        LCD->RAM[21] &= 0xfd;
+        switch (day)
+        {
+        case SUNDAY:
+            LCD->RAM[11] |= 0X40;
+            break;
+        case MONDAY:
+            LCD->RAM[11] |= 0X20;
+            break;
+        case TUESDAY:
+            LCD->RAM[11] |= 0X04;
+            break;
+        case WEDNESDAY:
+            LCD->RAM[11] |= 0X02;
+            break;
+        case THURSDAY:
+            LCD->RAM[10] |= 0X20;
+            break;
+        case FRIDAY:
+            LCD->RAM[21] |= 0X02;
+            break;
+        case SATURDAY:
+            LCD->RAM[20] |= 0X80;
+            break;
+        default:
+            break;
+        }
+    }
+}
+/**
+ ****************************************************************************
+ * @Function : void LCD_Eland_Wifi_RSSI_Set(LCD_Wifi_Rssi_t level)
+ * @File     : lcd_eland.c
+ * @Program  : level:Rssi level
+ * @Created  : 2017/11/4 by seblee
+ * @Brief    : set wifi play
+ * @Version  : V1.0
+**/
+void LCD_Eland_Wifi_RSSI_Set(LCD_Wifi_Rssi_t level)
+{
+    LCD_PageSelect(LCD_PageSelection_SecondPage);
+    LCD->RAM[12] &= 0x1f;
+    LCD->RAM[13] &= 0xfe;
+
+    switch (level)
+    {
+    case LEVEL0:
+        break; // 0x0000,
+    case LEVEL1:
+        LCD->RAM[13] |= 0x01;
+        break;
+    case LEVEL2:
+        LCD->RAM[12] |= 0x80;
+        LCD->RAM[13] |= 0x01;
+        break;
+    case LEVEL3:
+        LCD->RAM[12] |= 0xd0;
+        LCD->RAM[13] |= 0x01;
+        break;
+    case LEVEL4:
+        LCD->RAM[12] |= 0xe0;
+        LCD->RAM[13] |= 0x01;
+        break;
+    default:
+        break;
+    }
+}
+/**
+ ****************************************************************************
+ * @Function : void LCD_Eland_Time_Display(_eland_date_time time)
+ * @File     : lcd_eland.c
+ * @Program  : time:to set
+ * @Created  : 2017/11/4 by seblee
+ * @Brief    : display time
+ * @Version  : V1.0
+**/
+void LCD_Eland_Time_Display(_eland_date_time time)
+{
+    LCD_Week_Day_t week_temp;
+    LCD_Eland_Num_Set(Serial_01, ((time.year / 10) % 10)); //year
+    LCD_Eland_Num_Set(Serial_02, (time.year % 10));        //year
+
+    LCD_Eland_Num_Set(Serial_03, ((time.month / 10) % 10)); //month
+    LCD_Eland_Num_Set(Serial_04, (time.month % 10));        //month
+
+    LCD_Eland_Num_Set(Serial_05, ((time.day / 10) % 10)); //day
+    LCD_Eland_Num_Set(Serial_06, (time.day % 10));        //day
+
+    LCD_Eland_Num_Set(Serial_07, ((time.hour / 10) % 10));   //hour
+    LCD_Eland_Num_Set(Serial_08, (time.hour % 10));          //hour
+    LCD_Eland_Num_Set(Serial_09, ((time.minute / 10) % 10)); //minute
+    LCD_Eland_Num_Set(Serial_10, (time.minute % 10));        //minute
+    LCD_Eland_Num_Set(Serial_11, ((time.second / 10) % 10)); //second
+    LCD_Eland_Num_Set(Serial_12, (time.second % 10));        //second
+
+    if (time.week < RTC_Weekday_Sunday)
+        week_temp = (LCD_Week_Day_t)time.week;
+    else if (time.week == RTC_Weekday_Sunday)
+        week_temp = SUNDAY;
+    LCD_Eland_Week_Set(TIME_WEEK, week_temp);
 }

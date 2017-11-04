@@ -48,9 +48,10 @@ typedef struct
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-
+extern _eland_date_time ElandCurrentTime;
+extern __IO bool AlarmOccurred;
 /* Private function prototypes -----------------------------------------------*/
-void ELAND_RTC_Init(void); 
+void ELAND_RTC_Init(void);
 void ELAND_RTC_ALARM_ISR(void);
 /* Private functions ---------------------------------------------------------*/
 

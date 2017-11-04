@@ -11,6 +11,7 @@
 **/
 /* Private include -----------------------------------------------------------*/
 #include "rtc.h"
+#include "lcd_eland.h"
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
@@ -24,7 +25,7 @@ RTC_DateTypeDef RTC_DateStr;
 RTC_AlarmTypeDef RTC_AlarmStr;
 
 __IO bool AlarmOccurred = FALSE;
-_eland_date_time ElandCurrentTime = {2017, RTC_Month_October, 23, 17, 23, 30, RTC_Weekday_Monday};
+_eland_date_time ElandCurrentTime = {2017, RTC_Month_November, 4, 15, 49, 30, RTC_Weekday_Saturday};
 /* Private function prototypes -----------------------------------------------*/
 void Calendar_Init(void);
 /* Private functions ---------------------------------------------------------*/
@@ -61,16 +62,16 @@ void Calendar_Init(void)
     RTC_Init(&RTC_InitStr);
 
     RTC_DateStructInit(&RTC_DateStr);
-    RTC_DateStr.RTC_WeekDay = RTC_Weekday_Friday;
-    RTC_DateStr.RTC_Date = 13;
-    RTC_DateStr.RTC_Month = RTC_Month_May;
-    RTC_DateStr.RTC_Year = 11;
+    RTC_DateStr.RTC_WeekDay = ElandCurrentTime.week;
+    RTC_DateStr.RTC_Date = ElandCurrentTime.day;
+    RTC_DateStr.RTC_Month = ElandCurrentTime.month;
+    RTC_DateStr.RTC_Year = ElandCurrentTime.year % 100;
     RTC_SetDate(RTC_Format_BIN, &RTC_DateStr);
 
     RTC_TimeStructInit(&RTC_TimeStr);
-    RTC_TimeStr.RTC_Hours = 01;
-    RTC_TimeStr.RTC_Minutes = 00;
-    RTC_TimeStr.RTC_Seconds = 00;
+    RTC_TimeStr.RTC_Hours = ElandCurrentTime.hour;
+    RTC_TimeStr.RTC_Minutes = ElandCurrentTime.minute;
+    RTC_TimeStr.RTC_Seconds = ElandCurrentTime.second;
     RTC_SetTime(RTC_Format_BIN, &RTC_TimeStr);
 
     RTC_AlarmStructInit(&RTC_AlarmStr);
@@ -145,7 +146,7 @@ void ELAND_RTC_Read(_eland_date_time *time)
 **/
 void ELAND_RTC_ALARM_ISR(void)
 {
-    AlarmOccurred = TRUE;
     ELAND_RTC_Read(&ElandCurrentTime);
     RTC_ClearITPendingBit(RTC_IT_ALRA);
+    AlarmOccurred = TRUE;
 }

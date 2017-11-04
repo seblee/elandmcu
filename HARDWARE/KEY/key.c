@@ -60,7 +60,7 @@ void ElandKeyInit(void) //按键初始化
 **/
 uint16_t Eland_PinState_Read(void)
 {
-    u8 Cache = 0;
+    uint16_t Cache = 0;
     if (GPIO_ReadInputDataBit(ELAND_KEY_SET_PORT, ELAND_KEY_SET_PIN))
         Cache |= KEY_Set; //時刻設置
     if (GPIO_ReadInputDataBit(ELAND_KEY_SOFT_RESET_PORT, ELAND_KEY_SOFT_RESET_PIN))
@@ -79,6 +79,7 @@ uint16_t Eland_PinState_Read(void)
         Cache |= KEY_Snooze; //貪睡
     if (GPIO_ReadInputDataBit(ELAND_KEY_ALARM_PORT, ELAND_KEY_ALARM_PIN))
         Cache |= KEY_Alarm; //鬧鐘
+
     return Cache;
 }
 /**
@@ -97,7 +98,7 @@ void Eland_KeyState_Read(void)
     KeyValue_present = Eland_PinState_Read(); //key当前值
     if (KeyValue_present == KeyValue_last)    //去抖20ms
     {
-        ReadData = KeyValue_present ^ 0x7f;
+        ReadData = KeyValue_present ^ 0x01ff;
         Key_Trg = ReadData & (ReadData ^ Key_Count);
         Key_Count = ReadData;
     }

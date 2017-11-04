@@ -13,6 +13,7 @@
 #define __LCD_ELAND_H_
 /* Private include -----------------------------------------------------------*/
 #include "syscfg.h"
+#include "rtc.h"
 /* Private typedef -----------------------------------------------------------*/
 typedef enum {
     COM_0 = (uint8_t)0x00, /*!< COM 0  */
@@ -59,10 +60,34 @@ typedef union {
         unsigned char Digital_EDMJ : 4; //word 4-7    Data[1] 4-7
     };
 } __Digital_Coding_t;
+
 typedef enum {
     POSITIVE,
     NEGATIVE,
 } LCD_Coding_Dirtction_t;
+
+typedef enum {
+    TIME_WEEK,
+    ALARM_WEEK,
+} LCD_Week_Type_t;
+
+typedef enum {
+    SUNDAY,
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY,
+    THURSDAY,
+    FRIDAY,
+    SATURDAY,
+} LCD_Week_Day_t;
+
+typedef enum {
+    LEVEL0,
+    LEVEL1,
+    LEVEL2,
+    LEVEL3,
+    LEVEL4,
+} LCD_Wifi_Rssi_t;
 
 /* Private define ------------------------------------------------------------*/
 
@@ -78,6 +103,10 @@ void LCD_Eland_Pixel_Write(LCD_COMx_TypeDef COMx, u8 SEGn);
 void LCD_Eland_Pixel_Clear(LCD_COMx_TypeDef COMx, u8 SEGn);
 void LCD_Eland_COMx_Write(LCD_COMx_TypeDef COMx);
 void LCD_Eland_COMx_Clear(LCD_COMx_TypeDef COMx);
+void LCD_Eland_Num_Set(LCD_Digital_Serial_t Serial, u8 data);
+void LCD_Eland_Week_Set(LCD_Week_Type_t type, LCD_Week_Day_t day);
+void LCD_Eland_Wifi_RSSI_Set(LCD_Wifi_Rssi_t level);
+void LCD_Eland_Time_Display(_eland_date_time time);
 /* Private functions ---------------------------------------------------------*/
 
 #endif /*__LCD_ELAND_H_*/

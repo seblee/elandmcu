@@ -196,6 +196,7 @@ void RGBLED_Color_Set(__eland_color_t color)
         RGBLED_Input_RGB(255, 255, 255);
         break;
     default:
+        RGBLED_Input_RGB(255, 255, 255);
         break;
     }
 }
