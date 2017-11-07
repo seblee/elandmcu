@@ -666,8 +666,8 @@ void LCD_Eland_Time_Display(_eland_date_time time)
     LCD_Eland_Num_Set(Serial_08, (time.hour % 10));          //hour
     LCD_Eland_Num_Set(Serial_09, ((time.minute / 10) % 10)); //minute
     LCD_Eland_Num_Set(Serial_10, (time.minute % 10));        //minute
-    LCD_Eland_Num_Set(Serial_11, ((time.second / 10) % 10)); //second
-    LCD_Eland_Num_Set(Serial_12, (time.second % 10));        //second
+    // LCD_Eland_Num_Set(Serial_11, ((time.second / 10) % 10)); //second
+    // LCD_Eland_Num_Set(Serial_12, (time.second % 10));        //second
 
     if (time.week < RTC_Weekday_Sunday)
         week_temp = (LCD_Week_Day_t)time.week;

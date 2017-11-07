@@ -40,9 +40,7 @@
 **/
 void main(void)
 {
-    u8 temp;
-    u8 data = 0;
-    __eland_color_t color = ELAND_BLACK;
+    __eland_color_t color = ELAND_RED;
     disableInterrupts();
     /* System clock */
     SysClock_Init();
@@ -52,15 +50,12 @@ void main(void)
     LCD_ELAND_Init();
     RGBLED_CFG();
     ElandKeyInit();
-    RGBLED_Color_Set(ELAND_WHITE);
     IWDG_Config();
     enableInterrupts();
     LCD_ELAND_Write_All();
     IWDG_ReloadCounter();
     TIM5_SetCompare1(TIM5_PERIOD);
     /* Infinite loop */
-    // LCD_Eland_Week_Set(TIME_WEEK, SATURDAY);
-    // LCD_Eland_Week_Set(ALARM_WEEK, SATURDAY);
     while (1)
     {
         /* Reload IWDG counter */
@@ -69,44 +64,29 @@ void main(void)
         if (AlarmOccurred == TRUE)
         {
             AlarmOccurred = FALSE;
-            // LCD_Eland_Time_Display(ElandCurrentTime);
+            LCD_Eland_Time_Display(ElandCurrentTime);
         }
-        temp++;
-        if (temp > 60)
+
+        if ((Key_Trg & KEY_Set) ||
+            (Key_Trg & KEY_Reset) ||
+            (Key_Trg & KEY_Add) ||
+            (Key_Trg & KEY_Minus) ||
+            (Key_Trg & KEY_MON) ||
+            (Key_Trg & KEY_AlarmMode) ||
+            (Key_Trg & KEY_Wifi) ||
+            (Key_Trg & KEY_Snooze) ||
+            (Key_Trg & KEY_Alarm))
         {
-            temp = 0;
-            if (color == ELAND_WHITE)
-                color = ELAND_BLACK;
+            if (color == ELAND_RED)
+                color = ELAND_GREEN;
+            else if (color == ELAND_GREEN)
+                color = ELAND_BLUE;
+            else if (color == ELAND_BLUE)
+                color = ELAND_RED;
             else
-                color++;
+                color = ELAND_RED;
             RGBLED_Color_Set(color);
-
-            LCD_Eland_Num_Set(Serial_01, data % 10);
-            LCD_Eland_Num_Set(Serial_02, data % 10);
-            LCD_Eland_Num_Set(Serial_03, data % 10);
-            LCD_Eland_Num_Set(Serial_04, data % 10);
-            LCD_Eland_Num_Set(Serial_05, data % 10);
-            LCD_Eland_Num_Set(Serial_06, data % 10);
-            LCD_Eland_Num_Set(Serial_07, data % 10);
-            LCD_Eland_Num_Set(Serial_08, data % 10);
-            LCD_Eland_Num_Set(Serial_09, data % 10);
-            LCD_Eland_Num_Set(Serial_10, data % 10);
-            LCD_Eland_Num_Set(Serial_11, data % 10);
-            LCD_Eland_Num_Set(Serial_12, data % 10);
-            LCD_Eland_Num_Set(Serial_13, data % 10);
-            LCD_Eland_Num_Set(Serial_14, data % 10);
-            LCD_Eland_Num_Set(Serial_15, data % 10);
-            LCD_Eland_Num_Set(Serial_16, data % 10);
-            LCD_Eland_Num_Set(Serial_17, data % 10);
-            LCD_Eland_Num_Set(Serial_18, data % 10);
-            LCD_Eland_Num_Set(Serial_19, data % 10);
-            LCD_Eland_Num_Set(Serial_20, data % 10);
-            LCD_Eland_Week_Set(TIME_WEEK, (LCD_Week_Day_t)(data % 7));
-            LCD_Eland_Week_Set(ALARM_WEEK, (LCD_Week_Day_t)(data % 7));
-            LCD_Eland_Wifi_RSSI_Set((LCD_Wifi_Rssi_t)(data % 5));
-            data++;
         }
-
         while (1)
         {
             if (Timer_Counter_1ms > 20) //20ms
