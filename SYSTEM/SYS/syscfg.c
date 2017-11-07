@@ -11,6 +11,7 @@
  **/
 /* Private include -----------------------------------------------------------*/
 #include "syscfg.h"
+#include "timing_delay.h"
 
 /* Private typedef -----------------------------------------------------------*/
 
@@ -55,5 +56,9 @@ void SysClock_Init(void)
     CLK_LSEConfig(CLK_LSE_ON); // 使能外部LSE OSC（32.768KHz）
     while (CLK_GetFlagStatus(CLK_FLAG_LSERDY) == RESET)
         ; //等待直到LSE稳定
+    /* wait for 1 second for the LSE Stabilisation */
+    Delay_By_nop(50000);
+    Delay_By_nop(50000);
+
 #endif
 }
