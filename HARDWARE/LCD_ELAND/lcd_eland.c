@@ -675,3 +675,16 @@ void LCD_Eland_Time_Display(_eland_date_time time)
         week_temp = SUNDAY;
     LCD_Eland_Week_Set(TIME_WEEK, week_temp);
 }
+/**
+ ****************************************************************************
+ * @Function : void LCD_Eland_Time_Upgrade(_eland_date_time time)
+ * @File     : lcd_eland.c
+ * @Program  : time:real RTC time
+ * @Created  : 2017/11/8 by seblee
+ * @Brief    : upgrade time toggled point per second
+ * @Version  : V1.0
+**/
+void LCD_Eland_Time_Upgrade(_eland_date_time time)
+{
+    static _eland_date_time time;
+}
