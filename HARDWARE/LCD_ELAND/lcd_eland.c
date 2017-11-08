@@ -686,5 +686,13 @@ void LCD_Eland_Time_Display(_eland_date_time time)
 **/
 void LCD_Eland_Time_Upgrade(_eland_date_time time)
 {
-    static _eland_date_time time;
+    static _eland_date_time time_bak;
+    if (time_bak.minute != time.minute)
+    {
+        time_bak = time;
+        LCD_Eland_Time_Display(time);
+    }
+    //toggle point
+    LCD_PageSelect(LCD_PageSelection_FirstPage);
+    LCD->RAM[14] ^= 0x30;
 }
