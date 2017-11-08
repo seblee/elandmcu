@@ -25,7 +25,7 @@ RTC_DateTypeDef RTC_DateStr;
 RTC_AlarmTypeDef RTC_AlarmStr;
 
 __IO bool AlarmOccurred = FALSE;
-_eland_date_time ElandCurrentTime = {2017, RTC_Month_November, 4, 15, 49, 30, RTC_Weekday_Saturday};
+_eland_date_time ElandCurrentTime = {2017, RTC_Month_November, 7, 16, 00, 00, RTC_Weekday_Saturday};
 /* Private function prototypes -----------------------------------------------*/
 void Calendar_Init(void);
 /* Private functions ---------------------------------------------------------*/
@@ -40,10 +40,10 @@ void Calendar_Init(void);
 **/
 void ELAND_RTC_Init(void)
 {
-    CLK_PeripheralClockConfig(CLK_Peripheral_RTC, ENABLE);
-
     /* Select LSE (32.768 KHz) as RTC clock source */
     CLK_RTCClockConfig(CLK_RTCCLKSource_LSE, CLK_RTCCLKDiv_1);
+
+    CLK_PeripheralClockConfig(CLK_Peripheral_RTC, ENABLE);
 
     /* Calendar Configuration */
     Calendar_Init();
@@ -57,8 +57,8 @@ void ELAND_RTC_Init(void)
 void Calendar_Init(void)
 {
     RTC_InitStr.RTC_HourFormat = RTC_HourFormat_24;
-    RTC_InitStr.RTC_AsynchPrediv = 0x7c;
-    RTC_InitStr.RTC_SynchPrediv = 0x012f;
+    RTC_InitStr.RTC_AsynchPrediv = 0x7f;
+    RTC_InitStr.RTC_SynchPrediv = 0x00ff;
     RTC_Init(&RTC_InitStr);
 
     RTC_DateStructInit(&RTC_DateStr);
@@ -120,8 +120,7 @@ void RTC_Time_Set(_eland_date_time time)
 void ELAND_RTC_Read(_eland_date_time *time)
 {
     /* Wait until the calendar is synchronized */
-    while (RTC_WaitForSynchro() != SUCCESS)
-        ;
+    // while (RTC_WaitForSynchro() != SUCCESS) ;//低功耗時候使用
     /* Get the current Time*/
     RTC_GetTime(RTC_Format_BIN, &RTC_TimeStr);
     /* Get the current Date */

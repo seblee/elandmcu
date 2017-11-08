@@ -40,8 +40,7 @@
 **/
 void main(void)
 {
-    u8 temp;
-    __eland_color_t color = ELAND_BLACK;
+    __eland_color_t color = ELAND_RED;
     disableInterrupts();
     /* System clock */
     SysClock_Init();
@@ -51,15 +50,12 @@ void main(void)
     LCD_ELAND_Init();
     RGBLED_CFG();
     ElandKeyInit();
-    RGBLED_Color_Set(ELAND_WHITE);
     IWDG_Config();
     enableInterrupts();
     LCD_ELAND_Write_All();
     IWDG_ReloadCounter();
     TIM5_SetCompare1(TIM5_PERIOD);
     /* Infinite loop */
-    // LCD_Eland_Week_Set(TIME_WEEK, SATURDAY);
-    // LCD_Eland_Week_Set(ALARM_WEEK, SATURDAY);
     while (1)
     {
         /* Reload IWDG counter */
@@ -68,19 +64,29 @@ void main(void)
         if (AlarmOccurred == TRUE)
         {
             AlarmOccurred = FALSE;
-            LCD_Eland_Time_Upgrade(ElandCurrentTime);
-        }
-        temp++;
-        if (temp > 60)
-        {
-            temp = 0;
-            if (color == ELAND_WHITE)
-                color = ELAND_BLACK;
-            else
-                color++;
-            RGBLED_Color_Set(color);
+            LCD_Eland_Time_Display(ElandCurrentTime);
         }
 
+        if ((Key_Trg & KEY_Set) ||
+            (Key_Trg & KEY_Reset) ||
+            (Key_Trg & KEY_Add) ||
+            (Key_Trg & KEY_Minus) ||
+            (Key_Trg & KEY_MON) ||
+            (Key_Trg & KEY_AlarmMode) ||
+            (Key_Trg & KEY_Wifi) ||
+            (Key_Trg & KEY_Snooze) ||
+            (Key_Trg & KEY_Alarm))
+        {
+            if (color == ELAND_RED)
+                color = ELAND_GREEN;
+            else if (color == ELAND_GREEN)
+                color = ELAND_BLUE;
+            else if (color == ELAND_BLUE)
+                color = ELAND_RED;
+            else
+                color = ELAND_RED;
+            RGBLED_Color_Set(color);
+        }
         while (1)
         {
             if (Timer_Counter_1ms > 20) //20ms
