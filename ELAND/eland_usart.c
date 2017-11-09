@@ -13,6 +13,7 @@
 #include "eland_usart.h"
 #include "key.h"
 #include "usart.h"
+#include "lcd_eland.h"
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
@@ -101,6 +102,9 @@ static void OprationFrame(void)
     {
     case KEY_READ_02:
         MODH_Read_02H();
+        LCD_Eland_Num_Set(Serial_18, (msg_receive_buff[3] / 100));
+        LCD_Eland_Num_Set(Serial_19, ((msg_receive_buff[3] / 10) % 10));
+        LCD_Eland_Num_Set(Serial_20, (msg_receive_buff[3] % 10));
         break;
     case TIME_SET_03:
         break;

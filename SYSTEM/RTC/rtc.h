@@ -41,6 +41,7 @@ typedef struct
     u8 minute;
     u8 second;
     RTC_Weekday_TypeDef week;
+    RTC_HourFormat_TypeDef HourFormat;
 } _eland_date_time;
 
 /* Private define ------------------------------------------------------------*/
