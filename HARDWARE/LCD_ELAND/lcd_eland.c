@@ -643,14 +643,14 @@ void LCD_Eland_Wifi_RSSI_Set(LCD_Wifi_Rssi_t level)
 }
 /**
  ****************************************************************************
- * @Function : void LCD_Eland_Time_Display(_eland_date_time time)
+ * @Function : void LCD_Eland_Time_Display(_eland_date_time_t time)
  * @File     : lcd_eland.c
  * @Program  : time:to set
  * @Created  : 2017/11/4 by seblee
  * @Brief    : display time
  * @Version  : V1.0
 **/
-void LCD_Eland_Time_Display(_eland_date_time time)
+void LCD_Eland_Time_Display(_eland_date_time_t time)
 {
     LCD_Week_Day_t week_temp;
     LCD_Eland_Num_Set(Serial_01, ((time.year / 10) % 10)); //year
@@ -677,16 +677,16 @@ void LCD_Eland_Time_Display(_eland_date_time time)
 }
 /**
  ****************************************************************************
- * @Function : void LCD_Eland_Time_Upgrade(_eland_date_time time)
+ * @Function : void LCD_Eland_Time_Upgrade(_eland_date_time_t time)
  * @File     : lcd_eland.c
  * @Program  : time:real RTC time
  * @Created  : 2017/11/8 by seblee
  * @Brief    : upgrade time toggled point per second
  * @Version  : V1.0
 **/
-void LCD_Eland_Time_Upgrade(_eland_date_time time)
+void LCD_Eland_Time_Upgrade(_eland_date_time_t time)
 {
-    static _eland_date_time time_bak;
+    static _eland_date_time_t time_bak;
     if (time_bak.minute != time.minute)
     {
         time_bak = time;

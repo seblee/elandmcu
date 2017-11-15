@@ -13,6 +13,7 @@
 #include "eland_usart.h"
 #include "key.h"
 #include "usart.h"
+#include "rtc.h"
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
@@ -24,6 +25,7 @@ uint8_t msg_receive_buff[30];
 /* Private function prototypes -----------------------------------------------*/
 static void OprationFrame(void);
 static void MODH_Read_02H(void);
+static void MODH_Read_03H(void);
 /* Private functions ---------------------------------------------------------*/
 
 /**
@@ -133,5 +135,31 @@ static void MODH_Read_02H(void)
     *(SendBuf + 6) = (uint8_t)(Key_Restain & 0xff);
     *(SendBuf + 7) = Uart_Packet_Trail;
     USARTx_Send_Data(USART1, SendBuf, 8);
+    free(SendBuf);
+}
+/**
+ ****************************************************************************
+ * @Function : void MODH_Read_03H(void)
+ * @File     : eland_usart.c
+ * @Program  : H02 header fun len cur_time(....)  tral
+ *                    55   03 len cur_time        0xaa
+ * @Created  : 2017/11/13 by seblee
+ * @Brief    : RTC time set
+ * @Version  : V1.0
+**/
+static void MODH_Read_03H(void)
+{
+    uint8_t *SendBuf;
+    platform_rtc_time_t time;
+    _eland_date_time_t time_1;
+    memcpy(&time, &msg_receive_buff[3], sizeof(platform_rtc_time_t));
+    time_1 = ELAND_Time_Convert(time);
+    RTC_Time_Set(time_1);
+    SendBuf = calloc(4, sizeof(uint8_t));
+    *SendBuf = Uart_Packet_Header;
+    *(SendBuf + 1) = TIME_SET_03;
+    *(SendBuf + 2) = 0;
+    *(SendBuf + 3) = Uart_Packet_Trail;
+    USARTx_Send_Data(USART1, SendBuf, 4);
     free(SendBuf);
 }

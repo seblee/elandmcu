@@ -41,18 +41,33 @@ typedef struct
     u8 minute;
     u8 second;
     RTC_Weekday_TypeDef week;
-} _eland_date_time;
+} _eland_date_time_t;
 
+/**
+ * RTC time
+ */
+typedef struct
+{
+    uint8_t sec;
+    uint8_t min;
+    uint8_t hr;
+    uint8_t weekday; /* 1-sunday... 7-saturday */
+    uint8_t date;
+    uint8_t month;
+    uint8_t year;
+} platform_rtc_time_t;
 /* Private define ------------------------------------------------------------*/
 
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-extern _eland_date_time ElandCurrentTime;
+extern _eland_date_time_t ElandCurrentTime;
 extern __IO bool AlarmOccurred;
 /* Private function prototypes -----------------------------------------------*/
 void ELAND_RTC_Init(void);
 void ELAND_RTC_ALARM_ISR(void);
+void RTC_Time_Set(_eland_date_time_t time);
+_eland_date_time_t ELAND_Time_Convert(platform_rtc_time_t SCR_time);
 /* Private functions ---------------------------------------------------------*/
 
 #endif /*__RTC_H_*/

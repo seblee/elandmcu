@@ -25,7 +25,7 @@ RTC_DateTypeDef RTC_DateStr;
 RTC_AlarmTypeDef RTC_AlarmStr;
 
 __IO bool AlarmOccurred = FALSE;
-_eland_date_time ElandCurrentTime = {2017, RTC_Month_November, 7, 16, 00, 00, RTC_Weekday_Saturday};
+_eland_date_time_t ElandCurrentTime = {2017, RTC_Month_November, 7, 16, 00, 00, RTC_Weekday_Saturday};
 /* Private function prototypes -----------------------------------------------*/
 void Calendar_Init(void);
 /* Private functions ---------------------------------------------------------*/
@@ -86,14 +86,14 @@ void Calendar_Init(void)
 }
 /**
  ****************************************************************************
- * @Function : void RTC_Time_Set(_eland_date_time time)
+ * @Function : void RTC_Time_Set(_eland_date_time_t time)
  * @File     : rtc.c
  * @Program  : time to set
  * @Created  : 2017/10/23 by seblee
  * @Brief    : set time
  * @Version  : V1.0
 **/
-void RTC_Time_Set(_eland_date_time time)
+void RTC_Time_Set(_eland_date_time_t time)
 {
     RTC_DateStructInit(&RTC_DateStr);
     RTC_DateStr.RTC_WeekDay = time.week;
@@ -110,14 +110,14 @@ void RTC_Time_Set(_eland_date_time time)
 }
 /**
  ****************************************************************************
- * @Function : void ELAND_RTC_Read(_eland_date_time *time)
+ * @Function : void ELAND_RTC_Read(_eland_date_time_t *time)
  * @File     : rtc.c
  * @Program  : time register
  * @Created  : 2017/10/23 by seblee
  * @Brief    : read rtc time
  * @Version  : V1.0
 **/
-void ELAND_RTC_Read(_eland_date_time *time)
+void ELAND_RTC_Read(_eland_date_time_t *time)
 {
     /* Wait until the calendar is synchronized */
     // while (RTC_WaitForSynchro() != SUCCESS) ;//低功耗時候使用
@@ -148,4 +148,38 @@ void ELAND_RTC_ALARM_ISR(void)
     ELAND_RTC_Read(&ElandCurrentTime);
     RTC_ClearITPendingBit(RTC_IT_ALRA);
     AlarmOccurred = TRUE;
+}
+/**
+ ****************************************************************************
+ * @Function : _eland_date_time_t ELAND_Time_Convert(platform_rtc_time_t SCR_time)
+ * @File     : rtc.c
+ * @Program  : SCR_time
+ * @Created  : 2017/11/13 by seblee
+ * @Brief    : time formate converrt
+ * @Version  : V1.0
+**/
+_eland_date_time_t ELAND_Time_Convert(platform_rtc_time_t SCR_time)
+{
+    _eland_date_time_t time;
+    time.year = SCR_time.year;
+
+    if (SCR_time.month <= RTC_Month_September)
+        time.month = (RTC_Month_TypeDef)SCR_time.month;
+    else if (SCR_time.month == 10)
+        time.month = RTC_Month_October;
+    else if (SCR_time.month == 11)
+        time.month = RTC_Month_November;
+    else if (SCR_time.month == 12)
+        time.month = RTC_Month_December;
+
+    time.day = SCR_time.date;
+    time.hour = SCR_time.hr;
+    time.minute = SCR_time.min;
+    time.second = SCR_time.sec;
+    if (SCR_time.weekday == 1)
+        time.week = RTC_Weekday_Sunday;
+    else
+        time.week = (RTC_Weekday_TypeDef)(SCR_time.weekday - 1);
+
+    return time;
 }
