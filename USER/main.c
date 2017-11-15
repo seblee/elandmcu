@@ -41,6 +41,7 @@
 void main(void)
 {
     __eland_color_t color = ELAND_RED;
+    u8 Cache;
     disableInterrupts();
     /* System clock */
     SysClock_Init();
@@ -52,7 +53,7 @@ void main(void)
     ElandKeyInit();
     IWDG_Config();
     enableInterrupts();
-    LCD_ELAND_Write_All();
+    //LCD_ELAND_Write_All();
     IWDG_ReloadCounter();
     TIM5_SetCompare1(TIM5_PERIOD);
     /* Infinite loop */
@@ -64,7 +65,12 @@ void main(void)
         if (AlarmOccurred == TRUE)
         {
             AlarmOccurred = FALSE;
-            LCD_Eland_Time_Display(ElandCurrentTime);
+            //LCD_Eland_Time_Display(ElandCurrentTime);
+        }
+        Cache++;
+        if (Cache > 2)
+        {
+            Cache = 0;
         }
 
         if ((Key_Trg & KEY_Set) ||
@@ -89,6 +95,7 @@ void main(void)
         }
         while (1)
         {
+
             if (Timer_Counter_1ms > 20) //20ms
             {
                 Timer_Counter_1ms = 0;
