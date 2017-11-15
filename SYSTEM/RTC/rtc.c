@@ -25,7 +25,7 @@ RTC_DateTypeDef RTC_DateStr;
 RTC_AlarmTypeDef RTC_AlarmStr;
 
 __IO bool AlarmOccurred = FALSE;
-_eland_date_time_t ElandCurrentTime = {2017, RTC_Month_November, 7, 16, 00, 00, RTC_Weekday_Saturday};
+_eland_date_time_t ElandCurrentTime = {2017, RTC_Month_November, 15, 13, 20, 00, RTC_Weekday_Wednesday};
 /* Private function prototypes -----------------------------------------------*/
 void Calendar_Init(void);
 /* Private functions ---------------------------------------------------------*/

@@ -105,6 +105,7 @@ static void OprationFrame(void)
         MODH_Read_02H();
         break;
     case TIME_SET_03:
+        MODH_Read_03H();
         break;
     case TIME_READ_04:
         break;
