@@ -24,8 +24,9 @@
 uint8_t msg_receive_buff[30];
 /* Private function prototypes -----------------------------------------------*/
 static void OprationFrame(void);
-static void MODH_Read_02H(void);
-static void MODH_Read_03H(void);
+static void MODH_Opration_02H(void);
+static void MODH_Opration_03H(void);
+static void MODH_Opration_04H(void);
 /* Private functions ---------------------------------------------------------*/
 
 /**
@@ -102,12 +103,13 @@ static void OprationFrame(void)
     switch (msg_receive_buff[1])
     {
     case KEY_READ_02:
-        MODH_Read_02H();
+        MODH_Opration_02H();
         break;
     case TIME_SET_03:
-        MODH_Read_03H();
+        MODH_Opration_03H();
         break;
     case TIME_READ_04:
+        MODH_Opration_04H();
         break;
     default:
         break;
@@ -115,7 +117,7 @@ static void OprationFrame(void)
 }
 /**
  ****************************************************************************
- * @Function : void MODH_Read_02H(void)
+ * @Function : void MODH_Opration_02H(void)
  * @File     : eland_usart.c
  * @Program  : H02 header fun len 鍵值狀態(2Byte) 長按狀態(2Byte)  tral
  *                    55   02  04   xx xx             xx xx       0xaa
@@ -123,7 +125,7 @@ static void OprationFrame(void)
  * @Brief    : oprate KEY_READ_02
  * @Version  : V1.0
 **/
-static void MODH_Read_02H(void)
+static void MODH_Opration_02H(void)
 {
     uint8_t *SendBuf;
     SendBuf = calloc(8, sizeof(uint8_t));
@@ -140,27 +142,57 @@ static void MODH_Read_02H(void)
 }
 /**
  ****************************************************************************
- * @Function : void MODH_Read_03H(void)
+ * @Function : void MODH_Opration_03H(void)
  * @File     : eland_usart.c
- * @Program  : H02 header fun len cur_time(....)  tral
+ * @Program  : H03 header fun len cur_time(....)  tral
  *                    55   03 len cur_time        0xaa
  * @Created  : 2017/11/13 by seblee
  * @Brief    : RTC time set
  * @Version  : V1.0
 **/
-static void MODH_Read_03H(void)
+static void MODH_Opration_03H(void)
 {
     uint8_t *SendBuf;
-    platform_rtc_time_t time;
-    _eland_date_time_t time_1;
-    memcpy(&time, &msg_receive_buff[3], sizeof(platform_rtc_time_t));
-    time_1 = ELAND_Time_Convert(time);
-    RTC_Time_Set(time_1);
+    mico_rtc_time_t mico_time;
+    _eland_date_time_t mcu_time;
+    memcpy(&mico_time, &msg_receive_buff[3], sizeof(mico_rtc_time_t));
+    ELAND_Time_Convert(&mico_time, &mcu_time, MICO_2_MCU);
+    RTC_Time_Set(mcu_time);
     SendBuf = calloc(4, sizeof(uint8_t));
     *SendBuf = Uart_Packet_Header;
     *(SendBuf + 1) = TIME_SET_03;
     *(SendBuf + 2) = 0;
     *(SendBuf + 3) = Uart_Packet_Trail;
     USARTx_Send_Data(USART1, SendBuf, 4);
+    free(SendBuf);
+}
+/**
+ ****************************************************************************
+ * @Function : static void MODH_Opration_04H(void)
+ * @File     : lcd_eland.c
+ * @Program  : H04 header fun len cur_time(....)  tral
+ *                    55   03 len cur_time        0xaa
+ * @Created  : 2017/11/15 by seblee
+ * @Brief    : RTC time read
+ * @Version  : V1.0
+**/
+static void MODH_Opration_04H(void)
+{
+    uint8_t *SendBuf;
+    mico_rtc_time_t mico_time;
+    _eland_date_time_t mcu_time;
+
+    ELAND_RTC_Read(&mcu_time);
+    ELAND_Time_Convert(&mico_time, &mcu_time, MCU_2_MICO);
+
+    SendBuf = calloc(4 + sizeof(mico_rtc_time_t), sizeof(uint8_t));
+
+    *SendBuf = Uart_Packet_Header;
+    *(SendBuf + 1) = TIME_READ_04;
+    *(SendBuf + 2) = sizeof(mico_rtc_time_t);
+    memcpy((SendBuf + 3), &mico_time, sizeof(mico_rtc_time_t));
+    *(SendBuf + sizeof(mico_rtc_time_t) + 3) = Uart_Packet_Trail;
+
+    USARTx_Send_Data(USART1, SendBuf, 4 + sizeof(mico_rtc_time_t));
     free(SendBuf);
 }

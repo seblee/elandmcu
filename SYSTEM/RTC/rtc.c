@@ -151,35 +151,55 @@ void ELAND_RTC_ALARM_ISR(void)
 }
 /**
  ****************************************************************************
- * @Function : _eland_date_time_t ELAND_Time_Convert(platform_rtc_time_t SCR_time)
+ * @Function : _eland_date_time_t ELAND_Time_Convert(mico_rtc_time_t SCR_time)
  * @File     : rtc.c
  * @Program  : SCR_time
  * @Created  : 2017/11/13 by seblee
  * @Brief    : time formate converrt
  * @Version  : V1.0
 **/
-_eland_date_time_t ELAND_Time_Convert(platform_rtc_time_t SCR_time)
+void ELAND_Time_Convert(mico_rtc_time_t *mico_time, _eland_date_time_t *mcu_time, __mico2mcu_t mico2mcu)
 {
-    _eland_date_time_t time;
-    time.year = SCR_time.year;
+    if (mico2mcu == MICO_2_MCU)
+    {
+        mcu_time->year = mico_time->year;
 
-    if (SCR_time.month <= RTC_Month_September)
-        time.month = (RTC_Month_TypeDef)SCR_time.month;
-    else if (SCR_time.month == 10)
-        time.month = RTC_Month_October;
-    else if (SCR_time.month == 11)
-        time.month = RTC_Month_November;
-    else if (SCR_time.month == 12)
-        time.month = RTC_Month_December;
+        if (mico_time->month <= RTC_Month_September)
+            mcu_time->month = (RTC_Month_TypeDef)mico_time->month;
+        else if (mico_time->month == 10)
+            mcu_time->month = RTC_Month_October;
+        else if (mico_time->month == 11)
+            mcu_time->month = RTC_Month_November;
+        else if (mico_time->month == 12)
+            mcu_time->month = RTC_Month_December;
 
-    time.day = SCR_time.date;
-    time.hour = SCR_time.hr;
-    time.minute = SCR_time.min;
-    time.second = SCR_time.sec;
-    if (SCR_time.weekday == 1)
-        time.week = RTC_Weekday_Sunday;
-    else
-        time.week = (RTC_Weekday_TypeDef)(SCR_time.weekday - 1);
-
-    return time;
+        mcu_time->day = mico_time->date;
+        mcu_time->hour = mico_time->hr;
+        mcu_time->minute = mico_time->min;
+        mcu_time->second = mico_time->sec;
+        if (mico_time->weekday == 1)
+            mcu_time->week = RTC_Weekday_Sunday;
+        else
+            mcu_time->week = (RTC_Weekday_TypeDef)(mico_time->weekday - 1);
+    }
+    else if (mico2mcu == MCU_2_MICO)
+    {
+        mico_time->year = mcu_time->year;
+        if (mcu_time->month <= RTC_Month_September)
+            mico_time->month = (uint8_t)mcu_time->month;
+        else if (mcu_time->month == RTC_Month_October)
+            mico_time->month = 10;
+        else if (mcu_time->month == RTC_Month_November)
+            mico_time->month = 11;
+        else if (mcu_time->month == RTC_Month_December)
+            mico_time->month = 12;
+        mico_time->date = mcu_time->day;
+        mico_time->hr = mcu_time->hour;
+        mico_time->min = mcu_time->minute;
+        mico_time->sec = mcu_time->second;
+        if (mcu_time->week == RTC_Weekday_Sunday)
+            mico_time->weekday = 1;
+        else
+            mico_time->weekday = (uint8_t)mcu_time->week + 1;
+    }
 }

@@ -29,7 +29,7 @@ Enabled=0
 ShowSource=1
 [DebugChecksum]
 <<<<<<< HEAD
-Checksum=-124949059
+Checksum=-2067278782
 =======
 Checksum=1321796144
 >>>>>>> ws-performance
@@ -47,9 +47,6 @@ Fmt4={W}42:Trg	4	0
 LogEnabled=0
 GraphEnabled=0
 ShowTimeLog=1
-[Breakpoints]
-Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\HARDWARE\LCD_ELAND\lcd_eland.c}.699.1" 0 0 0 0 "" 0 ""
-Count=1
 [Log file]
 LoggingEnabled=_ 0
 LogFile=_ ""
@@ -57,6 +54,9 @@ Category=_ 0
 [TermIOLog]
 LoggingEnabled=_ 0
 LogFile=_ ""
+[Breakpoints]
+Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\ELAND\eland_usart.c}.185.5" 1 0 0 0 "" 0 ""
+Count=1
 [Aliases]
 Count=0
 SuppressDialog=0

@@ -55,7 +55,12 @@ typedef struct
     uint8_t date;
     uint8_t month;
     uint8_t year;
-} platform_rtc_time_t;
+} mico_rtc_time_t;
+
+typedef enum {
+    MICO_2_MCU,
+    MCU_2_MICO,
+} __mico2mcu_t;
 /* Private define ------------------------------------------------------------*/
 
 /* Private macro -------------------------------------------------------------*/
@@ -67,7 +72,8 @@ extern __IO bool AlarmOccurred;
 void ELAND_RTC_Init(void);
 void ELAND_RTC_ALARM_ISR(void);
 void RTC_Time_Set(_eland_date_time_t time);
-_eland_date_time_t ELAND_Time_Convert(platform_rtc_time_t SCR_time);
+void ELAND_RTC_Read(_eland_date_time_t *time);
+void ELAND_Time_Convert(mico_rtc_time_t *mico_time, _eland_date_time_t *mcu_time, __mico2mcu_t mico2mcu);
 /* Private functions ---------------------------------------------------------*/
 
 #endif /*__RTC_H_*/
