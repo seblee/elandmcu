@@ -58,9 +58,9 @@ void TIM4_Init(void)
 **/
 void TIM4_UPD_OVF(void)
 {
-    static uint32_t counter = 0;
+    static uint16_t counter = 0;
     Timer_Counter_1ms++;
     counter++;
-    if ((counter % 2) == 0)
+    if ((counter % 10) == 0)
         LCD_Eland_COM_SCAN();
 }

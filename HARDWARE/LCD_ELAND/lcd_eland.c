@@ -777,7 +777,7 @@ void LCD_Eland_Time_Upgrade(_eland_date_time_t time)
 void LCD_Eland_COM_SCAN(void)
 {
     static u8 flag = 0x01;
-    if (flag == 0x80)
+    if (flag == 0x08)
         flag = 0x01;
     else
         flag <<= 1;

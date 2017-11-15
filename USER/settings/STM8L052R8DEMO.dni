@@ -30,7 +30,7 @@ ShowSource=1
 [DebugChecksum]
 <<<<<<< HEAD
 <<<<<<< HEAD
-Checksum=-368403139
+Checksum=-303451238
 =======
 Checksum=1701354560
 >>>>>>> 9b0f253659f2e14896327c1912c65c127946f501
@@ -52,7 +52,7 @@ LogEnabled=0
 GraphEnabled=0
 ShowTimeLog=1
 [Breakpoints]
-Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\HARDWARE\LCD_ELAND\lcd_eland.c}.785.5" 0 0 0 0 "" 0 ""
+Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\HARDWARE\LCD_ELAND\lcd_eland.c}.780.5" 0 0 0 0 "" 0 ""
 Count=1
 [Log file]
 LoggingEnabled=_ 0
