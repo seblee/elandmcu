@@ -12,6 +12,7 @@
 /* Private include -----------------------------------------------------------*/
 #include "lcd_eland.h"
 #include "usart.h"
+#include "key.h"
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
@@ -71,7 +72,31 @@ static __Digital_Coding_t LCD_Eland_Digital_Convert(LCD_Coding_Dirtction_t direc
  * @Version  : V1.0
 **/
 void LCD_ELAND_Init(void)
-{ /*
+{
+    LCD_Prescaler_TypeDef Prescaler;
+    LCD_Duty_TypeDef Duty;
+
+    uint16_t keyvalue;
+    keyvalue = Eland_PinState_Read();
+    keyvalue = ~keyvalue;
+    switch (keyvalue & 0x0070)
+    {
+    case KEY_MON: //one com
+        Duty = LCD_Duty_Static;
+        Prescaler = LCD_Prescaler_16;
+        break;
+    case KEY_AlarmMode: //two com
+        Duty = LCD_Duty_1_2;
+        Prescaler = LCD_Prescaler_8;
+        break;
+    case KEY_Wifi: //eight com
+        Duty = LCD_Duty_1_8;
+        Prescaler = LCD_Prescaler_2;
+        break;
+    default:
+        break;
+    }
+    /*
     The LCD is configured as follow:
      - clock source = LSE (32.768 KHz)
      - Voltage source = Internal
@@ -86,7 +111,7 @@ void LCD_ELAND_Init(void)
     CLK_RTCClockConfig(CLK_RTCCLKSource_LSE, CLK_RTCCLKDiv_1);
 
     /* Initialize the LCD */
-    LCD_Init(LCD_Prescaler_2, LCD_Divider_18, LCD_Duty_1_8,
+    LCD_Init(Prescaler, LCD_Divider_18, Duty,
              LCD_Bias_1_4, LCD_VoltageSource_Internal);
 
     /* Mask register*/

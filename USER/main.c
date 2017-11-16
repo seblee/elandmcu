@@ -47,9 +47,9 @@ void main(void)
     TIM4_Init();
     UART1_Init();
     ELAND_RTC_Init();
+    ElandKeyInit();
     LCD_ELAND_Init();
     RGBLED_CFG();
-    ElandKeyInit();
     IWDG_Config();
     enableInterrupts();
     LCD_ELAND_Write_All();
@@ -64,7 +64,7 @@ void main(void)
         if (AlarmOccurred == TRUE)
         {
             AlarmOccurred = FALSE;
-            LCD_Eland_Time_Display(ElandCurrentTime);
+            //LCD_Eland_Time_Display(ElandCurrentTime);
         }
 
         if ((Key_Trg & KEY_Set) ||
