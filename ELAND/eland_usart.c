@@ -181,7 +181,7 @@ static void MODH_Opration_04H(void)
     uint8_t *SendBuf;
     mico_rtc_time_t mico_time;
     _eland_date_time_t mcu_time;
-
+    memset(&mico_time, 0, sizeof(mico_rtc_time_t));
     ELAND_RTC_Read(&mcu_time);
     ELAND_Time_Convert(&mico_time, &mcu_time, MCU_2_MICO);
 

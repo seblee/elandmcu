@@ -95,18 +95,21 @@ void Calendar_Init(void)
 **/
 void RTC_Time_Set(_eland_date_time_t time)
 {
-    RTC_DateStructInit(&RTC_DateStr);
-    RTC_DateStr.RTC_WeekDay = time.week;
-    RTC_DateStr.RTC_Date = time.day;
-    RTC_DateStr.RTC_Month = time.month;
-    RTC_DateStr.RTC_Year = time.year;
-    RTC_SetDate(RTC_Format_BIN, &RTC_DateStr);
+    RTC_TimeTypeDef TimeStr;
+    RTC_DateTypeDef DateStr;
 
-    RTC_TimeStructInit(&RTC_TimeStr);
-    RTC_TimeStr.RTC_Hours = time.hour;
-    RTC_TimeStr.RTC_Minutes = time.minute;
-    RTC_TimeStr.RTC_Seconds = time.second;
-    RTC_SetTime(RTC_Format_BIN, &RTC_TimeStr);
+    RTC_DateStructInit(&DateStr);
+    DateStr.RTC_WeekDay = time.week;
+    DateStr.RTC_Date = time.day;
+    DateStr.RTC_Month = time.month;
+    DateStr.RTC_Year = time.year;
+    RTC_SetDate(RTC_Format_BIN, &DateStr);
+
+    RTC_TimeStructInit(&TimeStr);
+    TimeStr.RTC_Hours = time.hour;
+    TimeStr.RTC_Minutes = time.minute;
+    TimeStr.RTC_Seconds = time.second;
+    RTC_SetTime(RTC_Format_BIN, &TimeStr);
 }
 /**
  ****************************************************************************
@@ -119,20 +122,22 @@ void RTC_Time_Set(_eland_date_time_t time)
 **/
 void ELAND_RTC_Read(_eland_date_time_t *time)
 {
+    RTC_TimeTypeDef TimeStr;
+    RTC_DateTypeDef DateStr;
     /* Wait until the calendar is synchronized */
     // while (RTC_WaitForSynchro() != SUCCESS) ;//低功耗時候使用
     /* Get the current Time*/
-    RTC_GetTime(RTC_Format_BIN, &RTC_TimeStr);
+    RTC_GetTime(RTC_Format_BIN, &TimeStr);
     /* Get the current Date */
-    RTC_GetDate(RTC_Format_BIN, &RTC_DateStr);
+    RTC_GetDate(RTC_Format_BIN, &DateStr);
 
-    time->year = RTC_DateStr.RTC_Year;
-    time->month = RTC_DateStr.RTC_Month;
-    time->day = RTC_DateStr.RTC_Date;
-    time->week = RTC_DateStr.RTC_WeekDay;
-    time->hour = RTC_TimeStr.RTC_Hours;
-    time->minute = RTC_TimeStr.RTC_Minutes;
-    time->second = RTC_TimeStr.RTC_Seconds;
+    time->year = DateStr.RTC_Year;
+    time->month = DateStr.RTC_Month;
+    time->day = DateStr.RTC_Date;
+    time->week = DateStr.RTC_WeekDay;
+    time->hour = TimeStr.RTC_Hours;
+    time->minute = TimeStr.RTC_Minutes;
+    time->second = TimeStr.RTC_Seconds;
 }
 /**
  ****************************************************************************
@@ -185,14 +190,8 @@ void ELAND_Time_Convert(mico_rtc_time_t *mico_time, _eland_date_time_t *mcu_time
     else if (mico2mcu == MCU_2_MICO)
     {
         mico_time->year = mcu_time->year;
-        if (mcu_time->month <= RTC_Month_September)
-            mico_time->month = (uint8_t)mcu_time->month;
-        else if (mcu_time->month == RTC_Month_October)
-            mico_time->month = 10;
-        else if (mcu_time->month == RTC_Month_November)
-            mico_time->month = 11;
-        else if (mcu_time->month == RTC_Month_December)
-            mico_time->month = 12;
+        mico_time->month = (uint8_t)mcu_time->month;
+
         mico_time->date = mcu_time->day;
         mico_time->hr = mcu_time->hour;
         mico_time->min = mcu_time->minute;
