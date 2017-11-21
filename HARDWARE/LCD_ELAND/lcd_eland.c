@@ -86,7 +86,7 @@ void LCD_ELAND_Init(void)
     CLK_RTCClockConfig(CLK_RTCCLKSource_LSE, CLK_RTCCLKDiv_1);
 
     /* Initialize the LCD */
-    LCD_Init(LCD_Prescaler_2, LCD_Divider_18, LCD_Duty_1_8,
+    LCD_Init(LCD_Prescaler_2, LCD_Divider_16, LCD_Duty_1_8,
              LCD_Bias_1_4, LCD_VoltageSource_Internal);
 
     /* Mask register*/
