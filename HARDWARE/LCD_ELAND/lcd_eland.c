@@ -87,7 +87,7 @@ void LCD_ELAND_Init(void)
 
     /* Initialize the LCD */
     LCD_Init(LCD_Prescaler_2, LCD_Divider_16, LCD_Duty_1_8,
-             LCD_Bias_1_4, LCD_VoltageSource_Internal);
+             LCD_Bias_1_3, LCD_VoltageSource_Internal);
 
     /* Mask register*/
     LCD_PortMaskConfig(LCD_PortMaskRegister_0, 0xFF);
@@ -96,7 +96,7 @@ void LCD_ELAND_Init(void)
     LCD_PortMaskConfig(LCD_PortMaskRegister_3, 0xFF);
     LCD_PortMaskConfig(LCD_PortMaskRegister_4, 0xFF);
 
-    LCD_ContrastConfig(LCD_Contrast_Level_7);
+    LCD_ContrastConfig(LCD_Contrast_Level_5);
 
     LCD_PulseOnDurationConfig(LCD_PulseOnDuration_7);
     LCD_DeadTimeConfig(LCD_DeadTime_0);
