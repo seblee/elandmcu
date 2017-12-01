@@ -41,6 +41,7 @@
 void main(void)
 {
     __eland_color_t color = ELAND_RED;
+    LCD_COMx_TypeDef COMx = COM_0;
     disableInterrupts();
     /* System clock */
     SysClock_Init();
@@ -53,8 +54,9 @@ void main(void)
     IWDG_Config();
     enableInterrupts();
     LCD_ELAND_Write_All();
+    //LCD_Eland_COMx_Write(COM_0);
     IWDG_ReloadCounter();
-    TIM5_SetCompare1(TIM5_PERIOD);
+    TIM5_SetCompare1(TIM5_PERIOD); //LCD_Eland_Time_Display(ElandCurrentTime);
     /* Infinite loop */
     while (1)
     {
@@ -64,9 +66,18 @@ void main(void)
         if (AlarmOccurred == TRUE)
         {
             AlarmOccurred = FALSE;
+            //if (Key_Count & KEY_MON)
             LCD_Eland_Time_Display(ElandCurrentTime);
         }
-
+        if (Key_Trg & KEY_Minus)
+        {
+            //LCD_Eland_COMx_Clear(COMx);
+            if (COMx == COM_7)
+                COMx = COM_0;
+            else
+                COMx++;
+            //LCD_Eland_COMx_Write(COMx);
+        }
         if ((Key_Trg & KEY_Set) ||
             (Key_Trg & KEY_Reset) ||
             (Key_Trg & KEY_Add) ||

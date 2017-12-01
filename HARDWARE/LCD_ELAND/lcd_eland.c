@@ -87,7 +87,7 @@ void LCD_ELAND_Init(void)
 
     /* Initialize the LCD */
     LCD_Init(LCD_Prescaler_2, LCD_Divider_16, LCD_Duty_1_8,
-             LCD_Bias_1_3, LCD_VoltageSource_Internal);
+             LCD_Bias_1_4, LCD_VoltageSource_External);
 
     /* Mask register*/
     LCD_PortMaskConfig(LCD_PortMaskRegister_0, 0xFF);
@@ -96,10 +96,13 @@ void LCD_ELAND_Init(void)
     LCD_PortMaskConfig(LCD_PortMaskRegister_3, 0xFF);
     LCD_PortMaskConfig(LCD_PortMaskRegister_4, 0xFF);
 
-    LCD_ContrastConfig(LCD_Contrast_Level_5);
+    LCD_ContrastConfig(LCD_Contrast_Level_7);
 
-    LCD_PulseOnDurationConfig(LCD_PulseOnDuration_7);
     LCD_DeadTimeConfig(LCD_DeadTime_0);
+
+    LCD_PulseOnDurationConfig(LCD_PulseOnDuration_1);
+
+    LCD_HighDriveCmd(ENABLE);
 
     LCD_Cmd(ENABLE); /*!< Enable LCD peripheral */
 }
@@ -652,28 +655,47 @@ void LCD_Eland_Wifi_RSSI_Set(LCD_Wifi_Rssi_t level)
 **/
 void LCD_Eland_Time_Display(_eland_date_time_t time)
 {
+    static _eland_date_time_t time_cache;
     LCD_Week_Day_t week_temp;
-    LCD_Eland_Num_Set(Serial_01, ((time.year / 10) % 10)); //year
-    LCD_Eland_Num_Set(Serial_02, (time.year % 10));        //year
-
-    LCD_Eland_Num_Set(Serial_03, ((time.month / 10) % 10)); //month
-    LCD_Eland_Num_Set(Serial_04, (time.month % 10));        //month
-
-    LCD_Eland_Num_Set(Serial_05, ((time.day / 10) % 10)); //day
-    LCD_Eland_Num_Set(Serial_06, (time.day % 10));        //day
-
-    LCD_Eland_Num_Set(Serial_07, ((time.hour / 10) % 10));   //hour
-    LCD_Eland_Num_Set(Serial_08, (time.hour % 10));          //hour
-    LCD_Eland_Num_Set(Serial_09, ((time.minute / 10) % 10)); //minute
-    LCD_Eland_Num_Set(Serial_10, (time.minute % 10));        //minute
-    LCD_Eland_Num_Set(Serial_11, ((time.second / 10) % 10)); //second
-    LCD_Eland_Num_Set(Serial_12, (time.second % 10));        //second
-
-    if (time.week < RTC_Weekday_Sunday)
-        week_temp = (LCD_Week_Day_t)time.week;
-    else if (time.week == RTC_Weekday_Sunday)
-        week_temp = SUNDAY;
-    LCD_Eland_Week_Set(TIME_WEEK, week_temp);
+    if (time_cache.year != time.year)
+    {
+        LCD_Eland_Num_Set(Serial_01, ((time.year / 10) % 10)); //year
+        LCD_Eland_Num_Set(Serial_02, (time.year % 10));        //year
+    }
+    if (time_cache.month != time.month)
+    {
+        LCD_Eland_Num_Set(Serial_03, ((time.month / 10) % 10)); //month
+        LCD_Eland_Num_Set(Serial_04, (time.month % 10));        //month
+    }
+    if (time_cache.day != time.day)
+    {
+        LCD_Eland_Num_Set(Serial_05, ((time.day / 10) % 10)); //day
+        LCD_Eland_Num_Set(Serial_06, (time.day % 10));        //day
+    }
+    if (time_cache.hour != time.hour)
+    {
+        LCD_Eland_Num_Set(Serial_07, ((time.hour / 10) % 10)); //hour
+        LCD_Eland_Num_Set(Serial_08, (time.hour % 10));        //hour
+    }
+    if (time_cache.minute != time.minute)
+    {
+        LCD_Eland_Num_Set(Serial_09, ((time.minute / 10) % 10)); //minute
+        LCD_Eland_Num_Set(Serial_10, (time.minute % 10));        //minute
+    }
+    if (time_cache.second != time.second)
+    {
+        LCD_Eland_Num_Set(Serial_11, ((time.second / 10) % 10)); //second
+        LCD_Eland_Num_Set(Serial_12, (time.second % 10));        //second
+    }
+    if (time_cache.week != time.week)
+    {
+        if (time.week < RTC_Weekday_Sunday)
+            week_temp = (LCD_Week_Day_t)time.week;
+        else if (time.week == RTC_Weekday_Sunday)
+            week_temp = SUNDAY;
+        LCD_Eland_Week_Set(TIME_WEEK, week_temp);
+    }
+    memcpy(&time_cache, &time, sizeof(_eland_date_time_t));
 }
 /**
  ****************************************************************************

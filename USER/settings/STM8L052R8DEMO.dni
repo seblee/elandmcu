@@ -29,7 +29,7 @@ Enabled=0
 ShowSource=1
 [DebugChecksum]
 <<<<<<< HEAD
-Checksum=-101689424
+Checksum=1117596244
 =======
 Checksum=1321796144
 >>>>>>> ws-performance
@@ -55,8 +55,7 @@ Category=_ 0
 LoggingEnabled=_ 0
 LogFile=_ ""
 [Breakpoints]
-Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\ELAND\eland_usart.c}.185.5" 1 0 0 0 "" 0 ""
-Count=1
+Count=0
 [Aliases]
 Count=0
 SuppressDialog=0
