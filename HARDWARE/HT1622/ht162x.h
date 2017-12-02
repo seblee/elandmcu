@@ -47,6 +47,69 @@ typedef enum _SEQUENT_ {
     MSB,
     LSB
 } __SEQUENT_t;
+
+typedef enum {
+    COM0 = (uint8_t)0x00, /*!< COM 0  */
+    COM1 = (uint8_t)0x01, /*!< COM 1  */
+    COM2 = (uint8_t)0x02, /*!< COM 2  */
+    COM3 = (uint8_t)0x03, /*!< COM 3  */
+    COM4 = (uint8_t)0x04, /*!< COM 4  */
+    COM5 = (uint8_t)0x05, /*!< COM 5  */
+    COM6 = (uint8_t)0x06, /*!< COM 6  */
+    COM7 = (uint8_t)0x07, /*!< COM 7  */
+} LCD_COMx_TypeDef;
+
+typedef enum {
+    SEG00 = (uint8_t)0x00, /*!< SEG00  */
+    SEG01 = (uint8_t)0x01, /*!< SEG01  */
+    SEG02 = (uint8_t)0x02, /*!< SEG02  */
+    SEG03 = (uint8_t)0x03, /*!< SEG03  */
+    SEG04 = (uint8_t)0x04, /*!< SEG04  */
+    SEG05 = (uint8_t)0x05, /*!< SEG05  */
+    SEG06 = (uint8_t)0x06, /*!< SEG06  */
+    SEG07 = (uint8_t)0x07, /*!< SEG07  */
+    SEG08 = (uint8_t)0x08, /*!< SEG08  */
+    SEG09 = (uint8_t)0x09, /*!< SEG09  */
+    SEG10 = (uint8_t)0x0A, /*!< SEG10  */
+    SEG11 = (uint8_t)0x0B, /*!< SEG11  */
+    SEG12 = (uint8_t)0x0C, /*!< SEG12  */
+    SEG13 = (uint8_t)0x0D, /*!< SEG13  */
+    SEG14 = (uint8_t)0x0E, /*!< SEG14  */
+    SEG15 = (uint8_t)0x0F, /*!< SEG15  */
+    SEG16 = (uint8_t)0x10, /*!< SEG16  */
+    SEG17 = (uint8_t)0x11, /*!< SEG17  */
+    SEG18 = (uint8_t)0x12, /*!< SEG18  */
+    SEG19 = (uint8_t)0x13, /*!< SEG19  */
+    SEG20 = (uint8_t)0x14, /*!< SEG20  */
+    SEG21 = (uint8_t)0x15, /*!< SEG21  */
+    SEG22 = (uint8_t)0x16, /*!< SEG22  */
+    SEG23 = (uint8_t)0x17, /*!< SEG23  */
+    SEG24 = (uint8_t)0x18, /*!< SEG24  */
+    SEG25 = (uint8_t)0x19, /*!< SEG25  */
+    SEG26 = (uint8_t)0x1A, /*!< SEG26  */
+    SEG27 = (uint8_t)0x1B, /*!< SEG27  */
+    SEG28 = (uint8_t)0x1C, /*!< SEG28  */
+    SEG29 = (uint8_t)0x1D, /*!< SEG29  */
+    SEG30 = (uint8_t)0x1E, /*!< SEG30  */
+    SEG31 = (uint8_t)0x1F, /*!< SEG31  */
+    SEG32 = (uint8_t)0x20, /*!< SEG32  */
+    SEG33 = (uint8_t)0x21, /*!< SEG33  */
+    SEG34 = (uint8_t)0x22, /*!< SEG34  */
+    SEG35 = (uint8_t)0x23, /*!< SEG35  */
+    SEG36 = (uint8_t)0x24, /*!< SEG36  */
+    SEG37 = (uint8_t)0x25, /*!< SEG37  */
+    SEG38 = (uint8_t)0x26, /*!< SEG38  */
+    SEG39 = (uint8_t)0x27, /*!< SEG39  */
+    SEG40 = (uint8_t)0x28, /*!< SEG40  */
+    SEG41 = (uint8_t)0x29, /*!< SEG41  */
+    SEG42 = (uint8_t)0x2A, /*!< SEG42  */
+    SEG43 = (uint8_t)0x2B, /*!< SEG43  */
+    SEG44 = (uint8_t)0x2C, /*!< SEG44  */
+    SEG45 = (uint8_t)0x2D, /*!< SEG45  */
+    SEG46 = (uint8_t)0x2E, /*!< SEG46  */
+    SEG47 = (uint8_t)0x2F, /*!< SEG47  */
+} LCD_SEGx_TypeDef;
+
 /* Private define ------------------------------------------------------------*/
 //HT162x_CS
 #define HT162x_CS_PORT GPIOD
@@ -60,12 +123,12 @@ typedef enum _SEQUENT_ {
 #define HT162x_RD_RESET GPIO_WriteBit(HT162x_RD_PORT, HT162x_RD_PIN, RESET)
 //HT162x_RD
 #define HT162x_WR_PORT GPIOB
-#define HT162x_WR_PIN GPIO_Pin_5
+#define HT162x_WR_PIN GPIO_Pin_6
 #define HT162x_WR_SET GPIO_WriteBit(HT162x_WR_PORT, HT162x_WR_PIN, SET)
 #define HT162x_WR_RESET GPIO_WriteBit(HT162x_WR_PORT, HT162x_WR_PIN, RESET)
 //HT162x_DATA
 #define HT162x_DATA_PORT GPIOB
-#define HT162x_DATA_PIN GPIO_Pin_6
+#define HT162x_DATA_PIN GPIO_Pin_5
 #define HT162x_DATA_SET GPIO_WriteBit(HT162x_DATA_PORT, HT162x_DATA_PIN, SET)
 #define HT162x_DATA_RESET GPIO_WriteBit(HT162x_DATA_PORT, HT162x_DATA_PIN, RESET)
 #define HT162x_DATA_SET_OUT GPIO_Init(HT162x_DATA_PORT, HT162x_DATA_PIN, GPIO_Mode_Out_PP_High_Fast)
@@ -75,13 +138,13 @@ typedef enum _SEQUENT_ {
 
 #define CMD_ID_READ 0XC0
 #define CMD_ID_WRITE 0XA0
+#define CMD_ID_WR_MODIFY_RD 0XA0
 #define CMD_ID_COMMAND 0X80
 
 #define LEN_CMD_ID 3
 #define LEN_ADDRESS 7
 #define LEN_DATA 4
 #define LEN_COMMMAND 9
-
 #define HT1623_MEM_NUM 96
 /* Private macro -------------------------------------------------------------*/
 
