@@ -62,7 +62,7 @@ void HT162x_init(void)
  * @Brief    : write bits
  * @Version  : V1.0
 **/
-static void HT162x_Write_Bit(uint8_t data, uint8_t count, __SEQUENT_t sequent)
+static void HT162x_Write_Bit(uint8_t data, uint8_t count, _SEQUENT_t sequent)
 {
     uint8_t i, Temp = ((sequent == MSB) ? 0x80 : 0X01);
     for (i = 0; i < count; i++)
@@ -109,7 +109,7 @@ static void HT162x_Write_Command(_HT162x_CMD_t cmd)
  * @Brief    : write one data
  * @Version  : V1.0
 **/
-static void HT162x_Write_Data(uint8_t addrass, uint8_t data)
+void HT162x_Write_Data(uint8_t addrass, uint8_t data)
 {
     HT162x_CS_RESET;
     /*change data pin configration*/
@@ -214,7 +214,7 @@ uint8_t HT162x_Read_Data(uint8_t address)
  * @Brief    : read data Continuously
  * @Version  : V1.0
 **/
-static void HT162x_Read_Data_Continuously(uint8_t address, uint8_t *data, uint8_t length)
+void HT162x_Read_Data_Continuously(uint8_t address, uint8_t *data, uint8_t length)
 {
     uint8_t i;
     HT162x_CS_RESET;
@@ -261,7 +261,7 @@ void HT162x_LCD_Clear(FlagStatus value)
  * @Function : void HT162x_LCD_Write_Pixel(LCD_COMx_TypeDef comx,LCD_SEGx_TypeDef segx, FlagStatus value)
  * @File     : ht162x.c
  * @Program  : comx:witch com of the pixel
- *             segx:witch seg of the pixel 
+ *             segx:witch seg of the pixel
  *             value:change to the value
  * @Created  : 2017/12/2 by seblee
  * @Brief    : write pixel
@@ -301,7 +301,7 @@ void HT162x_LCD_Change_Pixel(LCD_COMx_TypeDef comx, LCD_SEGx_TypeDef segx, FlagS
  ****************************************************************************
  * @Function : void HT162x_LCD_Write_COMx(LCD_COMx_TypeDef comx, FlagStatus value)
  * @File     : ht162x.c
- * @Program  : comx:witch com to write 
+ * @Program  : comx:witch com to write
  *             value:change to the value
  * @Created  : 2017/12/2 by seblee
  * @Brief    : scan comx
@@ -320,7 +320,7 @@ void HT162x_LCD_Change_COMx(LCD_COMx_TypeDef comx, FlagStatus value)
     HT162x_Write_Bit(CMD_ID_WR_MODIFY_RD, LEN_CMD_ID, MSB);
     /*wrtie address for write*/
     HT162x_Write_Bit(address, LEN_ADDRESS, MSB);
-    for (i = 0; i < HT1623_MEM_NUM, i++)
+    for (i = 0; i < HT1623_MEM_NUM; i++)
     {
         /*change data pin configration*/
         HT162x_DATA_SET_IN;
@@ -345,7 +345,7 @@ void HT162x_LCD_Change_COMx(LCD_COMx_TypeDef comx, FlagStatus value)
  ****************************************************************************
  * @Function : void HT162x_LCD_Wtrtie_SEGxData(LCD_SEGx_TypeDef segx, uint8_t data)
  * @File     : ht162x.c
- * @Program  : segx:the segx to change 
+ * @Program  : segx:the segx to change
  *             value:change to the value
  * @Created  : 2017/12/2 by seblee
  * @Brief    : scan segx
@@ -370,4 +370,16 @@ void HT162x_LCD_Wtrtie_SEGxData(LCD_SEGx_TypeDef segx, uint8_t data)
     /*Write BITS */
     HT162x_Write_Bit(data, LEN_DATA, LSB);
     HT162x_CS_SET;
+}
+/**
+ ****************************************************************************
+ * @Function : void HT162x_LCD_Wrtie(void)
+ * @File     : ht162x.c
+ * @Program  : none
+ * @Created  : 2017/12/2 by seblee
+ * @Brief    : none
+ * @Version  : V1.0
+**/
+void HT162x_LCD_Wrtie(void)
+{
 }

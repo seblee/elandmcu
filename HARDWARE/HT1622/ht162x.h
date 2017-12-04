@@ -46,7 +46,7 @@ typedef enum _HT162x_CMD {
 typedef enum _SEQUENT_ {
     MSB,
     LSB
-} __SEQUENT_t;
+} _SEQUENT_t;
 
 typedef enum {
     COM0 = (uint8_t)0x00, /*!< COM 0  */
