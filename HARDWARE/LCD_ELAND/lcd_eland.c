@@ -523,8 +523,7 @@ void LCD_Eland_Num_Set(LCD_Digital_Serial_t Serial, u8 data)
 static __Digital_Coding_t LCD_Eland_Digital_Convert(LCD_Coding_Dirtction_t direction, uint8_t Data)
 {
     __Digital_Coding_t Cache;
-    uint16_t Num_Cache = 0;
-    uint8_t i;
+    uint8_t i, Num_Cache;
     if (direction == POSITIVE)
         Cache.WORD = NumberMap[Data];
     else if (direction == NEGATIVE)

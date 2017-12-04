@@ -17,6 +17,7 @@
 #include "timing_delay.h"
 #include "iwdg.h"
 #include "rtc.h"
+#include "ht162x.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -36,15 +37,21 @@
 **/
 void main(void)
 {
+    uint8_t i = 0, j = 0;
+    FlagStatus value = (FlagStatus)0;
+    LCD_COMx_TypeDef COMx = COM4;
     disableInterrupts();
     /* System clock */
     SysClock_Init();
     TIM4_Init();
     ELAND_RTC_Init();
-    IWDG_Config();
+    //IWDG_Config();
     enableInterrupts();
+    HT162x_init();
     IWDG_ReloadCounter();
+
     /* Infinite loop */
+
     while (1)
     {
         /* Reload IWDG counter */
@@ -52,6 +59,23 @@ void main(void)
         if (AlarmOccurred == TRUE)
         {
             AlarmOccurred = FALSE;
+        }
+        HT162x_LCD_Change_Pixel(COMx, i++, value);
+        if ((i > SEG39))
+        {
+            i = SEG00;
+            COMx++;
+        }
+        if (COMx > COM7)
+        {
+            COMx = COM0;
+            value ^= 0xff;
+        }
+
+        if (j == SEG40)
+        {
+            i++;
+            j = SEG00;
         }
 
         while (1)
@@ -64,7 +88,6 @@ void main(void)
         }
     }
 }
-
 #ifdef USE_FULL_ASSERT
 
 /**

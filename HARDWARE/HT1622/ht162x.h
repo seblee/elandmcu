@@ -110,6 +110,44 @@ typedef enum {
     SEG47 = (uint8_t)0x2F, /*!< SEG47  */
 } LCD_SEGx_TypeDef;
 
+typedef enum {
+    Serial_01,
+    Serial_02,
+    Serial_03,
+    Serial_04,
+    Serial_05,
+    Serial_06,
+    Serial_07,
+    Serial_08,
+    Serial_09,
+    Serial_10,
+    Serial_11,
+    Serial_12,
+    Serial_13,
+    Serial_14,
+    Serial_15,
+    Serial_16,
+    Serial_17,
+    Serial_18,
+    Serial_19,
+    Serial_20,
+} LCD_Digital_Serial_t;
+typedef union {
+    uint16_t WORD;
+    uint8_t BYTE[2];
+    struct
+    {
+        unsigned char Digital_IJK : 4;  //word 0-3    Data[0] 0-3
+        unsigned char Digital_HML : 4;  //word 4-7    Data[0] 4-7
+        unsigned char Digital_GDA : 4;  //word 8-11   Data[1] 0-3
+        unsigned char Digital_FECB : 4; //word 12-15  Data[1] 4-7
+    };
+} __Digital_Coding_t;
+
+typedef enum {
+    POSITIVE,
+    NEGATIVE,
+} LCD_Coding_Dirtction_t;
 /* Private define ------------------------------------------------------------*/
 //HT162x_CS
 #define HT162x_CS_PORT GPIOD
@@ -132,7 +170,7 @@ typedef enum {
 #define HT162x_DATA_SET GPIO_WriteBit(HT162x_DATA_PORT, HT162x_DATA_PIN, SET)
 #define HT162x_DATA_RESET GPIO_WriteBit(HT162x_DATA_PORT, HT162x_DATA_PIN, RESET)
 #define HT162x_DATA_SET_OUT GPIO_Init(HT162x_DATA_PORT, HT162x_DATA_PIN, GPIO_Mode_Out_PP_High_Fast)
-#define HT162x_DATA_SET_IN GPIO_Init(HT162x_DATA_PORT, HT162x_DATA_PIN, GPIO_Mode_In_FL_No_IT)
+#define HT162x_DATA_SET_IN GPIO_Init(HT162x_DATA_PORT, HT162x_DATA_PIN, GPIO_Mode_In_PU_No_IT)
 
 #define HT162x_DATA_IN GPIO_ReadInputDataBit(HT162x_DATA_PORT, HT162x_DATA_PIN)
 
@@ -151,7 +189,13 @@ typedef enum {
 /* Private variables ---------------------------------------------------------*/
 
 /* Private function prototypes -----------------------------------------------*/
-
+void HT162x_init(void);
+void HT162x_LCD_Clear(FlagStatus value);
+void HT162x_LCD_Change_COMx(LCD_COMx_TypeDef comx, FlagStatus value);
+void HT162x_LCD_Wtrtie_SEGxData(LCD_SEGx_TypeDef segx, uint8_t data);
+void HT162x_LCD_Change_Pixel(LCD_COMx_TypeDef comx, LCD_SEGx_TypeDef segx, FlagStatus value);
+uint8_t HT162x_Read_Data(uint8_t address);
+void HT162x_Write_Data(uint8_t addrass, uint8_t data);
 /* Private functions ---------------------------------------------------------*/
 
 #endif /*__HT162x_H_*/

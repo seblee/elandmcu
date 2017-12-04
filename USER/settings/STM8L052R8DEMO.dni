@@ -29,7 +29,7 @@ Enabled=0
 ShowSource=1
 [DebugChecksum]
 <<<<<<< HEAD
-Checksum=1117596244
+Checksum=-230025960
 =======
 Checksum=1321796144
 >>>>>>> ws-performance
@@ -41,8 +41,10 @@ MixedMode=1
 Fmt0={W}1:Count	4	0
 Fmt1={W}1:KeyValue_present	4	0
 Fmt2={W}1:Trg	4	0
-Fmt3={W}42:Count	4	0
-Fmt4={W}42:Trg	4	0
+Fmt3={W}1:data	4	0
+Fmt4={W}1:i	4	0
+Fmt5={W}42:Count	4	0
+Fmt6={W}42:Trg	4	0
 [DataSample]
 LogEnabled=0
 GraphEnabled=0
@@ -55,7 +57,8 @@ Category=_ 0
 LoggingEnabled=_ 0
 LogFile=_ ""
 [Breakpoints]
-Count=0
+Bp0=_ "STD_CODE" "{$PROJ_DIR$\main.c}.67.13" 1 0 0 0 "" 0 ""
+Count=1
 [Aliases]
 Count=0
 SuppressDialog=0
