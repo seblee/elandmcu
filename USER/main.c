@@ -14,13 +14,10 @@
 #include "stm8l15x.h"
 #include "syscfg.h"
 #include "timer.h"
-#include "rgbled.h"
 #include "timing_delay.h"
 #include "iwdg.h"
-#include "lcd_eland.h"
-#include "key.h"
-#include "usart.h"
 #include "rtc.h"
+#include "ht162x.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -40,64 +37,54 @@
 **/
 void main(void)
 {
-    __eland_color_t color = ELAND_RED;
-    LCD_COMx_TypeDef COMx = COM_0;
+    uint16_t j = 0;
+    uint16_t i = 0;
+    LCD_Wifi_Rssi_t rssi_value[5] = {LEVEL0, LEVEL1, LEVEL2, LEVEL3, LEVEL4};
     disableInterrupts();
     /* System clock */
     SysClock_Init();
     TIM4_Init();
-    UART1_Init();
     ELAND_RTC_Init();
-    LCD_ELAND_Init();
-    RGBLED_CFG();
-    ElandKeyInit();
-    IWDG_Config();
+    //IWDG_Config();
     enableInterrupts();
-    LCD_ELAND_Write_All();
-    //LCD_Eland_COMx_Write(COM_0);
+    HT162x_init();
+    /* Reload IWDG counter */
     IWDG_ReloadCounter();
-    TIM5_SetCompare1(TIM5_PERIOD); //LCD_Eland_Time_Display(ElandCurrentTime);
+    HT162x_LCD_Clear(SET);
+    HT162x_LCD_Change_Pixel(COM0, SEG08, SET);
+    HT162x_LCD_Change_Pixel(COM0, SEG16, SET);
+    HT162x_LCD_Change_Pixel(COM0, SEG32, SET);
+    HT162x_LCD_Change_Pixel(COM0, SEG33, SET);
+    HT162x_LCD_Change_Pixel(COM7, SEG15, SET);
+    HT162x_LCD_Change_Pixel(COM7, SEG07, SET);
+    HT162x_LCD_Change_Pixel(COM7, SEG30, SET);
+    HT162x_LCD_Change_Pixel(COM7, SEG31, SET);
+
     /* Infinite loop */
     while (1)
     {
         /* Reload IWDG counter */
         IWDG_ReloadCounter();
-        Eland_KeyState_Read();
+        if (WakeupOccurred == TRUE)
+        {
+            WakeupOccurred = FALSE;
+            HT162x_LCD_Toggle_Pixel(COM0, SEG32);
+            HT162x_LCD_Toggle_Pixel(COM0, SEG33);
+        }
         if (AlarmOccurred == TRUE)
         {
+            HT162x_LCD_Time_Display(ElandCurrentTime);
             AlarmOccurred = FALSE;
-            //if (Key_Count & KEY_MON)
-            LCD_Eland_Time_Display(ElandCurrentTime);
         }
-        if (Key_Trg & KEY_Minus)
+        if ((i++ % 20) == 0)
         {
-            //LCD_Eland_COMx_Clear(COMx);
-            if (COMx == COM_7)
-                COMx = COM_0;
-            else
-                COMx++;
-            //LCD_Eland_COMx_Write(COMx);
+
+            HT162x_LCD_RSSI_Set(rssi_value[j % 5]);
+            // HT162x_LCD_AMPM_Set(TIME_PART, (LCD_AMPM_Distinguish_t)(j % 2));
+            // HT162x_LCD_AMPM_Set(ALARM_PART, (LCD_AMPM_Distinguish_t)(j % 2));
+            // j++;
         }
-        if ((Key_Trg & KEY_Set) ||
-            (Key_Trg & KEY_Reset) ||
-            (Key_Trg & KEY_Add) ||
-            (Key_Trg & KEY_Minus) ||
-            (Key_Trg & KEY_MON) ||
-            (Key_Trg & KEY_AlarmMode) ||
-            (Key_Trg & KEY_Wifi) ||
-            (Key_Trg & KEY_Snooze) ||
-            (Key_Trg & KEY_Alarm))
-        {
-            if (color == ELAND_RED)
-                color = ELAND_GREEN;
-            else if (color == ELAND_GREEN)
-                color = ELAND_BLUE;
-            else if (color == ELAND_BLUE)
-                color = ELAND_RED;
-            else
-                color = ELAND_RED;
-            RGBLED_Color_Set(color);
-        }
+
         while (1)
         {
             if (Timer_Counter_1ms > 20) //20ms
@@ -108,7 +95,6 @@ void main(void)
         }
     }
 }
-
 #ifdef USE_FULL_ASSERT
 
 /**

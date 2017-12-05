@@ -31,7 +31,6 @@
 
 #include "timing_delay.h"
 #include "timer.h"
-#include "usart.h"
 #include "rtc.h"
 /** @addtogroup STM8L15x_StdPeriph_Template
   * @{
@@ -117,7 +116,16 @@ INTERRUPT_HANDLER(RTC_CSSLSE_IRQHandler, 4)
     /* In order to detect unexpected events during development,
        it is recommended to set a breakpoint on the following instruction.
     */
-    ELAND_RTC_ALARM_ISR();
+    if (RTC_GetFlagStatus(RTC_FLAG_WUTF) != RESET)
+    {
+        ELAND_RTC_WAKEUP_ISR();
+        return;
+    }
+    if (RTC_GetFlagStatus(RTC_FLAG_ALRAF) != RESET)
+    {
+        ELAND_RTC_ALARM_ISR();
+        return;
+    }
 }
 /**
   * @brief External IT PORTE/F and PVD Interrupt routine.
@@ -404,7 +412,7 @@ INTERRUPT_HANDLER(USART1_RX_TIM5_CC_IRQHandler, 28)
     /* In order to detect unexpected events during development,
        it is recommended to set a breakpoint on the following instruction.
     */
-    USART1_RX_Service();
+    //USART1_RX_Service();
 }
 
 /**

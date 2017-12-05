@@ -523,8 +523,7 @@ void LCD_Eland_Num_Set(LCD_Digital_Serial_t Serial, u8 data)
 static __Digital_Coding_t LCD_Eland_Digital_Convert(LCD_Coding_Dirtction_t direction, uint8_t Data)
 {
     __Digital_Coding_t Cache;
-    uint16_t Num_Cache = 0;
-    uint8_t i;
+    uint8_t i, Num_Cache;
     if (direction == POSITIVE)
         Cache.WORD = NumberMap[Data];
     else if (direction == NEGATIVE)
@@ -547,16 +546,16 @@ static __Digital_Coding_t LCD_Eland_Digital_Convert(LCD_Coding_Dirtction_t direc
  ****************************************************************************
  * @Function : void LCD_Eland_Week_Set(u8 type,u8 day)
  * @File     : lcd_eland.c
- * @Program  : type: TIME_WEEK/ALARM_WEEK
+ * @Program  : type: TIME_PART/ALARM_PART
  *             day : The day of the week
  * @Created  : 2017/11/4 by seblee
  * @Brief    : set week day
  * @Version  : V1.0
 **/
-void LCD_Eland_Week_Set(LCD_Week_Type_t type, LCD_Week_Day_t day)
+void LCD_Eland_Week_Set(LCD_Time_Type_t type, LCD_Week_Day_t day)
 {
     uint8_t i;
-    if (type == TIME_WEEK)
+    if (type == TIME_PART)
     {
         LCD_PageSelect(LCD_PageSelection_FirstPage);
         for (i = 0; i < 3; i++)
@@ -571,7 +570,7 @@ void LCD_Eland_Week_Set(LCD_Week_Type_t type, LCD_Week_Day_t day)
         else if (day <= SATURDAY)
             LCD->RAM[day / 2 + 12] |= (0x04 << ((day % 2) ? 4 : 0));
     }
-    else if (type == ALARM_WEEK)
+    else if (type == ALARM_PART)
     {
         LCD_PageSelect(LCD_PageSelection_SecondPage);
         LCD->RAM[10] &= 0xdf;
@@ -693,7 +692,7 @@ void LCD_Eland_Time_Display(_eland_date_time_t time)
             week_temp = (LCD_Week_Day_t)time.week;
         else if (time.week == RTC_Weekday_Sunday)
             week_temp = SUNDAY;
-        LCD_Eland_Week_Set(TIME_WEEK, week_temp);
+        LCD_Eland_Week_Set(TIME_PART, week_temp);
     }
     memcpy(&time_cache, &time, sizeof(_eland_date_time_t));
 }

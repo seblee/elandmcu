@@ -67,9 +67,9 @@ typedef enum {
 } LCD_Coding_Dirtction_t;
 
 typedef enum {
-    TIME_WEEK,
-    ALARM_WEEK,
-} LCD_Week_Type_t;
+    TIME_PART,
+    ALARM_PART,
+} LCD_Time_Type_t;
 
 typedef enum {
     SUNDAY,
@@ -104,7 +104,7 @@ void LCD_Eland_Pixel_Clear(LCD_COMx_TypeDef COMx, u8 SEGn);
 void LCD_Eland_COMx_Write(LCD_COMx_TypeDef COMx);
 void LCD_Eland_COMx_Clear(LCD_COMx_TypeDef COMx);
 void LCD_Eland_Num_Set(LCD_Digital_Serial_t Serial, u8 data);
-void LCD_Eland_Week_Set(LCD_Week_Type_t type, LCD_Week_Day_t day);
+void LCD_Eland_Week_Set(LCD_Time_Type_t type, LCD_Week_Day_t day);
 void LCD_Eland_Wifi_RSSI_Set(LCD_Wifi_Rssi_t level);
 void LCD_Eland_Time_Display(_eland_date_time_t time);
 void LCD_Eland_Time_Upgrade(_eland_date_time_t time);
