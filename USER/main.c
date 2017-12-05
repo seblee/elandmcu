@@ -37,9 +37,6 @@
 **/
 void main(void)
 {
-    uint8_t i = 0, j = 0;
-    FlagStatus value = (FlagStatus)0;
-    LCD_COMx_TypeDef COMx = COM4;
     disableInterrupts();
     /* System clock */
     SysClock_Init();
@@ -49,7 +46,7 @@ void main(void)
     enableInterrupts();
     HT162x_init();
     IWDG_ReloadCounter();
-
+    HT162x_LCD_Num_Set(Serial_07, 7);
     /* Infinite loop */
 
     while (1)
@@ -59,23 +56,6 @@ void main(void)
         if (AlarmOccurred == TRUE)
         {
             AlarmOccurred = FALSE;
-        }
-        HT162x_LCD_Change_Pixel(COMx, i++, value);
-        if ((i > SEG39))
-        {
-            i = SEG00;
-            COMx++;
-        }
-        if (COMx > COM7)
-        {
-            COMx = COM0;
-            value ^= 0xff;
-        }
-
-        if (j == SEG40)
-        {
-            i++;
-            j = SEG00;
         }
 
         while (1)

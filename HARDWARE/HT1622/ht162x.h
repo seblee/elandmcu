@@ -44,7 +44,7 @@ typedef enum _HT162x_CMD {
     NORMAL = 0XE3,    //Normal mod ------------ Def.
 } _HT162x_CMD_t;
 typedef enum _SEQUENT_ {
-    MSB,
+    MSB = 0X00,
     LSB
 } _SEQUENT_t;
 
@@ -111,7 +111,7 @@ typedef enum {
 } LCD_SEGx_TypeDef;
 
 typedef enum {
-    Serial_01,
+    Serial_01 = 0X00,
     Serial_02,
     Serial_03,
     Serial_04,
@@ -137,10 +137,10 @@ typedef union {
     uint8_t BYTE[2];
     struct
     {
+        unsigned char Digital_GDA : 4;  //word 8-11  Data[0] 4-7
+        unsigned char Digital_FECB : 4; //word 12-15  Data[0] 4-7
         unsigned char Digital_IJK : 4;  //word 0-3    Data[0] 0-3
-        unsigned char Digital_HML : 4;  //word 4-7    Data[0] 4-7
-        unsigned char Digital_GDA : 4;  //word 8-11   Data[1] 0-3
-        unsigned char Digital_FECB : 4; //word 12-15  Data[1] 4-7
+        unsigned char Digital_HML : 4;  //word 8-11   Data[1] 0-3
     };
 } __Digital_Coding_t;
 
@@ -196,6 +196,7 @@ void HT162x_LCD_Wtrtie_SEGxData(LCD_SEGx_TypeDef segx, uint8_t data);
 void HT162x_LCD_Change_Pixel(LCD_COMx_TypeDef comx, LCD_SEGx_TypeDef segx, FlagStatus value);
 uint8_t HT162x_Read_Data(uint8_t address);
 void HT162x_Write_Data(uint8_t addrass, uint8_t data);
+void HT162x_LCD_Num_Set(LCD_Digital_Serial_t Serial, u8 data);
 /* Private functions ---------------------------------------------------------*/
 
 #endif /*__HT162x_H_*/

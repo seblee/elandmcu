@@ -457,7 +457,7 @@ static void HT162x_LCD_RAM_Change(uint8_t address, uint8_t data, uint8_t Mask)
     /*change data pin configration*/
     HT162x_DATA_SET_OUT;
     /*Write BITS */
-    HT162x_Write_Bit(data, LEN_DATA, LSB);
+    HT162x_Write_Bit(Cache, LEN_DATA, LSB);
     HT162x_CS_SET;
 }
 /**
@@ -504,10 +504,11 @@ static __Digital_Coding_t HT162x_LCD_Digital_Convert(LCD_Coding_Dirtction_t dire
  **/
 void HT162x_LCD_Num_Set(LCD_Digital_Serial_t Serial, u8 data)
 {
-    __Digital_Coding_t Code = 0;
-    Cache.WORD = NumberMap[data];
+    __Digital_Coding_t Cache;
+
     if (Serial < Serial_11) //Serial_01 ~ 10
     {
+        Cache = HT162x_LCD_Digital_Convert(POSITIVE, data);
         HT162x_LCD_RAM_Change((Serial * 8), Cache.Digital_IJK, 0x01);
         HT162x_LCD_RAM_Change((Serial * 8 + 2), Cache.Digital_HML, 0x01);
         HT162x_LCD_RAM_Change((Serial * 8 + 4), Cache.Digital_GDA, 0x01);
@@ -515,16 +516,28 @@ void HT162x_LCD_Num_Set(LCD_Digital_Serial_t Serial, u8 data)
     }
     else if (Serial == Serial_11)
     {
-        HT162x_LCD_RAM_Change((129 - Serial * 8), Cache.Digital_FECB, 0x80);
-        HT162x_LCD_RAM_Change((129 - Serial * 8 + 2), Cache.Digital_GDA, 0x80);
-        HT162x_LCD_RAM_Change((129 - Serial * 8 + 4), Cache.Digital_HML, 0x80);
-        HT162x_LCD_RAM_Change((129 - Serial * 8 + 6), Cache.Digital_IJK, 0x80);
+        Cache = HT162x_LCD_Digital_Convert(NEGATIVE, data);
+        HT162x_LCD_RAM_Change((129 - Serial * 8), Cache.Digital_FECB, 0x08);
+        HT162x_LCD_RAM_Change((129 - Serial * 8 + 2), Cache.Digital_GDA, 0x08);
+        HT162x_LCD_RAM_Change((129 - Serial * 8 + 4), Cache.Digital_HML, 0x08);
+        HT162x_LCD_RAM_Change((129 - Serial * 8 + 6), Cache.Digital_IJK, 0x08);
+
+        HT162x_LCD_Change_Pixel(COM7, SEG14, (FlagStatus)(Cache.Digital_FECB & 0x08));
     }
     else if (Serial < Serial_16) //Serial_12 ~ 16
     {
+        Cache = HT162x_LCD_Digital_Convert(NEGATIVE, data);
         HT162x_LCD_RAM_Change((129 - Serial * 8), Cache.Digital_FECB, 0x00);
-        HT162x_LCD_RAM_Change((129 - Serial * 8 + 2), Cache.Digital_GDA, 0x80);
-        HT162x_LCD_RAM_Change((129 - Serial * 8 + 4), Cache.Digital_HML, 0x80);
-        HT162x_LCD_RAM_Change((129 - Serial * 8 + 6), Cache.Digital_IJK, 0x80);
+        HT162x_LCD_RAM_Change((129 - Serial * 8 + 2), Cache.Digital_GDA, 0x08);
+        HT162x_LCD_RAM_Change((129 - Serial * 8 + 4), Cache.Digital_HML, 0x08);
+        HT162x_LCD_RAM_Change((129 - Serial * 8 + 6), Cache.Digital_IJK, 0x08);
+    }
+    else //Serial_17 ~ 20
+    {
+        Cache = HT162x_LCD_Digital_Convert(NEGATIVE, data);
+        HT162x_LCD_RAM_Change((209 - Serial * 8), Cache.Digital_FECB, 0x00);
+        HT162x_LCD_RAM_Change((209 - Serial * 8 + 2), Cache.Digital_GDA, 0x08);
+        HT162x_LCD_RAM_Change((209 - Serial * 8 + 4), Cache.Digital_HML, 0x08);
+        HT162x_LCD_RAM_Change((209 - Serial * 8 + 6), Cache.Digital_IJK, 0x08);
     }
 }
