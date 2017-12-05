@@ -25,7 +25,8 @@ RTC_DateTypeDef RTC_DateStr;
 RTC_AlarmTypeDef RTC_AlarmStr;
 
 __IO bool AlarmOccurred = FALSE;
-_eland_date_time_t ElandCurrentTime = {2017, RTC_Month_November, 15, 13, 20, 00, RTC_Weekday_Wednesday};
+__IO bool WakeupOccurred = FALSE;
+_eland_date_time_t ElandCurrentTime = {2017, RTC_Month_December, 5, 16, 20, 00, RTC_Weekday_Tuesday};
 /* Private function prototypes -----------------------------------------------*/
 void Calendar_Init(void);
 /* Private functions ---------------------------------------------------------*/
@@ -44,7 +45,14 @@ void ELAND_RTC_Init(void)
     CLK_RTCClockConfig(CLK_RTCCLKSource_LSE, CLK_RTCCLKDiv_1);
 
     CLK_PeripheralClockConfig(CLK_Peripheral_RTC, ENABLE);
+    /* Configures the RTC wakeup timer_step = RTCCLK/16 = LSE/16 = 488.28125 us */
+    RTC_WakeUpClockConfig(RTC_WakeUpClock_RTCCLK_Div16);
 
+    /* Enable wake up unit Interrupt */
+    RTC_ITConfig(RTC_IT_WUT, ENABLE);
+
+    RTC_SetWakeUpCounter(1023);
+    RTC_WakeUpCmd(ENABLE);
     /* Calendar Configuration */
     Calendar_Init();
 }
@@ -145,7 +153,7 @@ void ELAND_RTC_Read(_eland_date_time_t *time)
  * @File     : rtc.c
  * @Program  : none
  * @Created  : 2017/10/23 by seblee
- * @Brief    : RTC ALARM Interupt Service
+ * @Brief    : RTC ALARM Interrupt Service
  * @Version  : V1.0
 **/
 void ELAND_RTC_ALARM_ISR(void)
@@ -154,6 +162,21 @@ void ELAND_RTC_ALARM_ISR(void)
     RTC_ClearITPendingBit(RTC_IT_ALRA);
     AlarmOccurred = TRUE;
 }
+/**
+ ****************************************************************************
+ * @Function : void ELAND_RTC_WAKEUP_ISR(void)
+ * @File     : rtc.c
+ * @Program  : none
+ * @Created  : 2017/12/5 by seblee
+ * @Brief    : RTC WAKEUP Interrupt
+ * @Version  : V1.0
+**/
+void ELAND_RTC_WAKEUP_ISR(void)
+{
+    RTC_ClearITPendingBit(RTC_IT_WUT);
+    WakeupOccurred = TRUE;
+}
+
 /**
  ****************************************************************************
  * @Function : _eland_date_time_t ELAND_Time_Convert(mico_rtc_time_t SCR_time)

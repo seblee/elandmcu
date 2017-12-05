@@ -68,9 +68,11 @@ typedef enum {
 /* Private variables ---------------------------------------------------------*/
 extern _eland_date_time_t ElandCurrentTime;
 extern __IO bool AlarmOccurred;
+extern __IO bool WakeupOccurred;
 /* Private function prototypes -----------------------------------------------*/
 void ELAND_RTC_Init(void);
 void ELAND_RTC_ALARM_ISR(void);
+void ELAND_RTC_WAKEUP_ISR(void);
 void RTC_Time_Set(_eland_date_time_t time);
 void ELAND_RTC_Read(_eland_date_time_t *time);
 void ELAND_Time_Convert(mico_rtc_time_t *mico_time, _eland_date_time_t *mcu_time, __mico2mcu_t mico2mcu);

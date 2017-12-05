@@ -13,6 +13,7 @@
 #define __HT162x_H_
 /* Private include -----------------------------------------------------------*/
 #include "syscfg.h"
+#include "rtc.h"
 /* Private typedef -----------------------------------------------------------*/
 typedef enum _HT162x_CMD {
     SYS_DIS = 0X00,   //Turn off both system oscillator and LCD bias generator ------------ Def.
@@ -132,6 +133,7 @@ typedef enum {
     Serial_19,
     Serial_20,
 } LCD_Digital_Serial_t;
+
 typedef union {
     uint16_t WORD;
     uint8_t BYTE[2];
@@ -148,6 +150,38 @@ typedef enum {
     POSITIVE,
     NEGATIVE,
 } LCD_Coding_Dirtction_t;
+
+typedef enum {
+    TIME_PART = 0,
+    ALARM_PART,
+    WEEKTYPEMAX,
+} LCD_Time_Type_t;
+
+typedef enum {
+    SUNDAY = 0,
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY,
+    THURSDAY,
+    FRIDAY,
+    SATURDAY,
+    WEEKDAYMAX,
+} LCD_Week_Day_t;
+
+typedef enum {
+    AM = 0,
+    PM,
+    AMPMMAX,
+} LCD_AMPM_Distinguish_t;
+
+typedef enum {
+    LEVEL0 = 0x00,
+    LEVEL1 = 0x08,
+    LEVEL2 = 0x0C,
+    LEVEL3 = 0x0E,
+    LEVEL4 = 0x0F,
+} LCD_Wifi_Rssi_t;
+
 /* Private define ------------------------------------------------------------*/
 //HT162x_CS
 #define HT162x_CS_PORT GPIOD
@@ -194,9 +228,14 @@ void HT162x_LCD_Clear(FlagStatus value);
 void HT162x_LCD_Change_COMx(LCD_COMx_TypeDef comx, FlagStatus value);
 void HT162x_LCD_Wtrtie_SEGxData(LCD_SEGx_TypeDef segx, uint8_t data);
 void HT162x_LCD_Change_Pixel(LCD_COMx_TypeDef comx, LCD_SEGx_TypeDef segx, FlagStatus value);
+void HT162x_LCD_Toggle_Pixel(LCD_COMx_TypeDef comx, LCD_SEGx_TypeDef segx);
 uint8_t HT162x_Read_Data(uint8_t address);
 void HT162x_Write_Data(uint8_t addrass, uint8_t data);
 void HT162x_LCD_Num_Set(LCD_Digital_Serial_t Serial, u8 data);
+void HT162x_LCD_Week_Set(LCD_Time_Type_t type, LCD_Week_Day_t day);
+void HT162x_LCD_RSSI_Set(LCD_Wifi_Rssi_t value);
+void HT162x_LCD_AMPM_Set(LCD_Time_Type_t type, LCD_AMPM_Distinguish_t value);
+void HT162x_LCD_Time_Display(_eland_date_time_t time);
 /* Private functions ---------------------------------------------------------*/
 
 #endif /*__HT162x_H_*/
