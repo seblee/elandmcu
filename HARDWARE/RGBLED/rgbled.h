@@ -31,6 +31,7 @@ typedef enum {
 
 /* Private define ------------------------------------------------------------*/
 #define TIM3_PERIOD 1000
+#define TIM2_PERIOD 1000
 #define TIM5_PERIOD 1000
 
 #define LED_RED_PORT GPIOI
@@ -46,6 +47,8 @@ typedef enum {
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
+extern __IO uint16_t TIM2_CCR1_Val;
+extern __IO uint16_t TIM2_CCR2_Val;
 extern __IO uint16_t TIM3_CCR1_Val;
 extern __IO uint16_t TIM3_CCR2_Val;
 extern __IO uint16_t TIM5_CCR1_Val;

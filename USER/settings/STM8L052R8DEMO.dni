@@ -28,17 +28,11 @@ ActionState=1
 Enabled=0
 ShowSource=1
 [DebugChecksum]
-<<<<<<< HEAD
-Checksum=1531028051
-=======
-Checksum=1321796144
->>>>>>> ws-performance
+Checksum=1515037118
 [CallStack]
 ShowArgs=0
 [Disassembly]
 MixedMode=1
-[struct_types]
-Fmt0=union <Unnamed 5>-WORD	4	0
 [watch_formats]
 Fmt0={W}1:Cache	4	0
 Fmt1={W}1:Count	4	0
@@ -54,6 +48,8 @@ Fmt9={W}42:Trg	4	0
 LogEnabled=0
 GraphEnabled=0
 ShowTimeLog=1
+[Breakpoints]
+Count=0
 [Log file]
 LoggingEnabled=_ 0
 LogFile=_ ""
@@ -61,8 +57,6 @@ Category=_ 0
 [TermIOLog]
 LoggingEnabled=_ 0
 LogFile=_ ""
-[Breakpoints]
-Count=0
 [Aliases]
 Count=0
 SuppressDialog=0
