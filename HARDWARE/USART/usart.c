@@ -72,13 +72,13 @@ static void stm8_uart1_init(u32 USART_BaudRate,
     CLK_PeripheralClockConfig((CLK_Peripheral_TypeDef)CLK_Peripheral_USART1, ENABLE);
 
     /*Configure USART1 Tx- Rx (PC3- PC2) remapping to PA2- PA3*/
-    SYSCFG_REMAPPinConfig(REMAP_Pin_USART1TxRxPortA, ENABLE);
+    //SYSCFG_REMAPPinConfig(REMAP_Pin_USART1TxRxPortA, ENABLE);
 
     /* Configure USART Tx as alternate function push-pull  (software pull up)*/
-    GPIO_ExternalPullUpConfig(GPIOA, GPIO_Pin_2, ENABLE);
+    GPIO_ExternalPullUpConfig(GPIOC, GPIO_Pin_2, ENABLE);
 
     /* Configure USART Rx as alternate function push-pull  (software pull up)*/
-    GPIO_ExternalPullUpConfig(GPIOA, GPIO_Pin_3, ENABLE);
+    GPIO_ExternalPullUpConfig(GPIOC, GPIO_Pin_3, ENABLE);
 
     /* USART configuration */
     // USART_DeInit(USART1);

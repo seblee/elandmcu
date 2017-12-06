@@ -29,36 +29,36 @@ typedef enum {
 } KEY_State_TypeDef;
 /* Private define ------------------------------------------------------------*/
 //時刻設置
-#define ELAND_KEY_SET_PORT GPIOI
-#define ELAND_KEY_SET_PIN GPIO_Pin_1
+#define ELAND_KEY_SET_PORT GPIOA
+#define ELAND_KEY_SET_PIN GPIO_Pin_3
 //軟件復位
-#define ELAND_KEY_SOFT_RESET_PORT GPIOI
-#define ELAND_KEY_SOFT_RESET_PIN GPIO_Pin_2
+#define ELAND_KEY_SOFT_RESET_PORT GPIOA
+#define ELAND_KEY_SOFT_RESET_PIN GPIO_Pin_4
 //時間＋
-#define ELAND_KEY_ADD_PORT GPIOH
-#define ELAND_KEY_ADD_PIN GPIO_Pin_4
+#define ELAND_KEY_ADD_PORT GPIOA
+#define ELAND_KEY_ADD_PIN GPIO_Pin_5
 //時間－
-#define ELAND_KEY_MINUS_PORT GPIOH
-#define ELAND_KEY_MINUS_PIN GPIO_Pin_5
+#define ELAND_KEY_MINUS_PORT GPIOD
+#define ELAND_KEY_MINUS_PIN GPIO_Pin_1
 //mon時間
-#define ELAND_KEY_MON_PORT GPIOF
-#define ELAND_KEY_MON_PIN GPIO_Pin_1
+#define ELAND_KEY_MON_PORT GPIOD
+#define ELAND_KEY_MON_PIN GPIO_Pin_2
 //鬧鐘
-#define ELAND_KEY_ALARM_MODE_PORT GPIOF
-#define ELAND_KEY_ALARM_MODE_PIN GPIO_Pin_2
+#define ELAND_KEY_ALARM_MODE_PORT GPIOD
+#define ELAND_KEY_ALARM_MODE_PIN GPIO_Pin_3
 //wifi模式
-#define ELAND_KEY_WIFI_PORT GPIOF
-#define ELAND_KEY_WIFI_PIN GPIO_Pin_3
+#define ELAND_KEY_WIFI_PORT GPIOC
+#define ELAND_KEY_WIFI_PIN GPIO_Pin_0
 
 //貪睡
-#define ELAND_KEY_SNOOZE_PORT GPIOC
-#define ELAND_KEY_SNOOZE_PIN GPIO_Pin_0
+#define ELAND_KEY_SNOOZE_PORT GPIOA
+#define ELAND_KEY_SNOOZE_PIN GPIO_Pin_2
 
 //Alarm
 #define ELAND_KEY_ALARM_PORT GPIOC
-#define ELAND_KEY_ALARM_PIN GPIO_Pin_1
+#define ELAND_KEY_ALARM_PIN GPIO_Pin_4
 
-#define LONG_PRESS_TIMES 100 //10×20ms=2s
+#define LONG_PRESS_TIMES 100 //100×20ms=2s
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/

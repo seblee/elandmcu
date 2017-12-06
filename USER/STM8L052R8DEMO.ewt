@@ -1949,12 +1949,6 @@
   <group>
     <name>HARDWARE</name>
     <group>
-      <name>GPIO</name>
-      <file>
-        <name>$PROJ_DIR$\..\HARDWARE\GPIO\gpio.c</name>
-      </file>
-    </group>
-    <group>
       <name>HT1622</name>
       <file>
         <name>$PROJ_DIR$\..\HARDWARE\HT1622\ht162x.c</name>

@@ -18,6 +18,8 @@
 #include "iwdg.h"
 #include "rtc.h"
 #include "ht162x.h"
+#include "key.h"
+#include "rgbled.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -40,14 +42,18 @@ void main(void)
     uint16_t j = 0;
     uint16_t i = 0;
     LCD_Wifi_Rssi_t rssi_value[5] = {LEVEL0, LEVEL1, LEVEL2, LEVEL3, LEVEL4};
+    __eland_color_t color;
     disableInterrupts();
     /* System clock */
     SysClock_Init();
     TIM4_Init();
+    ElandKeyInit();
     ELAND_RTC_Init();
-    //IWDG_Config();
+    IWDG_Config();
     enableInterrupts();
     HT162x_init();
+    RGBLED_CFG();
+    TIM3_SetCompare1(TIM3_PERIOD);
     /* Reload IWDG counter */
     IWDG_ReloadCounter();
     HT162x_LCD_Clear(SET);
@@ -65,7 +71,28 @@ void main(void)
     {
         /* Reload IWDG counter */
         IWDG_ReloadCounter();
-        if (WakeupOccurred == TRUE)
+        Eland_KeyState_Read();
+        if ((Key_Trg & KEY_Set) ||
+            (Key_Trg & KEY_Reset) ||
+            (Key_Trg & KEY_Add) ||
+            (Key_Trg & KEY_Minus) ||
+            (Key_Trg & KEY_MON) ||
+            (Key_Trg & KEY_AlarmMode) ||
+            (Key_Trg & KEY_Wifi) ||
+            (Key_Trg & KEY_Snooze) ||
+            (Key_Trg & KEY_Alarm))
+        {
+            if (color == ELAND_RED)
+                color = ELAND_GREEN;
+            else if (color == ELAND_GREEN)
+                color = ELAND_BLUE;
+            else if (color == ELAND_BLUE)
+                color = ELAND_RED;
+            else
+                color = ELAND_RED;
+            RGBLED_Color_Set(color);
+        }
+        if (WakeupOccurred == TRUE) //500ms point flash
         {
             WakeupOccurred = FALSE;
             HT162x_LCD_Toggle_Pixel(COM0, SEG32);
@@ -78,11 +105,8 @@ void main(void)
         }
         if ((i++ % 20) == 0)
         {
-
             HT162x_LCD_RSSI_Set(rssi_value[j % 5]);
-            // HT162x_LCD_AMPM_Set(TIME_PART, (LCD_AMPM_Distinguish_t)(j % 2));
-            // HT162x_LCD_AMPM_Set(ALARM_PART, (LCD_AMPM_Distinguish_t)(j % 2));
-            // j++;
+            j++;
         }
 
         while (1)

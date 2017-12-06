@@ -66,20 +66,20 @@
         <option>
           <name>GenLibInFormatter</name>
           <version>0</version>
-          <state>2</state>
+          <state>0</state>
         </option>
         <option>
           <name>GenLibInFormatterDescription</name>
-          <state>Full formatting, without multibytes.</state>
+          <state>Automatic choice of formatter.</state>
         </option>
         <option>
           <name>GenLibOutFormatter</name>
           <version>0</version>
-          <state>2</state>
+          <state>0</state>
         </option>
         <option>
           <name>GenLibOutFormatterDescription</name>
-          <state>Full formatting, without multibytes.</state>
+          <state>Automatic choice of formatter.</state>
         </option>
         <option>
           <name>GenStackSize</name>
@@ -114,11 +114,11 @@
         <option>
           <name>GenMathFunctionVariant</name>
           <version>0</version>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>GenMathFunctionDescription</name>
-          <state>Default variants of cos, sin, tan, log, log10, pow, and exp.</state>
+          <state>Smaller size, higher execution speed, less precision, smaller input range.</state>
         </option>
       </data>
     </settings>
@@ -262,9 +262,13 @@
           <state>$PROJ_DIR$\..\SYSTEM\Misc</state>
           <state>$PROJ_DIR$\..\SYSTEM\SYS</state>
           <state>$PROJ_DIR$\..\SYSTEM\RTC</state>
+          <state>$PROJ_DIR$\..\ELAND</state>
           <state>$PROJ_DIR$\..\HARDWARE\TIMER</state>
           <state>$PROJ_DIR$\..\HARDWARE\IWDG</state>
           <state>$PROJ_DIR$\..\HARDWARE\HT1622</state>
+          <state>$PROJ_DIR$\..\HARDWARE\KEY</state>
+          <state>$PROJ_DIR$\..\HARDWARE\RGBLED</state>
+          <state>$PROJ_DIR$\..\HARDWARE\USART</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -1597,24 +1601,12 @@
   </configuration>
   <group>
     <name>ELAND</name>
-    <excluded>
-      <configuration>Debug</configuration>
-    </excluded>
     <file>
       <name>$PROJ_DIR$\..\ELAND\eland_usart.c</name>
     </file>
   </group>
   <group>
     <name>HARDWARE</name>
-    <group>
-      <name>GPIO</name>
-      <excluded>
-        <configuration>Debug</configuration>
-      </excluded>
-      <file>
-        <name>$PROJ_DIR$\..\HARDWARE\GPIO\gpio.c</name>
-      </file>
-    </group>
     <group>
       <name>HT1622</name>
       <file>
@@ -1629,9 +1621,6 @@
     </group>
     <group>
       <name>KEY</name>
-      <excluded>
-        <configuration>Debug</configuration>
-      </excluded>
       <file>
         <name>$PROJ_DIR$\..\HARDWARE\KEY\key.c</name>
       </file>
@@ -1647,9 +1636,6 @@
     </group>
     <group>
       <name>RGBLED</name>
-      <excluded>
-        <configuration>Debug</configuration>
-      </excluded>
       <file>
         <name>$PROJ_DIR$\..\HARDWARE\RGBLED\rgbled.c</name>
       </file>
@@ -1662,9 +1648,6 @@
     </group>
     <group>
       <name>USART</name>
-      <excluded>
-        <configuration>Debug</configuration>
-      </excluded>
       <file>
         <name>$PROJ_DIR$\..\HARDWARE\USART\usart.c</name>
       </file>

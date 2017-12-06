@@ -27,8 +27,11 @@ RTC_AlarmTypeDef RTC_AlarmStr;
 __IO bool AlarmOccurred = FALSE;
 __IO bool WakeupOccurred = FALSE;
 _eland_date_time_t ElandCurrentTime = {2017, RTC_Month_December, 5, 16, 20, 00, RTC_Weekday_Tuesday};
+const char MonthStr[12][4] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+RTC_Month_TypeDef MonthValue[12] = {RTC_Month_January, RTC_Month_February, RTC_Month_March, RTC_Month_April, RTC_Month_May, RTC_Month_June, RTC_Month_July, RTC_Month_August, RTC_Month_September, RTC_Month_October, RTC_Month_November, RTC_Month_December};
 /* Private function prototypes -----------------------------------------------*/
 void Calendar_Init(void);
+static void Get_built_DateTime(_eland_date_time_t *time);
 /* Private functions ---------------------------------------------------------*/
 /**
  ****************************************************************************
@@ -68,6 +71,7 @@ void Calendar_Init(void)
     RTC_InitStr.RTC_AsynchPrediv = 0x7f;
     RTC_InitStr.RTC_SynchPrediv = 0x00ff;
     RTC_Init(&RTC_InitStr);
+    Get_built_DateTime(&ElandCurrentTime);
 
     RTC_DateStructInit(&RTC_DateStr);
     RTC_DateStr.RTC_WeekDay = ElandCurrentTime.week;
@@ -192,14 +196,16 @@ void ELAND_Time_Convert(mico_rtc_time_t *mico_time, _eland_date_time_t *mcu_time
     {
         mcu_time->year = mico_time->year;
 
-        if (mico_time->month <= RTC_Month_September)
-            mcu_time->month = (RTC_Month_TypeDef)mico_time->month;
-        else if (mico_time->month == 10)
-            mcu_time->month = RTC_Month_October;
-        else if (mico_time->month == 11)
-            mcu_time->month = RTC_Month_November;
-        else if (mico_time->month == 12)
-            mcu_time->month = RTC_Month_December;
+        mcu_time->month = MonthValue[mico_time->month - 1];
+
+        // if (mico_time->month <= RTC_Month_September)
+        //     mcu_time->month = (RTC_Month_TypeDef)mico_time->month;
+        // else if (mico_time->month == 10)
+        //     mcu_time->month = RTC_Month_October;
+        // else if (mico_time->month == 11)
+        //     mcu_time->month = RTC_Month_November;
+        // else if (mico_time->month == 12)
+        //     mcu_time->month = RTC_Month_December;
 
         mcu_time->day = mico_time->date;
         mcu_time->hour = mico_time->hr;
@@ -223,5 +229,34 @@ void ELAND_Time_Convert(mico_rtc_time_t *mico_time, _eland_date_time_t *mcu_time
             mico_time->weekday = 1;
         else
             mico_time->weekday = (uint8_t)mcu_time->week + 1;
+    }
+}
+/**
+ ****************************************************************************
+ * @Function : static void Get_built_DateTime(_eland_date_time_t *time)
+ * @File     : rtc.c
+ * @Program  : time:back current time
+ * @Created  : 2017/12/6 by seblee
+ * @Brief    : set current time
+ * @Version  : V1.0
+**/
+static void Get_built_DateTime(_eland_date_time_t *time)
+{
+    uint16_t da, ho, mi, se;
+    char temp_str[4] = {0, 0, 0, 0}, i;
+    sscanf(__DATE__, "%s %2d %4d", temp_str, &da, &(time->year));
+    sscanf(__TIME__, "%2d:%2d:%2d", &ho, &mi, &se);
+
+    time->day = (uint8_t)da;
+    time->hour = (uint8_t)ho;
+    time->minute = (uint8_t)mi;
+    time->second = (uint8_t)se;
+    for (i = 0; i < 12; i++)
+    {
+        if (strncmp(temp_str, MonthStr[i], 3) == 0)
+        {
+            time->month = MonthValue[i];
+            break;
+        }
     }
 }

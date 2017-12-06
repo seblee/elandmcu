@@ -28,17 +28,11 @@ ActionState=1
 Enabled=0
 ShowSource=1
 [DebugChecksum]
-<<<<<<< HEAD
-Checksum=1531028051
-=======
-Checksum=1321796144
->>>>>>> ws-performance
+Checksum=-2141885683
 [CallStack]
 ShowArgs=0
 [Disassembly]
 MixedMode=1
-[struct_types]
-Fmt0=union <Unnamed 5>-WORD	4	0
 [watch_formats]
 Fmt0={W}1:Cache	4	0
 Fmt1={W}1:Count	4	0

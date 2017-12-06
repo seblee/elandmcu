@@ -19,15 +19,17 @@
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
+__IO uint16_t TIM2_CCR1_Val = 0;
+__IO uint16_t TIM2_CCR2_Val = 0;
 __IO uint16_t TIM3_CCR1_Val = 0;
 __IO uint16_t TIM3_CCR2_Val = 0;
-
 __IO uint16_t TIM5_CCR1_Val = 0;
 __IO uint16_t TIM5_CCR2_Val = 0;
 /* Private function prototypes -----------------------------------------------*/
 static void RGBLED_GPIO_Cfg(void);
 static void TIM3_Config(void);
-static void TIM5_Config(void);
+static void TIM2_Config(void);
+//static void TIM5_Config(void);
 /* Private functions ---------------------------------------------------------*/
 
 /**
@@ -46,7 +48,7 @@ void RGBLED_CFG(void)
 {
     RGBLED_GPIO_Cfg();
     TIM3_Config();
-    TIM5_Config();
+    TIM2_Config();
 }
 
 /**
@@ -55,22 +57,22 @@ void RGBLED_CFG(void)
  * @File     : rgbled.c
  * @Program  : none
  * @Created  : 2017/10/20 by seblee
- * @Program  : PI0 TIM3---channel 1
- *             PI3 TIM3---channel 2
- *             PH7 TIM5---channel 2
- *             PH6 TIM5---channel 1
+ * @Program  : PB0 TIM2---channel 1
+ *             PB2 TIM2---channel 2
+ *             PB1 TIM3---channel 1
+ *             PD0 TIM3---channel 2
  * @Version  : V1.0
 **/
 static void RGBLED_GPIO_Cfg(void)
 {
     /*!< TIM3 Channel 1 (PB1) remapping to PI0 */
-    SYSCFG_REMAPPinConfig(REMAP_Pin_TIM3Channel1, ENABLE);
+    //SYSCFG_REMAPPinConfig(REMAP_Pin_TIM3Channel1, ENABLE);
     /*!< TIM3 Channel 2 (PD0) remapping to PI3 */
-    SYSCFG_REMAPPinConfig(REMAP_Pin_TIM3Channel2, ENABLE);
+    //SYSCFG_REMAPPinConfig(REMAP_Pin_TIM3Channel2, ENABLE);
 
-    GPIO_Init(GPIOI, GPIO_Pin_0 | GPIO_Pin_3, GPIO_Mode_Out_PP_Low_Fast);
+    GPIO_Init(GPIOB, GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2, GPIO_Mode_Out_PP_Low_Fast);
 
-    GPIO_Init(GPIOH, GPIO_Pin_6 | GPIO_Pin_7, GPIO_Mode_Out_PP_Low_Fast);
+    GPIO_Init(GPIOD, GPIO_Pin_0, GPIO_Mode_Out_PP_Low_Fast);
 }
 static void TIM3_Config(void)
 {
@@ -102,7 +104,37 @@ static void TIM3_Config(void)
     TIM3_CtrlPWMOutputs(ENABLE); //PWM输出使能
     TIM3_Cmd(ENABLE);            //使能
 }
-static void TIM5_Config(void)
+static void TIM2_Config(void)
+{
+    /* Enable TIM5 clock */
+    CLK_PeripheralClockConfig(CLK_Peripheral_TIM2, ENABLE);
+    /*
+  - TIM1CLK = 2 MHz
+  - TIM1 counter clock = TIM1CLK / TIM1_PRESCALER+1 = 2 MHz/1+1 = 1 MHz
+  */
+    /* Time base configuration */
+    TIM2_TimeBaseInit(TIM2_Prescaler_16, TIM2_CounterMode_Up, TIM2_PERIOD);
+    /*
+  - The TIM1 CCR1 register value is equal to 32768:
+  - CC1 update rate = TIM1 counter clock / CCR1_Val = 30.51 Hz,
+  - So the TIM1 Channel 1 generates a periodic signal with a frequency equal to 15.25 Hz.
+  */
+    /* Toggle Mode configuration: Channel1 */
+    TIM2_OC1Init(TIM2_OCMode_PWM1, TIM2_OutputState_Enable, TIM2_CCR1_Val, TIM2_OCPolarity_High, TIM2_OCIdleState_Reset);
+    TIM2_OC1PreloadConfig(ENABLE); //输出比较1通道预加载使能 TIM2_OCIdleState_Set
+    /*
+  - The TIM1 CCR2 register is equal to 16384:
+  - CC2 update rate = TIM1 counter clock / CCR2_Val = 61.03 Hz
+  - So the TIM1 channel 2 generates a periodic signal with a frequency equal to 30.51 Hz.
+  */
+    /* Toggle Mode configuration: Channel2 */
+    TIM2_OC2Init(TIM2_OCMode_PWM1, TIM2_OutputState_Enable, TIM2_CCR2_Val, TIM2_OCPolarity_High, TIM2_OCIdleState_Reset);
+    TIM2_OC2PreloadConfig(ENABLE); //输出比较2通道预加载使能
+
+    TIM2_CtrlPWMOutputs(ENABLE); //PWM输出使能
+    TIM2_Cmd(ENABLE);            //使能
+}
+void TIM5_Config(void)
 {
     /* Enable TIM5 clock */
     CLK_PeripheralClockConfig(CLK_Peripheral_TIM5, ENABLE);
@@ -145,9 +177,9 @@ static void TIM5_Config(void)
 **/
 void RGBLED_Input_RGB(u8 Red, u8 Green, u8 Blue)
 {
-    TIM3_SetCompare1(Red);
-    TIM3_SetCompare2(Green);
-    TIM5_SetCompare2(Blue);
+    TIM2_SetCompare1(Red);
+    TIM2_SetCompare2(Green);
+    TIM3_SetCompare1(Blue);
 }
 /**
  ****************************************************************************
