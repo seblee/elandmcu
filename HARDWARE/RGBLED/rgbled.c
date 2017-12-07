@@ -49,6 +49,7 @@ void RGBLED_CFG(void)
     RGBLED_GPIO_Cfg();
     TIM3_Config();
     TIM2_Config();
+    TIM3_SetCompare2(TIM3_PERIOD); //back light turn brightest
 }
 
 /**

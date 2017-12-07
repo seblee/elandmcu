@@ -53,7 +53,7 @@ void main(void)
     enableInterrupts();
     HT162x_init();
     RGBLED_CFG();
-    TIM3_SetCompare1(TIM3_PERIOD);
+
     /* Reload IWDG counter */
     IWDG_ReloadCounter();
     HT162x_LCD_Clear(SET);
