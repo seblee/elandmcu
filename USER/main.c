@@ -68,6 +68,7 @@ void main(void)
             AlarmOccurred = FALSE;
             //if (Key_Count & KEY_MON)
             LCD_Eland_Time_Display(ElandCurrentTime);
+            eland_state_display();
         }
         if (Key_Trg & KEY_Minus)
         {

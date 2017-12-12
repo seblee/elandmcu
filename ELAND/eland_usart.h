@@ -15,9 +15,22 @@
 #include "syscfg.h"
 /* Private typedef -----------------------------------------------------------*/
 typedef enum {
+    ElandNone = 0,
+    ElandBegin,
+    ElandAPStatus,
+    ElandHttpServerStatus,
+    ElandWifyConnectedSuccessed,
+    ElandWifyConnectedFailed,
+    ElandAliloPlay,
+    ElandAliloPause,
+    ElandAliloStop,
+} Eland_Status_type_t;
+
+typedef enum {
     KEY_READ_02 = 0X02,
     TIME_SET_03,
     TIME_READ_04,
+    ELAND_STATES_05,
 } __msg_function_t;
 
 typedef enum {
@@ -36,6 +49,7 @@ typedef enum {
 
 /* Private function prototypes -----------------------------------------------*/
 void ReceiveUsart(u8 Cache);
+void eland_state_display(void);
 /* Private functions ---------------------------------------------------------*/
 
 #endif /*__ELAND_USART_H_*/
