@@ -1,53 +1,31 @@
 /**
  ****************************************************************************
  * @Warning :Without permission from the author,Not for commercial use
- * @File    :eland_usart.h
+ * @File    :lcd_display.h
  * @Author  :seblee
- * @date    :2017/11/1
+ * @date    :2017/12/12
  * @version :V 1.0.0
  *************************************************
  * @brief   :
  ****************************************************************************
 **/
-#ifndef __ELAND_USART_H_
-#define __ELAND_USART_H_
+#ifndef __LCD_DISPLAY_H_
+#define __LCD_DISPLAY_H_
 /* Private include -----------------------------------------------------------*/
 #include "syscfg.h"
+#include "eland_usart.h"
+#include "ht162x.h"
 /* Private typedef -----------------------------------------------------------*/
-typedef enum {
-    KEY_READ_02 = 0X02,
-    TIME_SET_03,
-    TIME_READ_04,
-    ELAND_STATES_05,
-} __msg_function_t;
 
-typedef enum {
-    FrameHeadSataus,
-    FrameDataStatus,
-    FrameTrailSataus,
-    FrameEndStatus,
-} __msg_state_t;
-/*Eland 状态*/
-typedef enum {
-    ElandNone = 0,
-    ElandBegin,
-    ElandAPStatus,
-    ElandHttpServerStatus,
-    ElandWifyConnectedSuccessed,
-    ElandWifyConnectedFailed,
-    ElandAliloPlay,
-    ElandAliloPause,
-    ElandAliloStop,
-} Eland_Status_type_t;
 /* Private define ------------------------------------------------------------*/
-#define Uart_Packet_Header (uint8_t)(0x55)
-#define Uart_Packet_Trail (uint8_t)(0xaa)
+
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-extern Eland_Status_type_t eland_state;
-/* Private function prototypes -----------------------------------------------*/
-void ReceiveUsart(u8 Cache);
-/* Private functions ---------------------------------------------------------*/
 
-#endif /*__ELAND_USART_H_*/
+/* Private function prototypes -----------------------------------------------*/
+
+/* Private functions ---------------------------------------------------------*/
+void LCD_Display_Rssi_State(Eland_Status_type_t state);
+
+#endif /*__LCD_DISPLAY_H_*/

@@ -21,6 +21,7 @@
 #include "key.h"
 #include "rgbled.h"
 #include "usart.h"
+#include "lcd_display.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -40,16 +41,13 @@
 **/
 void main(void)
 {
-    uint16_t j = 0;
-    uint16_t i = 0;
-    LCD_Wifi_Rssi_t rssi_value[5] = {LEVEL0, LEVEL1, LEVEL2, LEVEL3, LEVEL4};
     __eland_color_t color;
     disableInterrupts();
     /* System clock */
     SysClock_Init();
     TIM4_Init();
-    ElandKeyInit();
     UART1_Init();
+    ElandKeyInit();
     ELAND_RTC_Init();
     IWDG_Config();
     enableInterrupts();
@@ -59,14 +57,6 @@ void main(void)
     /* Reload IWDG counter */
     IWDG_ReloadCounter();
     HT162x_LCD_Clear(SET);
-    HT162x_LCD_Change_Pixel(COM0, SEG08, SET);
-    HT162x_LCD_Change_Pixel(COM0, SEG16, SET);
-    HT162x_LCD_Change_Pixel(COM0, SEG32, SET);
-    HT162x_LCD_Change_Pixel(COM0, SEG33, SET);
-    HT162x_LCD_Change_Pixel(COM7, SEG15, SET);
-    HT162x_LCD_Change_Pixel(COM7, SEG07, SET);
-    HT162x_LCD_Change_Pixel(COM7, SEG30, SET);
-    HT162x_LCD_Change_Pixel(COM7, SEG31, SET);
 
     /* Infinite loop */
     while (1)
@@ -99,16 +89,12 @@ void main(void)
             WakeupOccurred = FALSE;
             HT162x_LCD_Toggle_Pixel(COM0, SEG32);
             HT162x_LCD_Toggle_Pixel(COM0, SEG33);
+            LCD_Display_Rssi_State(eland_state);
         }
         if (AlarmOccurred == TRUE)
         {
             HT162x_LCD_Time_Display(ElandCurrentTime);
             AlarmOccurred = FALSE;
-        }
-        if ((i++ % 20) == 0)
-        {
-            HT162x_LCD_RSSI_Set(rssi_value[j % 5]);
-            j++;
         }
 
         while (1)

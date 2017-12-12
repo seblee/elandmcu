@@ -1992,6 +1992,12 @@
     </group>
   </group>
   <group>
+    <name>LCD_DISPLAY</name>
+    <file>
+      <name>$PROJ_DIR$\..\LCD_DISPLAY\lcd_display.c</name>
+    </file>
+  </group>
+  <group>
     <name>STM8L15x_StdPeriph_Driver</name>
     <file>
       <name>$PROJ_DIR$\..\STM8L15x_StdPeriph_Driver\src\stm8l15x_adc.c</name>

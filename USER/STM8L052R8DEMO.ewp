@@ -263,6 +263,7 @@
           <state>$PROJ_DIR$\..\SYSTEM\SYS</state>
           <state>$PROJ_DIR$\..\SYSTEM\RTC</state>
           <state>$PROJ_DIR$\..\ELAND</state>
+          <state>$PROJ_DIR$\..\LCD_DISPLAY</state>
           <state>$PROJ_DIR$\..\HARDWARE\TIMER</state>
           <state>$PROJ_DIR$\..\HARDWARE\IWDG</state>
           <state>$PROJ_DIR$\..\HARDWARE\HT1622</state>
@@ -1652,6 +1653,12 @@
         <name>$PROJ_DIR$\..\HARDWARE\USART\usart.c</name>
       </file>
     </group>
+  </group>
+  <group>
+    <name>LCD_DISPLAY</name>
+    <file>
+      <name>$PROJ_DIR$\..\LCD_DISPLAY\lcd_display.c</name>
+    </file>
   </group>
   <group>
     <name>STM8L15x_StdPeriph_Driver</name>

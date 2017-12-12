@@ -22,11 +22,14 @@
 
 /* Private variables ---------------------------------------------------------*/
 uint8_t msg_receive_buff[30];
+Eland_Status_type_t eland_state = ElandNone;
 /* Private function prototypes -----------------------------------------------*/
-static void OprationFrame(void);
+static void
+OprationFrame(void);
 static void MODH_Opration_02H(void);
 static void MODH_Opration_03H(void);
 static void MODH_Opration_04H(void);
+static void MODH_Opration_05H(void);
 /* Private functions ---------------------------------------------------------*/
 
 /**
@@ -111,6 +114,9 @@ static void OprationFrame(void)
     case TIME_READ_04:
         MODH_Opration_04H();
         break;
+    case ELAND_STATES_05:
+        MODH_Opration_05H();
+        break;
     default:
         break;
     }
@@ -194,5 +200,27 @@ static void MODH_Opration_04H(void)
     *(SendBuf + sizeof(mico_rtc_time_t) + 3) = Uart_Packet_Trail;
 
     USARTx_Send_Data(USART1, SendBuf, 4 + sizeof(mico_rtc_time_t));
+    free(SendBuf);
+}
+/**
+ ****************************************************************************
+ * @Function : static void MODH_Opration_05H(void)
+ * @File     : eland_usart.c
+ * @Program  : H04 header fun len  tral
+ *                    55   05  0   0xaa
+ * @Created  : 2017/12/12 by seblee
+ * @Brief    : get state
+ * @Version  : V1.0
+**/
+static void MODH_Opration_05H(void)
+{
+    uint8_t *SendBuf;
+    eland_state = (Eland_Status_type_t)msg_receive_buff[3];
+    SendBuf = calloc(4, sizeof(uint8_t));
+    *SendBuf = Uart_Packet_Header;
+    *(SendBuf + 1) = ELAND_STATES_05;
+    *(SendBuf + 2) = 0;
+    *(SendBuf + 3) = Uart_Packet_Trail;
+    USARTx_Send_Data(USART1, SendBuf, 4);
     free(SendBuf);
 }
