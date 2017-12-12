@@ -20,6 +20,7 @@
 #include "ht162x.h"
 #include "key.h"
 #include "rgbled.h"
+#include "usart.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -48,6 +49,7 @@ void main(void)
     SysClock_Init();
     TIM4_Init();
     ElandKeyInit();
+    UART1_Init();
     ELAND_RTC_Init();
     IWDG_Config();
     enableInterrupts();
