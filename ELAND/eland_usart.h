@@ -15,6 +15,7 @@
 #include "syscfg.h"
 /* Private typedef -----------------------------------------------------------*/
 typedef enum {
+    KEY_FUN_NONE = 0x00, /*空命令*/
     KEY_READ_02 = 0X02,
     TIME_SET_03,
     TIME_READ_04,
