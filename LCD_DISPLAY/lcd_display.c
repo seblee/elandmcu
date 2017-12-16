@@ -36,7 +36,7 @@ void LCD_Display_State(Eland_Status_type_t state)
 {
     switch (state)
     {
-    case ElandAPStatus:
+    case APStatus:
         break;
     default:
         break;
@@ -54,7 +54,7 @@ void LCD_Display_State(Eland_Status_type_t state)
 void LCD_Display_Rssi_State(Eland_Status_type_t state)
 {
     static LCD_Wifi_Rssi_t rssi_value = LEVEL0;
-    if ((state == ElandAPStatus) || (state == ElandHttpServerStatus))
+    if ((state == APStatus) || (state == HttpServerStatus))
     {
         if (rssi_value == LEVEL0)
             rssi_value = LEVEL4;

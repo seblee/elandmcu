@@ -20,6 +20,7 @@ typedef enum {
     TIME_SET_03,
     TIME_READ_04,
     ELAND_STATES_05,
+    FIRM_WARE_06,
 } __msg_function_t;
 
 typedef enum {
@@ -32,13 +33,20 @@ typedef enum {
 typedef enum {
     ElandNone = 0,
     ElandBegin,
-    ElandAPStatus,
-    ElandHttpServerStatus,
-    ElandWifyConnectedSuccessed,
-    ElandWifyConnectedFailed,
+    APStatus,
+    APStatusClosed,
+    HttpServerStatus,
+    HttpServerStop,
+    ELAPPConnected,
+    WifyConnected,
+    WifyDisConnected,
+    WifyConnectedFailed,
     ElandAliloPlay,
     ElandAliloPause,
     ElandAliloStop,
+    HTTP_Get_HOST_INFO,
+    TCPConnectedELSV,
+    TCPHealthCheck,
 } Eland_Status_type_t;
 /* Private define ------------------------------------------------------------*/
 #define Uart_Packet_Header (uint8_t)(0x55)
@@ -46,6 +54,7 @@ typedef enum {
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
+extern uint8_t Firmware_Conter;
 extern Eland_Status_type_t eland_state;
 /* Private function prototypes -----------------------------------------------*/
 void ReceiveUsart(u8 Cache);

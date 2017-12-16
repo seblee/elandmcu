@@ -25,7 +25,8 @@
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-
+extern int Firmware_Version_Major;
+extern int Firmware_Version_Minor;
 /* Private function prototypes -----------------------------------------------*/
 void SysClock_Init(void);
 

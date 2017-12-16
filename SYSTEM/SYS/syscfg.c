@@ -20,7 +20,8 @@
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-
+int Firmware_Version_Major = 0;
+int Firmware_Version_Minor = 0;
 /* Private function prototypes -----------------------------------------------*/
 
 /* Private functions ---------------------------------------------------------*/

@@ -14,6 +14,7 @@
 #include "key.h"
 #include "usart.h"
 #include "rtc.h"
+#include "ht162x.h"
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
@@ -21,15 +22,17 @@
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
+
+uint8_t Firmware_Conter = 0;
 uint8_t msg_receive_buff[30];
 Eland_Status_type_t eland_state = ElandNone;
 /* Private function prototypes -----------------------------------------------*/
-static void
-OprationFrame(void);
+static void OprationFrame(void);
 static void MODH_Opration_02H(void);
 static void MODH_Opration_03H(void);
 static void MODH_Opration_04H(void);
 static void MODH_Opration_05H(void);
+static void MODH_Opration_06H(void);
 /* Private functions ---------------------------------------------------------*/
 
 /**
@@ -117,6 +120,10 @@ static void OprationFrame(void)
     case ELAND_STATES_05:
         MODH_Opration_05H();
         break;
+    case FIRM_WARE_06:
+        MODH_Opration_06H();
+        break;
+
     default:
         break;
     }
@@ -214,6 +221,8 @@ static void MODH_Opration_04H(void)
 **/
 static void MODH_Opration_05H(void)
 {
+    uint8_t cache;
+    cache = eland_state;
     uint8_t *SendBuf;
     eland_state = (Eland_Status_type_t)msg_receive_buff[3];
     SendBuf = calloc(4, sizeof(uint8_t));
@@ -223,4 +232,43 @@ static void MODH_Opration_05H(void)
     *(SendBuf + 3) = Uart_Packet_Trail;
     USARTx_Send_Data(USART1, SendBuf, 4);
     free(SendBuf);
+    if (cache == 0)
+    {
+        HT162x_LCD_Num_Set(Serial_13, 0);
+        HT162x_LCD_Num_Set(Serial_14, 0);
+        HT162x_LCD_Num_Set(Serial_15, eland_state / 10);
+        HT162x_LCD_Num_Set(Serial_16, eland_state % 10);
+    }
+    else
+    {
+        HT162x_LCD_Num_Set(Serial_15, eland_state / 10);
+        HT162x_LCD_Num_Set(Serial_16, eland_state % 10);
+    }
+}
+/**
+ ****************************************************************************
+ * @Function : static void MODH_Opration_06H(void)
+ * @File     : eland_usart.c
+ * @Program  : H04 header fun len  tral
+ *                    55   05  0   0xaa
+ * @Created  : 2017/12/16 by seblee
+ * @Brief    : get eland firmware
+ * @Version  : V1.0
+**/
+static void MODH_Opration_06H(void)
+{
+    uint8_t *SendBuf;
+    sscanf((char const *)&msg_receive_buff[3], "%02d.%02d", &Firmware_Version_Major, &Firmware_Version_Minor);
+    SendBuf = calloc(4, sizeof(uint8_t));
+    *SendBuf = Uart_Packet_Header;
+    *(SendBuf + 1) = FIRM_WARE_06;
+    *(SendBuf + 2) = 0;
+    *(SendBuf + 3) = Uart_Packet_Trail;
+    USARTx_Send_Data(USART1, SendBuf, 4);
+    free(SendBuf);
+
+    HT162x_LCD_Num_Set(Serial_17, Firmware_Version_Major / 10);
+    HT162x_LCD_Num_Set(Serial_18, Firmware_Version_Major % 10);
+    HT162x_LCD_Num_Set(Serial_19, Firmware_Version_Minor / 10);
+    HT162x_LCD_Num_Set(Serial_20, Firmware_Version_Minor % 10);
 }

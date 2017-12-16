@@ -64,6 +64,7 @@ void main(void)
         /* Reload IWDG counter */
         IWDG_ReloadCounter();
         Eland_KeyState_Read();
+
         if ((Key_Trg & KEY_Set) ||
             (Key_Trg & KEY_Reset) ||
             (Key_Trg & KEY_Add) ||
@@ -84,6 +85,7 @@ void main(void)
                 color = ELAND_RED;
             RGBLED_Color_Set(color);
         }
+
         if (WakeupOccurred == TRUE) //500ms point flash
         {
             WakeupOccurred = FALSE;

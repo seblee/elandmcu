@@ -32,6 +32,7 @@ RTC_Month_TypeDef MonthValue[12] = {RTC_Month_January, RTC_Month_February, RTC_M
 /* Private function prototypes -----------------------------------------------*/
 void Calendar_Init(void);
 static void Get_built_DateTime(_eland_date_time_t *time);
+static RTC_Weekday_TypeDef CaculateWeekDay(int y, int m, int d);
 /* Private functions ---------------------------------------------------------*/
 /**
  ****************************************************************************
@@ -259,4 +260,25 @@ static void Get_built_DateTime(_eland_date_time_t *time)
             break;
         }
     }
+    time->week = CaculateWeekDay(time->year, i + 1, time->day);
+}
+/**
+ ****************************************************************************
+ * @Function : RTC_Weekday_TypeDef CaculateWeekDay(int y, int m, int d)
+ * @File     : rtc.c
+ * @Program  : y:year m:month d:day
+ * @Created  : 2017/12/16 by seblee
+ * @Brief    : Caculat get week
+ * @Version  : V1.0
+**/
+RTC_Weekday_TypeDef CaculateWeekDay(int y, int m, int d)
+{
+    int iWeek;
+    if (m == 1 || m == 2)
+    {
+        m += 12;
+        y--;
+    }
+    iWeek = (d + 2 * m + 3 * (m + 1) / 5 + y + y / 4 - y / 100 + y / 400) % 7;
+    return (RTC_Weekday_TypeDef)(iWeek + 1);
 }
