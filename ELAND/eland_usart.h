@@ -45,8 +45,11 @@ typedef enum {
     ElandAliloPause,
     ElandAliloStop,
     HTTP_Get_HOST_INFO,
-    TCPConnectedELSV,
-    TCPHealthCheck,
+    TCP_CN00,
+    TCP_DV00,
+    TCP_AL00,
+    TCP_HD00,
+    TCP_HC00,
 } Eland_Status_type_t;
 /* Private define ------------------------------------------------------------*/
 #define Uart_Packet_Header (uint8_t)(0x55)

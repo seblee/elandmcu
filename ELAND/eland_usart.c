@@ -93,6 +93,7 @@ void ReceiveUsart(u8 Cache)
         OprationFrame();
         UartStatus = FrameHeadSataus;
         count = 0;
+        IWDG_ReloadCounter();
     }
 }
 /**
@@ -222,8 +223,9 @@ static void MODH_Opration_04H(void)
 static void MODH_Opration_05H(void)
 {
     uint8_t cache;
-    cache = eland_state;
+    static uint8_t state_receive_time = 0;
     uint8_t *SendBuf;
+    cache = eland_state;
     eland_state = (Eland_Status_type_t)msg_receive_buff[3];
     SendBuf = calloc(4, sizeof(uint8_t));
     *SendBuf = Uart_Packet_Header;
@@ -232,17 +234,17 @@ static void MODH_Opration_05H(void)
     *(SendBuf + 3) = Uart_Packet_Trail;
     USARTx_Send_Data(USART1, SendBuf, 4);
     free(SendBuf);
-    if (cache == 0)
+    if (cache != eland_state)
     {
-        HT162x_LCD_Num_Set(Serial_13, 0);
-        HT162x_LCD_Num_Set(Serial_14, 0);
         HT162x_LCD_Num_Set(Serial_15, eland_state / 10);
         HT162x_LCD_Num_Set(Serial_16, eland_state % 10);
     }
-    else
+    if (cache >= TCP_CN00)
     {
-        HT162x_LCD_Num_Set(Serial_15, eland_state / 10);
-        HT162x_LCD_Num_Set(Serial_16, eland_state % 10);
+        if (state_receive_time++ >= 100)
+            state_receive_time = 0;
+        HT162x_LCD_Num_Set(Serial_13, state_receive_time / 10);
+        HT162x_LCD_Num_Set(Serial_14, state_receive_time % 10);
     }
 }
 /**
