@@ -42,14 +42,14 @@
 void main(void)
 {
     __eland_color_t color;
-    disableInterrupts();
+     disableInterrupts();
     /* System clock */
     SysClock_Init();
     TIM4_Init();
     UART1_Init();
     ElandKeyInit();
     ELAND_RTC_Init();
-    IWDG_Config();
+     IWDG_Config();
     enableInterrupts();
     HT162x_init();
     RGBLED_CFG();

@@ -62,4 +62,18 @@ void LCD_Display_Rssi_State(Eland_Status_type_t state)
             rssi_value = LEVEL0;
         HT162x_LCD_RSSI_Set(rssi_value);
     }
+    else
+    {
+        if (RSSI_Value >= RSSI_STATE_STAGE4)
+            rssi_value = LEVEL4;
+        else if (RSSI_Value >= RSSI_STATE_STAGE3)
+            rssi_value = LEVEL3;
+        else if (RSSI_Value >= RSSI_STATE_STAGE2)
+            rssi_value = LEVEL2;
+        else if (RSSI_Value >= RSSI_STATE_STAGE1)
+            rssi_value = LEVEL1;
+        else
+            rssi_value = LEVEL0;
+        HT162x_LCD_RSSI_Set(rssi_value);
+    }
 }

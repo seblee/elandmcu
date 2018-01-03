@@ -500,7 +500,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>STM8LDEMO.hex</state>
+          <state>STM8L052R8DEMO.hex</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>

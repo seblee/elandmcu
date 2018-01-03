@@ -26,6 +26,7 @@
 uint8_t Firmware_Conter = 0;
 uint8_t msg_receive_buff[30];
 Eland_Status_type_t eland_state = ElandNone;
+int32_t RSSI_Value = -120;
 /* Private function prototypes -----------------------------------------------*/
 static void OprationFrame(void);
 static void MODH_Opration_02H(void);
@@ -33,6 +34,7 @@ static void MODH_Opration_03H(void);
 static void MODH_Opration_04H(void);
 static void MODH_Opration_05H(void);
 static void MODH_Opration_06H(void);
+static void MODH_Opration_08H(void);
 /* Private functions ---------------------------------------------------------*/
 
 /**
@@ -121,8 +123,11 @@ static void OprationFrame(void)
     case ELAND_STATES_05:
         MODH_Opration_05H();
         break;
-    case FIRM_WARE_06:
+    case SEAD_FIRM_WARE_06:
         MODH_Opration_06H();
+        break;
+    case SEND_LINK_STATE_08:
+        MODH_Opration_08H();
         break;
 
     default:
@@ -263,7 +268,7 @@ static void MODH_Opration_06H(void)
     sscanf((char const *)&msg_receive_buff[3], "%02d.%02d", &Firmware_Version_Major, &Firmware_Version_Minor);
     SendBuf = calloc(4, sizeof(uint8_t));
     *SendBuf = Uart_Packet_Header;
-    *(SendBuf + 1) = FIRM_WARE_06;
+    *(SendBuf + 1) = SEAD_FIRM_WARE_06;
     *(SendBuf + 2) = 0;
     *(SendBuf + 3) = Uart_Packet_Trail;
     USARTx_Send_Data(USART1, SendBuf, 4);
@@ -273,4 +278,30 @@ static void MODH_Opration_06H(void)
     HT162x_LCD_Num_Set(Serial_18, Firmware_Version_Major % 10);
     HT162x_LCD_Num_Set(Serial_19, Firmware_Version_Minor / 10);
     HT162x_LCD_Num_Set(Serial_20, Firmware_Version_Minor % 10);
+}
+/**
+ ****************************************************************************
+ * @Function : static void MODH_Opration_08H(void)
+ * @File     : eland_usart.c
+ * @Program  : H08 header fun    RSSI       tral
+ *                    55   08  RSSI value   0xaa
+ * @Created  : 2018/1/3 by seblee
+ * @Brief    : get wifi rssi
+ * @Version  : V1.0
+**/
+static void MODH_Opration_08H(void)
+{
+    uint8_t *SendBuf;
+    RSSI_Value = (int32_t)((uint32_t)msg_receive_buff[3] |
+                           ((uint32_t)msg_receive_buff[4] << 8) |
+                           ((uint32_t)msg_receive_buff[5] << 16) |
+                           ((uint32_t)msg_receive_buff[6] << 24));
+
+    SendBuf = calloc(4, sizeof(uint8_t));
+    *SendBuf = Uart_Packet_Header;
+    *(SendBuf + 1) = SEND_LINK_STATE_08;
+    *(SendBuf + 2) = 0;
+    *(SendBuf + 3) = Uart_Packet_Trail;
+    USARTx_Send_Data(USART1, SendBuf, 4);
+    free(SendBuf);
 }

@@ -20,7 +20,9 @@ typedef enum {
     TIME_SET_03,
     TIME_READ_04,
     ELAND_STATES_05,
-    FIRM_WARE_06,
+    SEAD_FIRM_WARE_06,
+    REND_FIRM_WARE_07,
+    SEND_LINK_STATE_08,
 } __msg_function_t;
 
 typedef enum {
@@ -54,11 +56,18 @@ typedef enum {
 /* Private define ------------------------------------------------------------*/
 #define Uart_Packet_Header (uint8_t)(0x55)
 #define Uart_Packet_Trail (uint8_t)(0xaa)
+
+#define RSSI_STATE_STAGE0 (int)(-85)
+#define RSSI_STATE_STAGE1 (int)(-70)
+#define RSSI_STATE_STAGE2 (int)(-60)
+#define RSSI_STATE_STAGE3 (int)(-50)
+#define RSSI_STATE_STAGE4 (int)(-40)
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
 extern uint8_t Firmware_Conter;
 extern Eland_Status_type_t eland_state;
+extern int32_t RSSI_Value;
 /* Private function prototypes -----------------------------------------------*/
 void ReceiveUsart(u8 Cache);
 /* Private functions ---------------------------------------------------------*/
