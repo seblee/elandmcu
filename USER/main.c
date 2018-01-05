@@ -22,6 +22,7 @@
 #include "rgbled.h"
 #include "usart.h"
 #include "lcd_display.h"
+#include "eland_ota.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -42,14 +43,15 @@
 void main(void)
 {
     __eland_color_t color;
-     disableInterrupts();
+    disableInterrupts();
+    //OTA_bootloader_enable();
     /* System clock */
     SysClock_Init();
     TIM4_Init();
     UART1_Init();
     ElandKeyInit();
     ELAND_RTC_Init();
-     IWDG_Config();
+    IWDG_Config();
     enableInterrupts();
     HT162x_init();
     RGBLED_CFG();
@@ -57,6 +59,7 @@ void main(void)
     /* Reload IWDG counter */
     IWDG_ReloadCounter();
     HT162x_LCD_Clear(SET);
+
 
     /* Infinite loop */
     while (1)

@@ -1943,6 +1943,9 @@
   <group>
     <name>ELAND</name>
     <file>
+      <name>$PROJ_DIR$\..\ELAND_OTA\eland_ota.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\ELAND\eland_usart.c</name>
     </file>
   </group>

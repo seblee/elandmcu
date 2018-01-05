@@ -652,8 +652,7 @@ void HT162x_LCD_Week_Set(LCD_Time_Type_t type, LCD_Week_Day_t day)
 **/
 void HT162x_LCD_RSSI_Set(LCD_Wifi_Rssi_t value)
 {
-    static LCD_Wifi_Rssi_t value_BAK = LEVEL0;
-    if (value > LEVEL4)
+     if (value > LEVEL4)
         return;
 
     HT162x_LCD_Change_Pixel(COM7, SEG20, (FlagStatus)(value & 0x08));
@@ -669,7 +668,7 @@ void HT162x_LCD_RSSI_Set(LCD_Wifi_Rssi_t value)
     //     HT162x_LCD_Change_Pixel(COM7, SEG18, (FlagStatus)(value & 0x02));
     // if ((value & 0x01) != (value_BAK & 0x01))
     //     HT162x_LCD_Change_Pixel(COM7, SEG17, (FlagStatus)(value & 0x01));
-    value_BAK = value;
+
 }
 /**
  ****************************************************************************

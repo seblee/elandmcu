@@ -15,6 +15,7 @@
 #include "usart.h"
 #include "rtc.h"
 #include "ht162x.h"
+#include "eland_ota.h"
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
@@ -35,6 +36,7 @@ static void MODH_Opration_04H(void);
 static void MODH_Opration_05H(void);
 static void MODH_Opration_06H(void);
 static void MODH_Opration_08H(void);
+static void MODH_Opration_09H(void);
 /* Private functions ---------------------------------------------------------*/
 
 /**
@@ -129,7 +131,9 @@ static void OprationFrame(void)
     case SEND_LINK_STATE_08:
         MODH_Opration_08H();
         break;
-
+    case MCU_FIRM_WARE_09:
+        MODH_Opration_09H();
+        break;
     default:
         break;
     }
@@ -304,4 +308,26 @@ static void MODH_Opration_08H(void)
     *(SendBuf + 3) = Uart_Packet_Trail;
     USARTx_Send_Data(USART1, SendBuf, 4);
     free(SendBuf);
+}
+/**
+ ****************************************************************************
+ * @Function : static void MODH_Opration_09H(void)
+ * @File     : eland_usart.c
+ * @Program  : H08 header fun len   tral
+ *                    55   09  00   0xaa
+ * @Created  : 2018/1/4 by seblee
+ * @Brief    : firmware update
+ * @Version  : V1.0
+**/
+static void MODH_Opration_09H(void)
+{
+    uint8_t *SendBuf;
+    SendBuf = calloc(4, sizeof(uint8_t));
+    *SendBuf = Uart_Packet_Header;
+    *(SendBuf + 1) = MCU_FIRM_WARE_09;
+    *(SendBuf + 2) = 0;
+    *(SendBuf + 3) = Uart_Packet_Trail;
+    USARTx_Send_Data(USART1, SendBuf, 4);
+    free(SendBuf);
+    OTA_start();
 }

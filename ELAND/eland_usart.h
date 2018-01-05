@@ -23,6 +23,7 @@ typedef enum {
     SEAD_FIRM_WARE_06,
     REND_FIRM_WARE_07,
     SEND_LINK_STATE_08,
+    MCU_FIRM_WARE_09,
 } __msg_function_t;
 
 typedef enum {

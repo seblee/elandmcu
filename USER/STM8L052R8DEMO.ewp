@@ -263,6 +263,7 @@
           <state>$PROJ_DIR$\..\SYSTEM\SYS</state>
           <state>$PROJ_DIR$\..\SYSTEM\RTC</state>
           <state>$PROJ_DIR$\..\ELAND</state>
+          <state>$PROJ_DIR$\..\ELAND_OTA</state>
           <state>$PROJ_DIR$\..\LCD_DISPLAY</state>
           <state>$PROJ_DIR$\..\HARDWARE\TIMER</state>
           <state>$PROJ_DIR$\..\HARDWARE\IWDG</state>
@@ -492,7 +493,7 @@
         <option>
           <name>OOCOutputFormat</name>
           <version>2</version>
-          <state>1</state>
+          <state>2</state>
         </option>
         <option>
           <name>OCOutputOverride</name>
@@ -500,7 +501,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>STM8L052R8DEMO.hex</state>
+          <state>STM8L052R8DEMO.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -1602,6 +1603,9 @@
   </configuration>
   <group>
     <name>ELAND</name>
+    <file>
+      <name>$PROJ_DIR$\..\ELAND_OTA\eland_ota.c</name>
+    </file>
     <file>
       <name>$PROJ_DIR$\..\ELAND\eland_usart.c</name>
     </file>
