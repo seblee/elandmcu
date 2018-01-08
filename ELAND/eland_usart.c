@@ -299,7 +299,7 @@ void MODH_Opration_07H(void)
     *SendBuf = Uart_Packet_Header;
     *(SendBuf + 1) = REND_FIRM_WARE_07;
     *(SendBuf + 2) = 5;
-    sprintf(SendBuf + 3, "%02d.%02d", MCU_VERSION_MAJOR, MCU_VERSION_MINOR);
+    sprintf((char*)(SendBuf + 3), "%02d.%02d", MCU_VERSION_MAJOR, MCU_VERSION_MINOR);
     *(SendBuf + 8) = Uart_Packet_Trail;
     USARTx_Send_Data(USART1, SendBuf, 9);
     free(SendBuf);

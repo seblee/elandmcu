@@ -49,13 +49,12 @@ void main(void)
     SysClock_Init();
     TIM4_Init();
     UART1_Init();
-    ElandKeyInit();
+    //ElandKeyInit();
     ELAND_RTC_Init();
     IWDG_Config();
     enableInterrupts();
     HT162x_init();
     RGBLED_CFG();
-
     /* Reload IWDG counter */
     IWDG_ReloadCounter();
     HT162x_LCD_Clear(SET);
