@@ -23,16 +23,17 @@
 /* Private function prototypes -----------------------------------------------*/
 static void MCU_RESET_STATE(void);
 /* Private functions ---------------------------------------------------------*/
-
+/**
+ ****************************************************************************
+ * @Function : void OTA_bootloader_enable(void)
+ * @File     : eland_ota.c
+ * @Program  : none
+ * @Created  : 2018/1/8 by seblee
+ * @Brief    : enable bootloader
+ * @Version  : V1.0
+**/
 void OTA_bootloader_enable(void)
 {
-      static uint8_t opt_M[5]  ;
-     opt_M[0] = FLASH_ReadByte(0x1000);
-     opt_M[1] = FLASH_ReadByte(0x1001);
-     opt_M[2] = FLASH_ReadByte(0x1002);
-     opt_M[3] = FLASH_ReadByte(0x1003);
-     opt_M[4] = FLASH_ReadByte(0x1004);
-
     FLASH_Unlock(FLASH_MemType_Data);
     asm("nop");
     while (!FLASH_GetFlagStatus(FLASH_FLAG_DUL)) // 等待解锁
@@ -47,42 +48,36 @@ void OTA_bootloader_enable(void)
 #endif
     FLASH_Lock(FLASH_MemType_Data);
 }
+/**
+ ****************************************************************************
+ * @Function : void OTA_bootloader_disable(void)
+ * @File     : eland_ota.c
+ * @Program  : none
+ * @Created  : 2018/1/8 by seblee
+ * @Brief    : disable bootloader
+ * @Version  : V1.0
+**/
+void OTA_bootloader_disable(void)
+{
+    FLASH_Unlock(FLASH_MemType_Data);
+    asm("nop");
+    while (!FLASH_GetFlagStatus(FLASH_FLAG_DUL)) // 等待解锁
+        ;
+    asm("nop");
+#if defined(STM8L15X_MD) || defined(STM8L15X_MDP) || defined(STM8L15X_LD) || defined(STM8L15X_HD) //STM8L
+    if (FLASH_ReadByte(0x480b) != 0x00)
+        FLASH_ProgramOptionByte(0x480b, 0x00);
+    if (FLASH_ReadByte(0x480c) != 0x00)
+        FLASH_ProgramOptionByte(0x480c, 0x00);
+#else //STM8S
+    if (FLASH_ReadByte(0x487e) != 0x00)
+        FLASH_ProgramOptionByte(0x487e, 0x00);
+    if (FLASH_ReadByte(0x487f) != 0x00)
+        FLASH_ProgramOptionByte(0x487f, 0x00);
+#endif
+    FLASH_Lock(FLASH_MemType_Data);
+}
 
-// #if defined(STM8L15X_MD) || defined(STM8L15X_MDP) || defined(STM8L15X_LD) || defined(STM8L15X_HD) //STM8L
-// void OTA_bootloader_enable(void)
-// {
-//     FLASH->DUKR = 0xae;
-//     asm("nop");
-//     FLASH->DUKR = 0x56; // 解除写保护
-//     asm("nop");
-//     while (!(FLASH->IAPSR & 0x08))
-//         ; // 等待解锁
-//     asm("nop");
-//     FLASH->CR2 = 0x80; // 对选项字节进行写操作
-//     asm("nop");
-//     *((unsigned char *)0x480b) = 0x55;
-//     asm("nop");
-//     *((unsigned char *)0x480c) = 0xaa; // 写入选项字节
-// }
-// #else //STM8S
-// void OTA_bootloader_enable(void)
-// {
-//     FLASH->DUKR = 0xae;
-//     asm("nop");
-//     FLASH->DUKR = 0x56;
-//     asm("nop");
-//     while (!(FLASH->IAPSR & 0x08))
-//         ;
-//     asm("nop");
-//     FLASH->CR2 = 0x80;
-//     asm("nop");
-//     FLASH->NCR2 = 0x7f;
-//     asm("nop");
-//     *((unsigned char *)0x487e) = 0x55;
-//     asm("nop");
-//     *((unsigned char *)0x487f) = 0xaa;
-// }
-// #endif
 /**
  ****************************************************************************
  * @Function : void OTA_start(void)
@@ -95,6 +90,7 @@ void OTA_bootloader_enable(void)
 void OTA_start(void)
 {
     MCU_RESET_STATE();
+    OTA_bootloader_enable();
     asm("jp 0x601F"); // jump to given entry point address
 }
 

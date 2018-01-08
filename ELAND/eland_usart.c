@@ -285,6 +285,28 @@ static void MODH_Opration_06H(void)
 }
 /**
  ****************************************************************************
+ * @Function : void MODH_Opration_07H(void)
+ * @File     : eland_usart.c
+ * @Program  : NONE
+ * @Created  : 2018/1/8 by seblee
+ * @Brief    : READ MCU FIRMWARE
+ * @Version  : V1.0
+**/
+void MODH_Opration_07H(void)
+{
+    uint8_t *SendBuf;
+    SendBuf = calloc(9, sizeof(uint8_t));
+    *SendBuf = Uart_Packet_Header;
+    *(SendBuf + 1) = REND_FIRM_WARE_07;
+    *(SendBuf + 2) = 5;
+    sprintf(SendBuf + 3, "%02d.%02d", MCU_VERSION_MAJOR, MCU_VERSION_MINOR);
+    *(SendBuf + 8) = Uart_Packet_Trail;
+    USARTx_Send_Data(USART1, SendBuf, 9);
+    free(SendBuf);
+}
+
+/**
+ ****************************************************************************
  * @Function : static void MODH_Opration_08H(void)
  * @File     : eland_usart.c
  * @Program  : H08 header fun    RSSI       tral

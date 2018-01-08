@@ -60,6 +60,5 @@ void SysClock_Init(void)
     /* wait for 1 second for the LSE Stabilisation */
     Delay_By_nop(50000);
     Delay_By_nop(50000);
-
 #endif
 }

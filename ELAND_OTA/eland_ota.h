@@ -25,6 +25,7 @@
 
 /* Private functions ---------------------------------------------------------*/
 void OTA_bootloader_enable(void);
+void OTA_bootloader_disable(void);
 void OTA_start(void);
 
 /****************************/

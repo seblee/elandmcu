@@ -44,7 +44,7 @@ void main(void)
 {
     __eland_color_t color;
     disableInterrupts();
-    //OTA_bootloader_enable();
+    OTA_bootloader_disable();
     /* System clock */
     SysClock_Init();
     TIM4_Init();
@@ -59,7 +59,6 @@ void main(void)
     /* Reload IWDG counter */
     IWDG_ReloadCounter();
     HT162x_LCD_Clear(SET);
-
 
     /* Infinite loop */
     while (1)
