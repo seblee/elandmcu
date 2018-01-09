@@ -26,7 +26,8 @@ RTC_AlarmTypeDef RTC_AlarmStr;
 
 __IO bool AlarmOccurred = FALSE;
 __IO bool WakeupOccurred = FALSE;
-_eland_date_time_t ElandCurrentTime = {2017, RTC_Month_December, 5, 16, 20, 00, RTC_Weekday_Tuesday};
+_eland_date_time_t ElandCurrentTime;
+
 const char MonthStr[12][4] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 RTC_Month_TypeDef MonthValue[12] = {RTC_Month_January, RTC_Month_February, RTC_Month_March, RTC_Month_April, RTC_Month_May, RTC_Month_June, RTC_Month_July, RTC_Month_August, RTC_Month_September, RTC_Month_October, RTC_Month_November, RTC_Month_December};
 /* Private function prototypes -----------------------------------------------*/

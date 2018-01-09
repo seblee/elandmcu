@@ -42,7 +42,6 @@
 **/
 void main(void)
 {
-    __eland_color_t color;
     disableInterrupts();
     OTA_bootloader_disable();
     /* System clock */
@@ -55,10 +54,10 @@ void main(void)
     enableInterrupts();
     HT162x_init();
     RGBLED_CFG();
-
     /* Reload IWDG counter */
     IWDG_ReloadCounter();
-    HT162x_LCD_Clear(SET);
+    // HT162x_LCD_Clear(SET);
+    LCD_data_init();
 
     /* Infinite loop */
     while (1)
@@ -66,40 +65,12 @@ void main(void)
         /* Reload IWDG counter */
         IWDG_ReloadCounter();
         Eland_KeyState_Read();
-
-        if ((Key_Trg & KEY_Set) ||
-            (Key_Trg & KEY_Reset) ||
-            (Key_Trg & KEY_Add) ||
-            (Key_Trg & KEY_Minus) ||
-            (Key_Trg & KEY_MON) ||
-            (Key_Trg & KEY_AlarmMode) ||
-            (Key_Trg & KEY_Wifi) ||
-            (Key_Trg & KEY_Snooze) ||
-            (Key_Trg & KEY_Alarm))
-        {
-            if (color == ELAND_RED)
-                color = ELAND_GREEN;
-            else if (color == ELAND_GREEN)
-                color = ELAND_BLUE;
-            else if (color == ELAND_BLUE)
-                color = ELAND_RED;
-            else
-                color = ELAND_RED;
-            RGBLED_Color_Set(color);
-        }
-
-        if (WakeupOccurred == TRUE) //500ms point flash
-        {
-            WakeupOccurred = FALSE;
-            HT162x_LCD_Toggle_Pixel(COM0, SEG32);
-            HT162x_LCD_Toggle_Pixel(COM0, SEG33);
-            LCD_Display_Rssi_State(eland_state);
-        }
-        if (AlarmOccurred == TRUE)
-        {
-            HT162x_LCD_Time_Display(ElandCurrentTime);
-            AlarmOccurred = FALSE;
-        }
+        if (Key_Count & KEY_Wifi) //NC/NA mode
+            LCD_NetMode();
+        else if (Key_Count & KEY_MON) //clock MON mode
+            LCD_Clock_MON();
+        else if (Key_Count & KEY_AlarmMode) //Clock Alarm mode
+            LCD_Clock_Alarm();
 
         while (1)
         {
