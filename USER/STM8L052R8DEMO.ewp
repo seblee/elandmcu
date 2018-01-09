@@ -17,7 +17,7 @@
         <debug>1</debug>
         <option>
           <name>GenDeviceSelectMenu</name>
-          <state>STM8L151G4	STM8L151G4</state>
+          <state>STM8L151G6	STM8L151G6</state>
         </option>
         <option>
           <name>GenCodeModel</name>
@@ -209,7 +209,7 @@
         </option>
         <option>
           <name>CCListCMnemonics</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>CCListCMessages</name>
@@ -221,7 +221,7 @@
         </option>
         <option>
           <name>CCListAssSource</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>CCEnableRemarks</name>
@@ -249,7 +249,7 @@
         </option>
         <option>
           <name>CCCompilerRuntimeInfo</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>PreInclude</name>
@@ -493,7 +493,7 @@
         <option>
           <name>OOCOutputFormat</name>
           <version>2</version>
-          <state>2</state>
+          <state>1</state>
         </option>
         <option>
           <name>OCOutputOverride</name>
@@ -501,7 +501,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>STM8L052R8DEMO.bin</state>
+          <state>STM8L052R8DEMO.hex</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -620,7 +620,7 @@
         </option>
         <option>
           <name>IlinkIcfFile</name>
-          <state>$TOOLKIT_DIR$\config\lnkstm8l151g4.icf</state>
+          <state>$TOOLKIT_DIR$\config\lnkstm8l151g6.icf</state>
         </option>
         <option>
           <name>IlinkIcfFileSlave</name>

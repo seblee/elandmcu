@@ -35,6 +35,7 @@ static void MODH_Opration_03H(void);
 static void MODH_Opration_04H(void);
 static void MODH_Opration_05H(void);
 static void MODH_Opration_06H(void);
+static void MODH_Opration_07H(void);
 static void MODH_Opration_08H(void);
 static void MODH_Opration_09H(void);
 /* Private functions ---------------------------------------------------------*/
@@ -127,6 +128,9 @@ static void OprationFrame(void)
         break;
     case SEAD_FIRM_WARE_06:
         MODH_Opration_06H();
+        break;
+    case REND_FIRM_WARE_07:
+        MODH_Opration_07H();
         break;
     case SEND_LINK_STATE_08:
         MODH_Opration_08H();
@@ -285,21 +289,22 @@ static void MODH_Opration_06H(void)
 }
 /**
  ****************************************************************************
- * @Function : void MODH_Opration_07H(void)
+ * @Function : static void MODH_Opration_07H(void)
  * @File     : eland_usart.c
  * @Program  : NONE
  * @Created  : 2018/1/8 by seblee
  * @Brief    : READ MCU FIRMWARE
  * @Version  : V1.0
 **/
-void MODH_Opration_07H(void)
+static void MODH_Opration_07H(void)
 {
     uint8_t *SendBuf;
     SendBuf = calloc(9, sizeof(uint8_t));
     *SendBuf = Uart_Packet_Header;
     *(SendBuf + 1) = REND_FIRM_WARE_07;
     *(SendBuf + 2) = 5;
-    sprintf(SendBuf + 3, "%02d.%02d", MCU_VERSION_MAJOR, MCU_VERSION_MINOR);
+
+    sprintf((char *)(SendBuf + 3), "%02d.%02d", MCU_VERSION_MAJOR, MCU_VERSION_MINOR);
     *(SendBuf + 8) = Uart_Packet_Trail;
     USARTx_Send_Data(USART1, SendBuf, 9);
     free(SendBuf);
