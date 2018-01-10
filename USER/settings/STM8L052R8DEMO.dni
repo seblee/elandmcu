@@ -28,7 +28,7 @@ ActionState=1
 Enabled=0
 ShowSource=1
 [DebugChecksum]
-Checksum=-1596380274
+Checksum=2111829622
 [CallStack]
 ShowArgs=0
 [Disassembly]
@@ -62,9 +62,7 @@ Category=_ 0
 LoggingEnabled=_ 0
 LogFile=_ ""
 [Breakpoints]
-Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\HARDWARE\HT1622\ht162x.c}.806.5" 1 0 0 0 "" 0 ""
-Bp1=_ "STD_CODE" "{$PROJ_DIR$\..\LCD_DISPLAY\lcd_display.c}.136.9" 1 0 0 0 "" 0 ""
-Count=2
+Count=0
 [Aliases]
 Count=0
 SuppressDialog=0

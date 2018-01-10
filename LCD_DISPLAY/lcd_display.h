@@ -27,7 +27,7 @@ typedef struct
 } _eland_data_t;
 typedef struct
 {
-    _eland_date_time_t alarm_moment; //
+    mico_rtc_time_t alarm_moment; //
     int8_t alarm_color;
     int8_t snooze_count;
     uint8_t alarm_on_days_of_week;
@@ -41,7 +41,7 @@ typedef enum _eland_mode {
 } _ELAND_MODE_t;
 
 /* Private define ------------------------------------------------------------*/
-
+#define ChangeSpeed 5 //speed of continued +/- =
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/

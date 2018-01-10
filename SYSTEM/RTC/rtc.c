@@ -26,14 +26,30 @@ RTC_AlarmTypeDef RTC_AlarmStr;
 
 __IO bool AlarmOccurred = FALSE;
 __IO bool WakeupOccurred = FALSE;
-_eland_date_time_t ElandCurrentTime;
+_eland_date_time_t CurrentMCUTime = {
+    2017, RTC_Month_December, 20, 15, 30, 00};
+mico_rtc_time_t CurrentMicoTime = {
+    17, 12, 20, 15, 30, 00};
 
 const char MonthStr[12][4] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 RTC_Month_TypeDef MonthValue[12] = {RTC_Month_January, RTC_Month_February, RTC_Month_March, RTC_Month_April, RTC_Month_May, RTC_Month_June, RTC_Month_July, RTC_Month_August, RTC_Month_September, RTC_Month_October, RTC_Month_November, RTC_Month_December};
+uint8_t DayOfMon[12][2] = {
+    {31, 31}, //1
+    {28, 29}, //2
+    {31, 31}, //3
+    {30, 30}, //4
+    {31, 31}, //5
+    {30, 30}, //6
+    {31, 31}, //7
+    {31, 31}, //8
+    {30, 30}, //9
+    {31, 31}, //10
+    {30, 30}, //11
+    {31, 31}, //12
+};
 /* Private function prototypes -----------------------------------------------*/
 void Calendar_Init(void);
 static void Get_built_DateTime(_eland_date_time_t *time);
-static RTC_Weekday_TypeDef CaculateWeekDay(int y, int m, int d);
 /* Private functions ---------------------------------------------------------*/
 /**
  ****************************************************************************
@@ -73,19 +89,19 @@ void Calendar_Init(void)
     RTC_InitStr.RTC_AsynchPrediv = 0x7f;
     RTC_InitStr.RTC_SynchPrediv = 0x00ff;
     RTC_Init(&RTC_InitStr);
-    Get_built_DateTime(&ElandCurrentTime);
+    Get_built_DateTime(&CurrentMCUTime);
 
     RTC_DateStructInit(&RTC_DateStr);
-    RTC_DateStr.RTC_WeekDay = ElandCurrentTime.week;
-    RTC_DateStr.RTC_Date = ElandCurrentTime.day;
-    RTC_DateStr.RTC_Month = ElandCurrentTime.month;
-    RTC_DateStr.RTC_Year = ElandCurrentTime.year % 100;
+    RTC_DateStr.RTC_WeekDay = CurrentMCUTime.week;
+    RTC_DateStr.RTC_Date = CurrentMCUTime.day;
+    RTC_DateStr.RTC_Month = CurrentMCUTime.month;
+    RTC_DateStr.RTC_Year = CurrentMCUTime.yea % 100;
     RTC_SetDate(RTC_Format_BIN, &RTC_DateStr);
 
     RTC_TimeStructInit(&RTC_TimeStr);
-    RTC_TimeStr.RTC_Hours = ElandCurrentTime.hour;
-    RTC_TimeStr.RTC_Minutes = ElandCurrentTime.minute;
-    RTC_TimeStr.RTC_Seconds = ElandCurrentTime.second;
+    RTC_TimeStr.RTC_Hours = CurrentMCUTime.hour;
+    RTC_TimeStr.RTC_Minutes = CurrentMCUTime.minute;
+    RTC_TimeStr.RTC_Seconds = CurrentMCUTime.second;
     RTC_SetTime(RTC_Format_BIN, &RTC_TimeStr);
 
     RTC_AlarmStructInit(&RTC_AlarmStr);
@@ -116,7 +132,7 @@ void RTC_Time_Set(_eland_date_time_t time)
     DateStr.RTC_WeekDay = time.week;
     DateStr.RTC_Date = time.day;
     DateStr.RTC_Month = time.month;
-    DateStr.RTC_Year = time.year;
+    DateStr.RTC_Year = time.yea;
     RTC_SetDate(RTC_Format_BIN, &DateStr);
 
     RTC_TimeStructInit(&TimeStr);
@@ -134,7 +150,7 @@ void RTC_Time_Set(_eland_date_time_t time)
  * @Brief    : read rtc time
  * @Version  : V1.0
 **/
-void ELAND_RTC_Read(_eland_date_time_t *time)
+void ELAND_RTC_Read(mico_rtc_time_t *time)
 {
     RTC_TimeTypeDef TimeStr;
     RTC_DateTypeDef DateStr;
@@ -147,11 +163,14 @@ void ELAND_RTC_Read(_eland_date_time_t *time)
 
     time->year = DateStr.RTC_Year;
     time->month = DateStr.RTC_Month;
-    time->day = DateStr.RTC_Date;
-    time->week = DateStr.RTC_WeekDay;
-    time->hour = TimeStr.RTC_Hours;
-    time->minute = TimeStr.RTC_Minutes;
-    time->second = TimeStr.RTC_Seconds;
+    time->date = DateStr.RTC_Date;
+    if (DateStr.RTC_WeekDay == RTC_Weekday_Sunday)
+        time->weekday = 1;
+    else
+        time->weekday = (uint8_t)DateStr.RTC_WeekDay + 1;
+    time->hr = TimeStr.RTC_Hours;
+    time->min = TimeStr.RTC_Minutes;
+    time->sec = TimeStr.RTC_Seconds;
 }
 /**
  ****************************************************************************
@@ -164,7 +183,7 @@ void ELAND_RTC_Read(_eland_date_time_t *time)
 **/
 void ELAND_RTC_ALARM_ISR(void)
 {
-    ELAND_RTC_Read(&ElandCurrentTime);
+    ELAND_RTC_Read(&CurrentMicoTime);
     RTC_ClearITPendingBit(RTC_IT_ALRA);
     AlarmOccurred = TRUE;
 }
@@ -196,8 +215,7 @@ void ELAND_Time_Convert(mico_rtc_time_t *mico_time, _eland_date_time_t *mcu_time
 {
     if (mico2mcu == MICO_2_MCU)
     {
-        mcu_time->year = mico_time->year;
-
+        mcu_time->yea = mico_time->year;
         mcu_time->month = MonthValue[mico_time->month - 1];
 
         // if (mico_time->month <= RTC_Month_September)
@@ -220,7 +238,7 @@ void ELAND_Time_Convert(mico_rtc_time_t *mico_time, _eland_date_time_t *mcu_time
     }
     else if (mico2mcu == MCU_2_MICO)
     {
-        mico_time->year = mcu_time->year;
+        mico_time->year = mcu_time->yea;
         mico_time->month = (uint8_t)mcu_time->month;
 
         mico_time->date = mcu_time->day;
@@ -246,7 +264,7 @@ static void Get_built_DateTime(_eland_date_time_t *time)
 {
     uint16_t da, ho, mi, se;
     char temp_str[4] = {0, 0, 0, 0}, i;
-    sscanf(__DATE__, "%s %2d %4d", temp_str, &da, &(time->year));
+    sscanf(__DATE__, "%s %2d %4d", temp_str, &da, &(time->yea));
     sscanf(__TIME__, "%2d:%2d:%2d", &ho, &mi, &se);
 
     time->day = (uint8_t)da;
@@ -261,7 +279,7 @@ static void Get_built_DateTime(_eland_date_time_t *time)
             break;
         }
     }
-    time->week = CaculateWeekDay(time->year, i + 1, time->day);
+    time->week = CaculateWeekDay(time->yea, i + 1, time->day);
 }
 /**
  ****************************************************************************

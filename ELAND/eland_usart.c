@@ -207,13 +207,10 @@ static void MODH_Opration_04H(void)
 {
     uint8_t *SendBuf;
     mico_rtc_time_t mico_time;
-    _eland_date_time_t mcu_time;
     memset(&mico_time, 0, sizeof(mico_rtc_time_t));
-    ELAND_RTC_Read(&mcu_time);
-    ELAND_Time_Convert(&mico_time, &mcu_time, MCU_2_MICO);
+    ELAND_RTC_Read(&mico_time);
 
     SendBuf = calloc(4 + sizeof(mico_rtc_time_t), sizeof(uint8_t));
-
     *SendBuf = Uart_Packet_Header;
     *(SendBuf + 1) = TIME_READ_04;
     *(SendBuf + 2) = sizeof(mico_rtc_time_t);

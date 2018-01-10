@@ -1,5 +1,5 @@
 /*
-       COM7    COM6    COM5    COM4        COM3    COM2    COM1    COM0    
+        COM7  COM6   COM5   COM4           COM3  COM2  COM1  COM0    
          D3    D2     D1     D0   LCD RAM   D3    D2    D1    D0  LCD RAM
 SEG00    16B   16C    16E    16F    1       1I    1J    1K    --    0
 SEG01    T22   16A    16D    16G    3       1H    1M    1L    --    2

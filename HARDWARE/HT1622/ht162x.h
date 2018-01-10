@@ -236,8 +236,8 @@ void HT162x_LCD_Num_Set(LCD_Digital_Serial_t Serial, u8 data);
 void HT162x_LCD_Week_Set(LCD_Time_Type_t type, LCD_Week_Day_t day);
 void HT162x_LCD_RSSI_Set(LCD_Wifi_Rssi_t value);
 void HT162x_LCD_AMPM_Set(LCD_Time_Type_t type, LCD_AMPM_Distinguish_t value);
-void HT162x_LCD_Time_Display(LCD_Time_Type_t type, _eland_date_time_t time);
-void HT162x_LCD_Date_Display(LCD_Time_Type_t type, _eland_date_time_t time);
+void HT162x_LCD_Time_Display(LCD_Time_Type_t type, mico_rtc_time_t time);
+void HT162x_LCD_Date_Display(LCD_Time_Type_t type, mico_rtc_time_t time);
 /* Private functions ---------------------------------------------------------*/
 
 #endif /*__HT162x_H_*/

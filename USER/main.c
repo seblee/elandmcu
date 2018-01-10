@@ -45,6 +45,7 @@ void main(void)
     disableInterrupts();
     OTA_bootloader_disable();
     /* System clock */
+    LCD_data_init();
     SysClock_Init();
     TIM4_Init();
     UART1_Init();
@@ -56,8 +57,6 @@ void main(void)
     RGBLED_CFG();
     /* Reload IWDG counter */
     IWDG_ReloadCounter();
-    // HT162x_LCD_Clear(SET);
-    LCD_data_init();
 
     /* Infinite loop */
     while (1)

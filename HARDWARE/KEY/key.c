@@ -19,7 +19,8 @@
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-uint16_t Key_Trg = 0;         //按鍵單次狀態
+uint16_t Key_Down_Trg = 0;    //按鍵單次狀態
+uint16_t Key_Up_Trg = 0;      //按鍵短按 放開
 uint16_t Key_Count = 0;       //按鍵長按狀態 按下/放開狀態
 uint16_t Key_Restain = 0;     //按鍵按捺狀態
 uint16_t Key_Restain_Trg = 0; //按鍵按捺狀態
@@ -100,7 +101,7 @@ void Eland_KeyState_Read(void)
     if (KeyValue_present == KeyValue_last)    //去抖20ms
     {
         ReadData = KeyValue_present ^ 0x01ff;
-        Key_Trg = ReadData & (ReadData ^ Key_Count);
+        Key_Down_Trg = ReadData & (ReadData ^ Key_Count);
         Key_Count = ReadData;
     }
     KeyValue_last = KeyValue_present;
@@ -131,6 +132,10 @@ static void Eland_Key_Long_Press_State(void)
         }
         else
         {
+            if ((KEY_Timer[i] > 0) && (KEY_Timer[i] < LONG_PRESS_TIMES)) // short press
+                Key_Up_Trg |= (1 << i);
+            else
+                Key_Up_Trg &= (~(1 << i));
             KEY_Timer[i] = 0;
             Key_Restain &= (~(1 << i));
         }

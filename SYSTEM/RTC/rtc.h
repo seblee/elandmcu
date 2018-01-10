@@ -34,7 +34,7 @@ typedef struct
 
 typedef struct
 {
-    u16 year;
+    u16 yea;
     RTC_Month_TypeDef month;
     u8 day;
     u8 hour;
@@ -66,16 +66,20 @@ typedef enum {
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-extern _eland_date_time_t ElandCurrentTime;
+extern _eland_date_time_t CurrentMCUTime;
+extern mico_rtc_time_t CurrentMicoTime;
 extern __IO bool AlarmOccurred;
 extern __IO bool WakeupOccurred;
+extern uint8_t DayOfMon[12][2];
 /* Private function prototypes -----------------------------------------------*/
 void ELAND_RTC_Init(void);
 void ELAND_RTC_ALARM_ISR(void);
 void ELAND_RTC_WAKEUP_ISR(void);
 void RTC_Time_Set(_eland_date_time_t time);
-void ELAND_RTC_Read(_eland_date_time_t *time);
+
+void ELAND_RTC_Read(mico_rtc_time_t *time);
 void ELAND_Time_Convert(mico_rtc_time_t *mico_time, _eland_date_time_t *mcu_time, __mico2mcu_t mico2mcu);
+RTC_Weekday_TypeDef CaculateWeekDay(int y, int m, int d);
 /* Private functions ---------------------------------------------------------*/
 
 #endif /*__RTC_H_*/
