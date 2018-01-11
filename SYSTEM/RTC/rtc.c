@@ -34,8 +34,8 @@ mico_rtc_time_t CurrentMicoTime = {
     17, 12, 20, 15, 30, 00};
 
 const char MonthStr[12][4] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-RTC_Month_TypeDef MonthValue[12] = {RTC_Month_January, RTC_Month_February, RTC_Month_March, RTC_Month_April, RTC_Month_May, RTC_Month_June, RTC_Month_July, RTC_Month_August, RTC_Month_September, RTC_Month_October, RTC_Month_November, RTC_Month_December};
-uint8_t DayOfMon[12][2] = {
+const RTC_Month_TypeDef MonthValue[12] = {RTC_Month_January, RTC_Month_February, RTC_Month_March, RTC_Month_April, RTC_Month_May, RTC_Month_June, RTC_Month_July, RTC_Month_August, RTC_Month_September, RTC_Month_October, RTC_Month_November, RTC_Month_December};
+const uint8_t DayOfMon[12][2] = {
     {31, 31}, //1
     {28, 29}, //2
     {31, 31}, //3
@@ -253,7 +253,6 @@ void ELAND_Time_Convert(mico_rtc_time_t *mico_time, _eland_date_time_t *mcu_time
     {
         mico_time->year = mcu_time->yea;
         mico_time->month = (uint8_t)mcu_time->month;
-
         mico_time->date = mcu_time->day;
         mico_time->hr = mcu_time->hour;
         mico_time->min = mcu_time->minute;

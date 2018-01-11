@@ -139,6 +139,9 @@ static void OprationFrame(void)
     case MCU_FIRM_WARE_09:
         MODH_Opration_09H();
         break;
+    case ALARM_READ_10:
+        MODH_Opration_10H();
+        break;
     default:
         break;
     }
@@ -357,4 +360,25 @@ static void MODH_Opration_09H(void)
     USARTx_Send_Data(USART1, SendBuf, 4);
     free(SendBuf);
     OTA_start();
+}
+/**
+ ****************************************************************************
+ * @Function : static void MODH_Opration_10H(void)
+ * @File     : eland_usart.c
+ * @Program  : H08 header fun len   tral
+ * @Created  : 2018/1/11 by seblee
+ * @Brief    : SEND MCU_ALARM TO ELAND
+ * @Version  : V1.0
+**/
+static void MODH_Opration_10H(void)
+{
+    uint8_t *SendBuf;
+    SendBuf = calloc(4 + sizeof(_alarm_data_t), sizeof(uint8_t));
+    *SendBuf = Uart_Packet_Header;
+    *(SendBuf + 1) = MCU_FIRM_WARE_09;
+    *(SendBuf + 2) = sizeof(_alarm_data_t);
+    memcpy((SendBuf + 3), &alarm_data, sizeof(_alarm_data_t));
+    *(SendBuf + 3 + sizeof(_alarm_data_t)) = Uart_Packet_Trail;
+    USARTx_Send_Data(USART1, SendBuf, 4 + sizeof(_alarm_data_t));
+    free(SendBuf);
 }
