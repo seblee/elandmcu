@@ -11,7 +11,7 @@
 **/
 /* Private include -----------------------------------------------------------*/
 #include "rgbled.h"
-
+#include "lcd_display.h"
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
@@ -49,7 +49,7 @@ void RGBLED_CFG(void)
     RGBLED_GPIO_Cfg();
     TIM3_Config();
     TIM2_Config();
-    TIM3_SetCompare2(TIM3_PERIOD); //back light turn brightest
+    RGBLED_Set_Brightness(eland_data.brightness_normal); //back light turn brightest
 }
 
 /**
@@ -249,4 +249,24 @@ void RGBLED_RGBCode_Set(u32 ColorCode)
     G_Cache = (u8)((ColorCode >> 8) & 0xff);
     B_Cache = (u8)((ColorCode >> 16) & 0xff);
     RGBLED_Input_RGB(R_Cache, G_Cache, B_Cache);
+}
+/**
+ ****************************************************************************
+ * @Function : void RGBLED_Set_Brightness(uint8_t Brightness)
+ * @File     : rgbled.c
+ * @Program  : Brightness:value of brightness
+ * @Created  : 2018/1/11 by seblee
+ * @Brief    : set background bright
+ * @Version  : V1.0
+**/
+void RGBLED_Set_Brightness(uint8_t Brightness)
+{
+    static uint8_t BrightnessBak = 0;
+    if (Brightness != BrightnessBak)
+    {
+        if (Brightness > 100)
+            Brightness = 100;
+        TIM3_SetCompare2(TIM3_PERIOD / 100 * Brightness); //back light turn brightest
+        BrightnessBak = Brightness;
+    }
 }

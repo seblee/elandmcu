@@ -737,31 +737,38 @@ void HT162x_LCD_AMPM_Set(LCD_Time_Type_t type, LCD_AMPM_Distinguish_t value)
 **/
 void HT162x_LCD_Date_Display(LCD_Time_Type_t type, mico_rtc_time_t time)
 {
-    static mico_rtc_time_t time_cache[2] = {0xff};
-    if (time_cache[type].year != time.year)
+    static mico_rtc_time_t time_cache[2] = {
+        {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+        {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+    };
+    if ((time_cache[type].year != time.year) ||
+        (time_cache[type].month != time.month) ||
+        (time_cache[type].date != time.date) ||
+        (time_cache[type].weekday != time.weekday))
     {
         HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_01 + 10 * type), ((time.year / 10) % 10)); //year
         HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_02 + 10 * type), (time.year % 10));        //year
-    }
-    if (time_cache[type].month != time.month)
-    {
+
         HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_03 + 10 * type), ((time.month / 10) % 10)); //month
         HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_04 + 10 * type), (time.month % 10));        //month
-    }
-    if (time_cache[type].date != time.date)
-    {
+
         HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_05 + 10 * type), ((time.date / 10) % 10)); //day
         HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_06 + 10 * type), (time.date % 10));        //day
-    }
 
-    HT162x_LCD_Change_Pixel(COM0, SEG08, SET);
-    HT162x_LCD_Change_Pixel(COM0, SEG16, SET);
+        HT162x_LCD_Week_Set(type, (LCD_Week_Day_t)(time.weekday - 1)); //week
 
-    if (time_cache[type].weekday != time.weekday)
-    {
-        HT162x_LCD_Week_Set(type, (LCD_Week_Day_t)(time.weekday - 1));
+        if (type == TIME_PART)
+        {
+            HT162x_LCD_Change_Pixel(COM0, SEG08, SET);
+            HT162x_LCD_Change_Pixel(COM0, SEG16, SET);
+        }
+        else if (type == ALARM_PART)
+        {
+            HT162x_LCD_Change_Pixel(COM7, SEG15, SET);
+            HT162x_LCD_Change_Pixel(COM7, SEG07, SET);
+        }
+        memcpy(&time_cache[type], &time, sizeof(mico_rtc_time_t));
     }
-    memcpy(&time_cache[type], &time, sizeof(mico_rtc_time_t));
 }
 /**
  ****************************************************************************
@@ -774,10 +781,14 @@ void HT162x_LCD_Date_Display(LCD_Time_Type_t type, mico_rtc_time_t time)
 **/
 void HT162x_LCD_Time_Display(LCD_Time_Type_t type, mico_rtc_time_t time)
 {
-    static mico_rtc_time_t time_cache[2] = {0xff};
+    static mico_rtc_time_t time_cache[2] = {
+        {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+        {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+    };
     uint8_t cache;
 
-    if (time_cache[type].hr != time.hr)
+    if ((time_cache[type].hr != time.hr) ||
+        (time_cache[type].min != time.min))
     {
         cache = time.hr;
 
@@ -800,9 +811,7 @@ void HT162x_LCD_Time_Display(LCD_Time_Type_t type, mico_rtc_time_t time)
         }
         HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_07 + 10 * type), ((cache / 10) % 10)); //hour
         HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_08 + 10 * type), (cache % 10));        //hour
-    }
-    if (time_cache[type].min != time.min)
-    {
+
         HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_09 + 10 * type), ((time.min / 10) % 10)); //min
         HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_10 + 10 * type), (time.min % 10));        //min
     }

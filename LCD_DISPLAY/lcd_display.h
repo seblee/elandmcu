@@ -25,6 +25,7 @@ typedef struct
     uint32_t night_mode_begin_time;
     uint32_t night_mode_end_time;
 } _eland_data_t;
+
 typedef struct
 {
     mico_rtc_time_t alarm_moment; //
@@ -32,12 +33,14 @@ typedef struct
     int8_t snooze_count;
     uint8_t alarm_on_days_of_week;
 } _alarm_data_t;
+
 typedef enum _eland_mode {
     ELAND_MODE_NONE,
     ELAND_CLOCK_MON,
     ELAND_CLOCK_ALARM,
     ELAND_NC,
     ELAND_NA,
+    ELAND_MODE_MAX,
 } _ELAND_MODE_t;
 
 /* Private define ------------------------------------------------------------*/

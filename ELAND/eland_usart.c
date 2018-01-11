@@ -23,11 +23,12 @@
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-
 uint8_t Firmware_Conter = 0;
 uint8_t msg_receive_buff[30];
 Eland_Status_type_t eland_state = ElandNone;
 int32_t RSSI_Value = -120;
+MCU_Refresh_type_t MCU_Refreshed = REFRESH_NONE;
+
 /* Private function prototypes -----------------------------------------------*/
 static void OprationFrame(void);
 static void MODH_Opration_02H(void);
@@ -155,7 +156,7 @@ static void OprationFrame(void)
 static void MODH_Opration_02H(void)
 {
     uint8_t *SendBuf;
-    SendBuf = calloc(8, sizeof(uint8_t));
+    SendBuf = calloc(9, sizeof(uint8_t));
     *SendBuf = Uart_Packet_Header;
     *(SendBuf + 1) = KEY_READ_02;
     *(SendBuf + 2) = 4;
@@ -163,9 +164,11 @@ static void MODH_Opration_02H(void)
     *(SendBuf + 4) = (uint8_t)(Key_Count & 0xff);
     *(SendBuf + 5) = (uint8_t)(Key_Restain >> 8);
     *(SendBuf + 6) = (uint8_t)(Key_Restain & 0xff);
-    *(SendBuf + 7) = Uart_Packet_Trail;
-    USARTx_Send_Data(USART1, SendBuf, 8);
+    *(SendBuf + 7) = (uint8_t)(MCU_Refreshed);
+    *(SendBuf + 8) = Uart_Packet_Trail;
+    USARTx_Send_Data(USART1, SendBuf, 9);
     free(SendBuf);
+    MCU_Refreshed = REFRESH_NONE;
 }
 /**
  ****************************************************************************

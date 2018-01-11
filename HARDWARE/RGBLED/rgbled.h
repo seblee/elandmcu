@@ -58,7 +58,7 @@ void RGBLED_CFG(void);
 void RGBLED_Input_RGB(u8 Red, u8 Green, u8 Blue);
 void RGBLED_Color_Set(__eland_color_t color);
 void RGBLED_RGBCode_Set(u32 ColorCode);
-
+void RGBLED_Set_Brightness(uint8_t Brightness);
 /* Private functions ---------------------------------------------------------*/
 
 #endif /*__RGBLED_H_*/

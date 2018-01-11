@@ -26,6 +26,8 @@ RTC_AlarmTypeDef RTC_AlarmStr;
 
 __IO bool AlarmOccurred = FALSE;
 __IO bool WakeupOccurred = FALSE;
+__IO uint32_t Today_Second = 0;
+
 _eland_date_time_t CurrentMCUTime = {
     2017, RTC_Month_December, 20, 15, 30, 00};
 mico_rtc_time_t CurrentMicoTime = {
@@ -103,6 +105,9 @@ void Calendar_Init(void)
     RTC_TimeStr.RTC_Minutes = CurrentMCUTime.minute;
     RTC_TimeStr.RTC_Seconds = CurrentMCUTime.second;
     RTC_SetTime(RTC_Format_BIN, &RTC_TimeStr);
+    Today_Second = (uint32_t)((uint32_t)CurrentMCUTime.hour * 3600);
+    Today_Second += (uint32_t)((uint32_t)CurrentMCUTime.minute * 60);
+    Today_Second += (uint32_t)CurrentMCUTime.second;
 
     RTC_AlarmStructInit(&RTC_AlarmStr);
     RTC_AlarmStr.RTC_AlarmTime.RTC_Hours = 01;
@@ -113,6 +118,7 @@ void Calendar_Init(void)
 
     RTC_ITConfig(RTC_IT_ALRA, ENABLE);
     RTC_AlarmCmd(ENABLE);
+    ELAND_RTC_Read(&CurrentMicoTime);
 }
 /**
  ****************************************************************************
@@ -140,6 +146,9 @@ void RTC_Time_Set(_eland_date_time_t time)
     TimeStr.RTC_Minutes = time.minute;
     TimeStr.RTC_Seconds = time.second;
     RTC_SetTime(RTC_Format_BIN, &TimeStr);
+    Today_Second = (uint32_t)((uint32_t)time.hour * 3600);
+    Today_Second += (uint32_t)((uint32_t)time.minute * 60);
+    Today_Second += (uint32_t)time.second;
 }
 /**
  ****************************************************************************
@@ -184,6 +193,10 @@ void ELAND_RTC_Read(mico_rtc_time_t *time)
 void ELAND_RTC_ALARM_ISR(void)
 {
     ELAND_RTC_Read(&CurrentMicoTime);
+    if (Today_Second < 86399)
+        Today_Second++;
+    else
+        Today_Second = 0;
     RTC_ClearITPendingBit(RTC_IT_ALRA);
     AlarmOccurred = TRUE;
 }
@@ -300,4 +313,17 @@ RTC_Weekday_TypeDef CaculateWeekDay(int y, int m, int d)
     }
     iWeek = (d + 2 * m + 3 * (m + 1) / 5 + y + y / 4 - y / 100 + y / 400) % 7;
     return (RTC_Weekday_TypeDef)(iWeek + 1);
+}
+/**
+ ****************************************************************************
+ * @Function : uint32_t RTC_Get_Time_Seconds(void)
+ * @File     : rtc.c
+ * @Program  : none
+ * @Created  : 2018/1/11 by seblee
+ * @Brief    : get seconds of today
+ * @Version  : V1.0
+**/
+uint32_t RTC_Get_Time_Seconds(void)
+{
+    return Today_Second;
 }

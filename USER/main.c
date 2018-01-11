@@ -66,10 +66,9 @@ void main(void)
         Eland_KeyState_Read();
         if (Key_Count & KEY_Wifi) //NC/NA mode
             LCD_NetMode();
-        else if (Key_Count & KEY_MON) //clock MON mode
+        else if ((Key_Count & KEY_MON) ||
+                 (Key_Count & KEY_AlarmMode)) //clock MON mode
             LCD_Clock_MON();
-        else if (Key_Count & KEY_AlarmMode) //Clock Alarm mode
-            LCD_Clock_Alarm();
 
         while (1)
         {

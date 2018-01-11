@@ -70,6 +70,7 @@ extern _eland_date_time_t CurrentMCUTime;
 extern mico_rtc_time_t CurrentMicoTime;
 extern __IO bool AlarmOccurred;
 extern __IO bool WakeupOccurred;
+extern __IO uint32_t Today_Second;
 extern uint8_t DayOfMon[12][2];
 /* Private function prototypes -----------------------------------------------*/
 void ELAND_RTC_Init(void);

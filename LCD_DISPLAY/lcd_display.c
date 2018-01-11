@@ -11,8 +11,10 @@
 **/
 /* Private include -----------------------------------------------------------*/
 #include "lcd_display.h"
+#include "rgbled.h"
 #include "key.h"
 #include "rtc.h"
+#include "eland_usart.h"
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
@@ -130,7 +132,10 @@ void LCD_Clock_MON(void)
     static uint8_t key_delay = 0;
     static mico_rtc_time_t Time_cache;
     _eland_date_time_t mcutimeCache;
-    if (Eland_mode != ELAND_CLOCK_MON)
+    static _ELAND_MODE_t Eland_modeBak = ELAND_MODE_MAX;
+    /***** bit0 time bit1 alarm*************/
+    uint8_t changeflag = 0;
+    if (Eland_mode != Eland_modeBak)
     {
         /**refresh wifi**/
         HT162x_LCD_RSSI_Set(LEVEL0);
@@ -140,7 +145,10 @@ void LCD_Clock_MON(void)
         /**refresh date**/
         HT162x_LCD_Date_Display(TIME_PART, CurrentMicoTime);
         /*clear alarm -- next alarm*/
-        HT162x_LCD_Change_Pixel(COM7, SEG11, RESET);
+        if (Key_Count & KEY_MON)
+            HT162x_LCD_Change_Pixel(COM7, SEG11, RESET);
+        else if (Key_Count & KEY_AlarmMode)
+            HT162x_LCD_Change_Pixel(COM7, SEG11, SET);
         /*clear alarm -- snooze*/
         HT162x_LCD_Change_Pixel(COM7, SEG13, RESET);
         /*clear alarm -- alarm date and time */
@@ -152,9 +160,15 @@ void LCD_Clock_MON(void)
         HT162x_LCD_Week_Set(ALARM_PART, WEEKDAYMAX);
         /**SHOW the line**/
         HT162x_LCD_Change_Pixel(COM7, SEG33, SET);
-        Eland_mode = ELAND_CLOCK_MON;
+
+        Eland_modeBak = Eland_mode;
         time_set_mode = 0;
     }
+    /******************/
+    if (Key_Count & KEY_MON)
+        Eland_mode = ELAND_CLOCK_MON;
+    else if (Key_Count & KEY_AlarmMode)
+        Eland_mode = ELAND_CLOCK_ALARM;
     /******key menue***********/
     switch (time_set_mode)
     {
@@ -239,6 +253,7 @@ void LCD_Clock_MON(void)
         {
             HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10)); //minute
             HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));        //minute
+            changeflag |= 2;
             time_set_mode = 0;
             number_flash_cache = 0;
         }
@@ -433,12 +448,22 @@ void LCD_Clock_MON(void)
             mcutimeCache.week = CaculateWeekDay((int)(Time_cache.year + 2000), Time_cache.month, Time_cache.date);
             RTC_Time_Set(mcutimeCache);
             memcpy(&CurrentMicoTime, &Time_cache, sizeof(mico_rtc_time_t));
+            changeflag |= 1;
         }
         break;
     default:
         break;
     }
-
+    if (changeflag != 0) //syncchronize
+    {
+        if (MCU_Refreshed == REFRESH_NONE)
+        {
+            if (changeflag & 1)
+                MCU_Refreshed = REFRESH_TIME;
+            else if (changeflag & 2)
+                MCU_Refreshed = REFRESH_ALARM;
+        }
+    }
     if (WakeupOccurred == TRUE) //500ms point flash
     {
         WakeupOccurred = FALSE;
@@ -464,6 +489,12 @@ void LCD_Clock_MON(void)
     {
         HT162x_LCD_Time_Display(TIME_PART, CurrentMicoTime);
         HT162x_LCD_Date_Display(TIME_PART, CurrentMicoTime);
+        /* back light turn brightest */
+        if ((Today_Second > eland_data.night_mode_begin_time) || (Today_Second < eland_data.night_mode_end_time))
+            RGBLED_Set_Brightness(eland_data.brightness_night);
+        else
+            RGBLED_Set_Brightness(eland_data.brightness_normal);
+
         AlarmOccurred = FALSE;
     }
 }
@@ -480,7 +511,6 @@ void LCD_Clock_Alarm(void)
 {
     if (Eland_mode != ELAND_CLOCK_MON)
     {
-
         Eland_mode = ELAND_CLOCK_ALARM;
     }
 }
@@ -494,5 +524,17 @@ void LCD_Clock_Alarm(void)
  * @Version  : V1.0
 **/
 void LCD_NetMode(void)
+{
+}
+/**
+ ****************************************************************************
+ * @Function : void ALARM_Alarm_Refresh(void)
+ * @File     : lcd_display.c
+ * @Program  : none
+ * @Created  : 2018/1/11 by seblee
+ * @Brief    : refresh alarm data
+ * @Version  : V1.0
+**/
+void ALARM_Alarm_Refresh(void)
 {
 }
