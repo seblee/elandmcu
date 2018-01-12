@@ -16,6 +16,7 @@
 #include "rtc.h"
 #include "ht162x.h"
 #include "eland_ota.h"
+#include "lcd_display.h"
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
@@ -39,6 +40,7 @@ static void MODH_Opration_06H(void);
 static void MODH_Opration_07H(void);
 static void MODH_Opration_08H(void);
 static void MODH_Opration_09H(void);
+static void MODH_Opration_10H(void);
 /* Private functions ---------------------------------------------------------*/
 
 /**
@@ -373,12 +375,12 @@ static void MODH_Opration_09H(void)
 static void MODH_Opration_10H(void)
 {
     uint8_t *SendBuf;
-    SendBuf = calloc(4 + sizeof(_alarm_data_t), sizeof(uint8_t));
+    SendBuf = calloc(4 + sizeof(_alarm_MCU_data_t), sizeof(uint8_t));
     *SendBuf = Uart_Packet_Header;
     *(SendBuf + 1) = MCU_FIRM_WARE_09;
-    *(SendBuf + 2) = sizeof(_alarm_data_t);
-    memcpy((SendBuf + 3), &alarm_data, sizeof(_alarm_data_t));
-    *(SendBuf + 3 + sizeof(_alarm_data_t)) = Uart_Packet_Trail;
-    USARTx_Send_Data(USART1, SendBuf, 4 + sizeof(_alarm_data_t));
+    *(SendBuf + 2) = sizeof(_alarm_MCU_data_t);
+    memcpy((SendBuf + 3), &alarm_data, sizeof(_alarm_MCU_data_t));
+    *(SendBuf + 3 + sizeof(_alarm_MCU_data_t)) = Uart_Packet_Trail;
+    USARTx_Send_Data(USART1, SendBuf, 4 + sizeof(_alarm_MCU_data_t));
     free(SendBuf);
 }

@@ -25,7 +25,7 @@
 
 /* Private function prototypes -----------------------------------------------*/
 _eland_data_t eland_data;
-_alarm_data_t alarm_data;
+_alarm_MCU_data_t alarm_data;
 _ELAND_MODE_t Eland_mode = ELAND_MODE_NONE;
 
 const LCD_Digital_Serial_t Clock_number_table[8][2] = {
@@ -59,7 +59,7 @@ void LCD_data_init(void)
     eland_data.night_mode_begin_time = 79200;
     eland_data.night_mode_end_time = 21600;
 
-    memset(&alarm_data, 0, sizeof(_alarm_data_t));
+    memset(&alarm_data, 0, sizeof(_alarm_MCU_data_t));
 }
 
 /**

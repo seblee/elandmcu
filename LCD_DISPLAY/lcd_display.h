@@ -32,7 +32,7 @@ typedef struct
     int8_t alarm_color;
     int8_t snooze_count;
     uint8_t alarm_on_days_of_week;
-} _alarm_data_t;
+} _alarm_MCU_data_t;
 
 typedef enum _eland_mode {
     ELAND_MODE_NONE,
@@ -49,7 +49,7 @@ typedef enum _eland_mode {
 
 /* Private variables ---------------------------------------------------------*/
 extern _eland_data_t eland_data;
-extern _alarm_data_t alarm_data;
+extern _alarm_MCU_data_t alarm_data;
 extern _ELAND_MODE_t Eland_mode;
 /* Private function prototypes -----------------------------------------------*/
 
