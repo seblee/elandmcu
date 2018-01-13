@@ -70,7 +70,7 @@ extern uint16_t Key_Restain_Trg; //按鍵按捺狀態 按下執行一次
 /* Private function prototypes -----------------------------------------------*/
 void ElandKeyInit(void); //按键初始化
 void Eland_KeyState_Read(void);
-
+uint16_t Eland_PinState_Read(void);
 /* Private functions ---------------------------------------------------------*/
 
 #endif /*__KEY_H_*/
