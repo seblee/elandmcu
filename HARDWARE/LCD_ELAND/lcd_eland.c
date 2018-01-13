@@ -71,7 +71,9 @@ static __Digital_Coding_t LCD_Eland_Digital_Convert(LCD_Coding_Dirtction_t direc
  * @Version  : V1.0
 **/
 void LCD_ELAND_Init(void)
-{ /*
+{
+#ifndef testlcdIO
+    /*
     The LCD is configured as follow:
      - clock source = LSE (32.768 KHz)
      - Voltage source = Internal
@@ -105,6 +107,107 @@ void LCD_ELAND_Init(void)
     LCD_HighDriveCmd(ENABLE);
 
     LCD_Cmd(ENABLE); /*!< Enable LCD peripheral */
+#else
+    GPIO_Init(GPIOA, GPIO_Pin_4, GPIO_Mode_Out_PP_High_Fast); //COM0
+    GPIO_Init(GPIOA, GPIO_Pin_5, GPIO_Mode_Out_PP_High_Fast); //COM1
+    GPIO_Init(GPIOA, GPIO_Pin_6, GPIO_Mode_Out_PP_High_Fast); //COM2
+    GPIO_Init(GPIOD, GPIO_Pin_1, GPIO_Mode_Out_PP_High_Fast); //COM3
+    GPIO_Init(GPIOF, GPIO_Pin_4, GPIO_Mode_Out_PP_High_Fast); //COM4
+    GPIO_Init(GPIOF, GPIO_Pin_5, GPIO_Mode_Out_PP_High_Fast); //COM5
+    GPIO_Init(GPIOF, GPIO_Pin_6, GPIO_Mode_Out_PP_High_Fast); //COM6
+    GPIO_Init(GPIOF, GPIO_Pin_7, GPIO_Mode_Out_PP_High_Fast); //COM7
+
+    GPIO_Init(GPIOA, GPIO_Pin_7, GPIO_Mode_Out_PP_High_Fast); //SEG0
+    GPIO_Init(GPIOE, GPIO_Pin_0, GPIO_Mode_Out_PP_High_Fast); //SEG1
+    GPIO_Init(GPIOE, GPIO_Pin_1, GPIO_Mode_Out_PP_High_Fast); //SEG2
+    GPIO_Init(GPIOE, GPIO_Pin_2, GPIO_Mode_Out_PP_High_Fast); //SEG3
+    GPIO_Init(GPIOE, GPIO_Pin_3, GPIO_Mode_Out_PP_High_Fast); //SEG4
+    GPIO_Init(GPIOE, GPIO_Pin_4, GPIO_Mode_Out_PP_High_Fast); //SEG5
+    GPIO_Init(GPIOE, GPIO_Pin_5, GPIO_Mode_Out_PP_High_Fast); //SEG6
+    GPIO_Init(GPIOD, GPIO_Pin_0, GPIO_Mode_Out_PP_High_Fast); //SEG7
+    GPIO_Init(GPIOD, GPIO_Pin_2, GPIO_Mode_Out_PP_High_Fast); //SEG8
+    GPIO_Init(GPIOD, GPIO_Pin_3, GPIO_Mode_Out_PP_High_Fast); //SEG9
+    GPIO_Init(GPIOB, GPIO_Pin_0, GPIO_Mode_Out_PP_High_Fast); //SEG10
+    GPIO_Init(GPIOB, GPIO_Pin_1, GPIO_Mode_Out_PP_High_Fast); //SEG11
+    GPIO_Init(GPIOB, GPIO_Pin_2, GPIO_Mode_Out_PP_High_Fast); //SEG12
+    GPIO_Init(GPIOB, GPIO_Pin_3, GPIO_Mode_Out_PP_High_Fast); //SEG13
+    GPIO_Init(GPIOB, GPIO_Pin_4, GPIO_Mode_Out_PP_High_Fast); //SEG14
+    GPIO_Init(GPIOB, GPIO_Pin_5, GPIO_Mode_Out_PP_High_Fast); //SEG15
+    GPIO_Init(GPIOB, GPIO_Pin_6, GPIO_Mode_Out_PP_High_Fast); //SEG16
+    GPIO_Init(GPIOB, GPIO_Pin_7, GPIO_Mode_Out_PP_High_Fast); //SEG17
+    GPIO_Init(GPIOD, GPIO_Pin_4, GPIO_Mode_Out_PP_High_Fast); //SEG18
+    GPIO_Init(GPIOD, GPIO_Pin_5, GPIO_Mode_Out_PP_High_Fast); //SEG19
+    GPIO_Init(GPIOD, GPIO_Pin_6, GPIO_Mode_Out_PP_High_Fast); //SEG20
+    GPIO_Init(GPIOD, GPIO_Pin_7, GPIO_Mode_Out_PP_High_Fast); //SEG21
+    GPIO_Init(GPIOC, GPIO_Pin_2, GPIO_Mode_Out_PP_High_Fast); //SEG22
+    GPIO_Init(GPIOC, GPIO_Pin_3, GPIO_Mode_Out_PP_High_Fast); //SEG23
+    GPIO_Init(GPIOC, GPIO_Pin_4, GPIO_Mode_Out_PP_High_Fast); //SEG24
+    GPIO_Init(GPIOC, GPIO_Pin_7, GPIO_Mode_Out_PP_High_Fast); //SEG25
+    GPIO_Init(GPIOE, GPIO_Pin_6, GPIO_Mode_Out_PP_High_Fast); //SEG26
+    GPIO_Init(GPIOE, GPIO_Pin_7, GPIO_Mode_Out_PP_High_Fast); //SEG27
+    GPIO_Init(GPIOG, GPIO_Pin_0, GPIO_Mode_Out_PP_High_Fast); //SEG28
+    GPIO_Init(GPIOG, GPIO_Pin_1, GPIO_Mode_Out_PP_High_Fast); //SEG29
+    GPIO_Init(GPIOG, GPIO_Pin_2, GPIO_Mode_Out_PP_High_Fast); //SEG30
+    GPIO_Init(GPIOG, GPIO_Pin_3, GPIO_Mode_Out_PP_High_Fast); //SEG31
+    GPIO_Init(GPIOG, GPIO_Pin_4, GPIO_Mode_Out_PP_High_Fast); //SEG32
+    GPIO_Init(GPIOG, GPIO_Pin_5, GPIO_Mode_Out_PP_High_Fast); //SEG33
+    GPIO_Init(GPIOG, GPIO_Pin_6, GPIO_Mode_Out_PP_High_Fast); //SEG34
+    GPIO_Init(GPIOG, GPIO_Pin_7, GPIO_Mode_Out_PP_High_Fast); //SEG35
+    GPIO_Init(GPIOH, GPIO_Pin_0, GPIO_Mode_Out_PP_High_Fast); //SEG36
+    GPIO_Init(GPIOH, GPIO_Pin_1, GPIO_Mode_Out_PP_High_Fast); //SEG37
+    GPIO_Init(GPIOH, GPIO_Pin_2, GPIO_Mode_Out_PP_High_Fast); //SEG38
+    GPIO_Init(GPIOH, GPIO_Pin_3, GPIO_Mode_Out_PP_High_Fast); //SEG39
+
+    GPIO_WriteBit(GPIOA, GPIO_Pin_4, SET);   //COM0
+    GPIO_WriteBit(GPIOA, GPIO_Pin_5, RESET); //COM1
+    GPIO_WriteBit(GPIOA, GPIO_Pin_6, RESET); //COM2
+    GPIO_WriteBit(GPIOD, GPIO_Pin_1, RESET); //COM3
+    GPIO_WriteBit(GPIOF, GPIO_Pin_4, RESET); //COM4
+    GPIO_WriteBit(GPIOF, GPIO_Pin_5, RESET); //COM5
+    GPIO_WriteBit(GPIOF, GPIO_Pin_6, RESET); //COM6
+    GPIO_WriteBit(GPIOF, GPIO_Pin_7, RESET); //COM7
+
+    GPIO_WriteBit(GPIOA, GPIO_Pin_7, RESET); //SEG0
+    GPIO_WriteBit(GPIOE, GPIO_Pin_0, RESET); //SEG1
+    GPIO_WriteBit(GPIOE, GPIO_Pin_1, RESET); //SEG2
+    GPIO_WriteBit(GPIOE, GPIO_Pin_2, RESET); //SEG3
+    GPIO_WriteBit(GPIOE, GPIO_Pin_3, RESET); //SEG4
+    GPIO_WriteBit(GPIOE, GPIO_Pin_4, RESET); //SEG5
+    GPIO_WriteBit(GPIOE, GPIO_Pin_5, RESET); //SEG6
+    GPIO_WriteBit(GPIOD, GPIO_Pin_0, RESET); //SEG7
+    GPIO_WriteBit(GPIOD, GPIO_Pin_2, RESET); //SEG8
+    GPIO_WriteBit(GPIOD, GPIO_Pin_3, RESET); //SEG9
+    GPIO_WriteBit(GPIOB, GPIO_Pin_0, RESET); //SEG10
+    GPIO_WriteBit(GPIOB, GPIO_Pin_1, RESET); //SEG11
+    GPIO_WriteBit(GPIOB, GPIO_Pin_2, RESET); //SEG12
+    GPIO_WriteBit(GPIOB, GPIO_Pin_3, RESET); //SEG13
+    GPIO_WriteBit(GPIOB, GPIO_Pin_4, RESET); //SEG14
+    GPIO_WriteBit(GPIOB, GPIO_Pin_5, RESET); //SEG15
+    GPIO_WriteBit(GPIOB, GPIO_Pin_6, RESET); //SEG16
+    GPIO_WriteBit(GPIOB, GPIO_Pin_7, RESET); //SEG17
+    GPIO_WriteBit(GPIOD, GPIO_Pin_4, RESET); //SEG18
+    GPIO_WriteBit(GPIOD, GPIO_Pin_5, RESET); //SEG19
+    GPIO_WriteBit(GPIOD, GPIO_Pin_6, RESET); //SEG20
+    GPIO_WriteBit(GPIOD, GPIO_Pin_7, RESET); //SEG21
+    GPIO_WriteBit(GPIOC, GPIO_Pin_2, RESET); //SEG22
+    GPIO_WriteBit(GPIOC, GPIO_Pin_3, RESET); //SEG23
+    GPIO_WriteBit(GPIOC, GPIO_Pin_4, RESET); //SEG24
+    GPIO_WriteBit(GPIOC, GPIO_Pin_7, RESET); //SEG25
+    GPIO_WriteBit(GPIOE, GPIO_Pin_6, RESET); //SEG26
+    GPIO_WriteBit(GPIOE, GPIO_Pin_7, RESET); //SEG27
+    GPIO_WriteBit(GPIOG, GPIO_Pin_0, RESET); //SEG28
+    GPIO_WriteBit(GPIOG, GPIO_Pin_1, RESET); //SEG29
+    GPIO_WriteBit(GPIOG, GPIO_Pin_2, RESET); //SEG30
+    GPIO_WriteBit(GPIOG, GPIO_Pin_3, RESET); //SEG31
+    GPIO_WriteBit(GPIOG, GPIO_Pin_4, RESET); //SEG32
+    GPIO_WriteBit(GPIOG, GPIO_Pin_5, RESET); //SEG33
+    GPIO_WriteBit(GPIOG, GPIO_Pin_6, RESET); //SEG34
+    GPIO_WriteBit(GPIOG, GPIO_Pin_7, RESET); //SEG35
+    GPIO_WriteBit(GPIOH, GPIO_Pin_0, RESET); //SEG36
+    GPIO_WriteBit(GPIOH, GPIO_Pin_1, RESET); //SEG37
+    GPIO_WriteBit(GPIOH, GPIO_Pin_2, RESET); //SEG38
+    GPIO_WriteBit(GPIOH, GPIO_Pin_3, RESET); //SEG39
+#endif
 }
 /**
  ****************************************************************************
@@ -717,3 +820,31 @@ void LCD_Eland_Time_Upgrade(_eland_date_time_t time)
     LCD_PageSelect(LCD_PageSelection_FirstPage);
     LCD->RAM[14] ^= 0x30;
 }
+#ifdef testlcdIO
+/**
+ ****************************************************************************
+ * @Function : void LCD_Eland_COM_SCAN(void)
+ * @File     : lcd_eland.c
+ * @Program  : NONE
+ * @Created  : 2017/11/15 by seblee
+ * @Brief    : SCAN COMX
+ * @Version  : V1.0
+**/
+void LCD_Eland_COM_SCAN(void)
+{
+    static u8 flag = 0x01;
+    if (flag == 0x08)
+        flag = 0x01;
+    else
+        flag <<= 1;
+
+    GPIO_WriteBit(GPIOA, GPIO_Pin_4, (BitAction)(flag & 0x01)); //COM0
+    GPIO_WriteBit(GPIOA, GPIO_Pin_5, (BitAction)(flag & 0x02)); //COM1
+    GPIO_WriteBit(GPIOA, GPIO_Pin_6, (BitAction)(flag & 0x04)); //COM2
+    GPIO_WriteBit(GPIOD, GPIO_Pin_1, (BitAction)(flag & 0x08)); //COM3
+    GPIO_WriteBit(GPIOF, GPIO_Pin_4, (BitAction)(flag & 0x10)); //COM4
+    GPIO_WriteBit(GPIOF, GPIO_Pin_5, (BitAction)(flag & 0x20)); //COM5
+    GPIO_WriteBit(GPIOF, GPIO_Pin_6, (BitAction)(flag & 0x40)); //COM6
+    GPIO_WriteBit(GPIOF, GPIO_Pin_7, (BitAction)(flag & 0x80)); //COM7
+}
+#endif

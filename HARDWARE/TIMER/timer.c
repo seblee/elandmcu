@@ -12,6 +12,9 @@
 
 /* Private include -----------------------------------------------------------*/
 #include "timer.h"
+#ifdef testlcdIO
+#include "lcd_eland.h"
+#endif
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
@@ -57,5 +60,11 @@ void TIM4_Init(void)
 **/
 void TIM4_UPD_OVF(void)
 {
+#ifdef testlcdIO
+    static uint16_t counter = 0;
+    counter++;
+    if ((counter % 10) == 0)
+        LCD_Eland_COM_SCAN();
+#endif
     Timer_Counter_1ms++;
 }

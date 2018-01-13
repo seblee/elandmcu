@@ -93,6 +93,7 @@ void main(void)
         }
         while (1)
         {
+
             if (Timer_Counter_1ms > 20) //20ms
             {
                 Timer_Counter_1ms = 0;
