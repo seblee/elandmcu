@@ -42,6 +42,7 @@
 **/
 void main(void)
 {
+    __eland_color_t color;
     disableInterrupts();
     OTA_bootloader_disable();
     /* System clock */
@@ -70,15 +71,15 @@ void main(void)
                  (Key_Count & KEY_AlarmMode)) //clock MON mode
             LCD_Clock_MON();
 
-        if ((Key_Trg & KEY_Set) ||
-            (Key_Trg & KEY_Reset) ||
-            (Key_Trg & KEY_Add) ||
-            (Key_Trg & KEY_Minus) ||
-            (Key_Trg & KEY_MON) ||
-            (Key_Trg & KEY_AlarmMode) ||
-            (Key_Trg & KEY_Wifi) ||
-            (Key_Trg & KEY_Snooze) ||
-            (Key_Trg & KEY_Alarm))
+        if ((Key_Down_Trg & KEY_Set) ||
+            (Key_Down_Trg & KEY_Reset) ||
+            (Key_Down_Trg & KEY_Add) ||
+            (Key_Down_Trg & KEY_Minus) ||
+            (Key_Down_Trg & KEY_MON) ||
+            (Key_Down_Trg & KEY_AlarmMode) ||
+            (Key_Down_Trg & KEY_Wifi) ||
+            (Key_Down_Trg & KEY_Snooze) ||
+            (Key_Down_Trg & KEY_Alarm))
         {
             if (color == ELAND_RED)
                 color = ELAND_GREEN;
