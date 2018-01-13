@@ -61,4 +61,5 @@ void SysClock_Init(void)
     Delay_By_nop(50000);
     Delay_By_nop(50000);
 #endif
+    //CLK_CCOConfig(CLK_CCOSource_LSE, CLK_CCODiv_1);
 }
