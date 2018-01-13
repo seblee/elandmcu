@@ -49,7 +49,7 @@ void main(void)
     SysClock_Init();
     TIM4_Init();
     UART1_Init();
-    ElandKeyInit();
+    //ElandKeyInit();
     ELAND_RTC_Init();
     IWDG_Config();
     enableInterrupts();
