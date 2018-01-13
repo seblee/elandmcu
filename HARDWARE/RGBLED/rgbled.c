@@ -12,6 +12,7 @@
 /* Private include -----------------------------------------------------------*/
 #include "rgbled.h"
 #include "lcd_display.h"
+#include "key.h"
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
@@ -179,8 +180,8 @@ void TIM5_Config(void)
 void RGBLED_Input_RGB(u8 Red, u8 Green, u8 Blue)
 {
     TIM2_SetCompare1(Red);
-    TIM2_SetCompare2(Green);
-    TIM3_SetCompare1(Blue);
+    TIM2_SetCompare2(Blue);
+    TIM3_SetCompare1(Green);
 }
 /**
  ****************************************************************************
@@ -195,44 +196,93 @@ void RGBLED_Color_Set(__eland_color_t color)
 {
     switch (color)
     {
-    case ELAND_BLACK:
+    case ELAND_BLACK: //
         RGBLED_Input_RGB(0, 0, 0);
         break;
-    case ELAND_BLUE:
+    case ELAND_BLUE: //
         RGBLED_Input_RGB(0, 0, 255);
         break;
-    case ELAND_WHITE_BLUE:
+    case ELAND_WHITE_BLUE: //
         RGBLED_Input_RGB(25, 25, 255);
         break;
-    case ELAND_PURPLE:
+    case ELAND_PURPLE: //
         RGBLED_Input_RGB(128, 0, 128);
         break;
-    case ELAND_RED:
+    case ELAND_RED: //
         RGBLED_Input_RGB(255, 0, 0);
         break;
-    case ELAND_PINK:
+    case ELAND_PINK: //
         RGBLED_Input_RGB(255, 100, 110);
         break;
-    case ELAND_ORANGE:
+    case ELAND_ORANGE: //
         RGBLED_Input_RGB(255, 165, 0);
         break;
-    case ELAND_YELLOW:
+    case ELAND_YELLOW: //
         RGBLED_Input_RGB(255, 255, 0);
         break;
     case ELAND_YELLOW_GREEN:
         RGBLED_Input_RGB(173, 255, 47);
         break;
-    case ELAND_GREEN:
+    case ELAND_GREEN: //
         RGBLED_Input_RGB(0, 128, 0);
         break;
-    case ELAND_WHITE:
+    case ELAND_WHITE: //
         RGBLED_Input_RGB(255, 255, 255);
         break;
-    default:
+    default: //
         RGBLED_Input_RGB(255, 255, 255);
         break;
     }
 }
+/**
+ ****************************************************************************
+ * @Function : void RGBLED_Rainbow_Set(__rainbow_t color)
+ * @File     : rgbled.c
+ * @Program  : color:witch to set
+ * @Created  : 2018/1/13 by seblee
+ * @Brief    : set color
+ * @Version  : V1.0
+**/
+void RGBLED_Rainbow_Set(__rainbow_t color)
+{
+    switch (color)
+    {
+    case RAINBOW_RED: /**赤#ff0000**/
+        RGBLED_Input_RGB(0xff, 0x00, 0x00);
+        break;
+    case RAINBOW_ORANGE: /**橙#ff9900**/
+        RGBLED_Input_RGB(0xff, 0x99, 0x00);
+        break;
+    case RAINBOW_YELLOW: /**黃#ffcc00**/
+        RGBLED_Input_RGB(0xff, 0xcc, 0x00);
+        break;
+    case RAINBOW_WARBLER: /**鶯#66cc00**/
+        RGBLED_Input_RGB(0x66, 0xcc, 0x00);
+        break;
+    case RAINBOW_GREEN: /**綠*#009933**/
+        RGBLED_Input_RGB(0x00, 0x99, 0x33);
+        break;
+    case RAINBOW_WATER: /**水#00ccff**/
+        RGBLED_Input_RGB(0x00, 0xcc, 0xff);
+        break;
+    case RAINBOW_WATERBLUE: /**青#0066ff**/
+        RGBLED_Input_RGB(0x00, 0x66, 0xff);
+        break;
+    case RAINBOW_PURPLE: /**紫#9900ff**/
+        RGBLED_Input_RGB(0x99, 0x00, 0xff);
+        break;
+    case RAINBOW_PEACH: /**桃#ff00cc**/
+        RGBLED_Input_RGB(0xff, 0x00, 0xcc);
+        break;
+    case RAINBOW_GRAY: /**灰#333333**/
+        RGBLED_Input_RGB(0x33, 0x33, 0x33);
+        break;
+    default: /****/
+        RGBLED_Input_RGB(0x00, 0x00, 0x00);
+        break;
+    }
+}
+
 /**
  ****************************************************************************
  * @Function : void RGBLED_RGBCode_Set(u32 ColorCode)
@@ -268,5 +318,38 @@ void RGBLED_Set_Brightness(uint8_t Brightness)
             Brightness = 100;
         TIM3_SetCompare2(TIM3_PERIOD / 100 * Brightness); //back light turn brightest
         BrightnessBak = Brightness;
+    }
+}
+/**
+ ****************************************************************************
+ * @Function : void RGBLED_Set_Brightness(void)
+ * @File     : rgbled.c
+ * @Program  : Brightness:value of brightness
+ * @Created  : 2018/1/11 by seblee
+ * @Brief    : set background bright
+ * @Version  : V1.0
+**/
+void RGBLED_SwitchRainBow_Color(void)
+{
+    static __rainbow_t color = RAINBOW_RED;
+    if (Key_Down_Trg & KEY_Add)
+    {
+        if (color >= RAINBOW_GRAY)
+            color = RAINBOW_RED;
+        else
+            color++;
+        RGBLED_Rainbow_Set(color);
+        HT162x_LCD_Num_Set(Serial_11, (((color + 1) / 10) % 10));
+        HT162x_LCD_Num_Set(Serial_12, ((color + 1) % 10));
+    }
+    else if (Key_Down_Trg & KEY_Minus)
+    {
+        if (color <= RAINBOW_RED)
+            color = RAINBOW_GRAY;
+        else
+            color--;
+        RGBLED_Rainbow_Set(color);
+        HT162x_LCD_Num_Set(Serial_11, (((color + 1) / 10) % 10));
+        HT162x_LCD_Num_Set(Serial_12, ((color + 1) % 10));
     }
 }

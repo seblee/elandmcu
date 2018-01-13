@@ -42,7 +42,6 @@
 **/
 void main(void)
 {
-    __eland_color_t color;
     disableInterrupts();
     OTA_bootloader_disable();
     /* System clock */
@@ -50,7 +49,7 @@ void main(void)
     SysClock_Init();
     TIM4_Init();
     UART1_Init();
-    //ElandKeyInit();
+    ElandKeyInit();
     ELAND_RTC_Init();
     IWDG_Config();
     enableInterrupts();
@@ -58,39 +57,21 @@ void main(void)
     RGBLED_CFG();
     /* Reload IWDG counter */
     IWDG_ReloadCounter();
-
+    RGBLED_Rainbow_Set(RAINBOW_RED);
+    HT162x_LCD_Num_Set(Serial_11, (((0 + 1) / 10) % 10));
+    HT162x_LCD_Num_Set(Serial_12, ((0 + 1) % 10));
     /* Infinite loop */
     while (1)
     {
         /* Reload IWDG counter */
         IWDG_ReloadCounter();
         Eland_KeyState_Read();
-        if (Key_Count & KEY_Wifi) //NC/NA mode
-            LCD_NetMode();
-        else if ((Key_Count & KEY_MON) ||
-                 (Key_Count & KEY_AlarmMode)) //clock MON mode
-            LCD_Clock_MON();
-
-        if ((Key_Down_Trg & KEY_Set) ||
-            (Key_Down_Trg & KEY_Reset) ||
-            (Key_Down_Trg & KEY_Add) ||
-            (Key_Down_Trg & KEY_Minus) ||
-            (Key_Down_Trg & KEY_MON) ||
-            (Key_Down_Trg & KEY_AlarmMode) ||
-            (Key_Down_Trg & KEY_Wifi) ||
-            (Key_Down_Trg & KEY_Snooze) ||
-            (Key_Down_Trg & KEY_Alarm))
-        {
-            if (color == ELAND_RED)
-                color = ELAND_GREEN;
-            else if (color == ELAND_GREEN)
-                color = ELAND_BLUE;
-            else if (color == ELAND_BLUE)
-                color = ELAND_RED;
-            else
-                color = ELAND_RED;
-            RGBLED_Color_Set(color);
-        }
+        // if (Key_Count & KEY_Wifi) //NC/NA mode
+        //     LCD_NetMode();
+        // else if ((Key_Count & KEY_MON) ||
+        //          (Key_Count & KEY_AlarmMode)) //clock MON mode
+        //     LCD_Clock_MON();
+        RGBLED_SwitchRainBow_Color();
         while (1)
         {
 

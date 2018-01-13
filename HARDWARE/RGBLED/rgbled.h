@@ -28,7 +28,18 @@ typedef enum {
     ELAND_GREEN,
     ELAND_WHITE,
 } __eland_color_t;
-
+typedef enum {
+    RAINBOW_RED,
+    RAINBOW_ORANGE,
+    RAINBOW_YELLOW,
+    RAINBOW_WARBLER,
+    RAINBOW_GREEN,
+    RAINBOW_WATER,
+    RAINBOW_WATERBLUE,
+    RAINBOW_PURPLE,
+    RAINBOW_PEACH,
+    RAINBOW_GRAY,
+} __rainbow_t;
 /* Private define ------------------------------------------------------------*/
 #define TIM3_PERIOD 1000
 #define TIM2_PERIOD 1000
@@ -57,8 +68,10 @@ extern __IO uint16_t TIM5_CCR2_Val;
 void RGBLED_CFG(void);
 void RGBLED_Input_RGB(u8 Red, u8 Green, u8 Blue);
 void RGBLED_Color_Set(__eland_color_t color);
+void RGBLED_Rainbow_Set(__rainbow_t color);
 void RGBLED_RGBCode_Set(u32 ColorCode);
 void RGBLED_Set_Brightness(uint8_t Brightness);
+void RGBLED_SwitchRainBow_Color(void);
 /* Private functions ---------------------------------------------------------*/
 
 #endif /*__RGBLED_H_*/
