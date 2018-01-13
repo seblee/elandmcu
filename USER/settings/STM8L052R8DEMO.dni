@@ -28,7 +28,15 @@ ActionState=1
 Enabled=0
 ShowSource=1
 [DebugChecksum]
+<<<<<<< HEAD
 Checksum=483789191
+=======
+<<<<<<< HEAD
+Checksum=-411249328
+=======
+Checksum=1321796144
+>>>>>>> ws-performance
+>>>>>>> stm8l152_lcd_driver
 [CallStack]
 ShowArgs=0
 [Disassembly]

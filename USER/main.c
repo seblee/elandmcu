@@ -70,6 +70,26 @@ void main(void)
                  (Key_Count & KEY_AlarmMode)) //clock MON mode
             LCD_Clock_MON();
 
+        if ((Key_Trg & KEY_Set) ||
+            (Key_Trg & KEY_Reset) ||
+            (Key_Trg & KEY_Add) ||
+            (Key_Trg & KEY_Minus) ||
+            (Key_Trg & KEY_MON) ||
+            (Key_Trg & KEY_AlarmMode) ||
+            (Key_Trg & KEY_Wifi) ||
+            (Key_Trg & KEY_Snooze) ||
+            (Key_Trg & KEY_Alarm))
+        {
+            if (color == ELAND_RED)
+                color = ELAND_GREEN;
+            else if (color == ELAND_GREEN)
+                color = ELAND_BLUE;
+            else if (color == ELAND_BLUE)
+                color = ELAND_RED;
+            else
+                color = ELAND_RED;
+            RGBLED_Color_Set(color);
+        }
         while (1)
         {
             if (Timer_Counter_1ms > 20) //20ms

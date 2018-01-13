@@ -81,6 +81,7 @@ extern int32_t RSSI_Value;
 extern MCU_Refresh_type_t MCU_Refreshed;
 /* Private function prototypes -----------------------------------------------*/
 void ReceiveUsart(u8 Cache);
+void eland_state_display(void);
 /* Private functions ---------------------------------------------------------*/
 
 #endif /*__ELAND_USART_H_*/
