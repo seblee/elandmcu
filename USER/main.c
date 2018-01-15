@@ -58,20 +58,18 @@ void main(void)
     /* Reload IWDG counter */
     IWDG_ReloadCounter();
     RGBLED_Rainbow_Set(RAINBOW_RED);
-    HT162x_LCD_Num_Set(Serial_11, (((0 + 1) / 10) % 10));
-    HT162x_LCD_Num_Set(Serial_12, ((0 + 1) % 10));
     /* Infinite loop */
     while (1)
     {
         /* Reload IWDG counter */
         IWDG_ReloadCounter();
         Eland_KeyState_Read();
-        // if (Key_Count & KEY_Wifi) //NC/NA mode
-        //     LCD_NetMode();
-        // else if ((Key_Count & KEY_MON) ||
-        //          (Key_Count & KEY_AlarmMode)) //clock MON mode
-        //     LCD_Clock_MON();
-        RGBLED_SwitchRainBow_Color();
+        if (Key_Count & KEY_Wifi) //NC/NA mode
+            LCD_NetMode();
+        else if ((Key_Count & KEY_MON) ||
+                 (Key_Count & KEY_AlarmMode)) //clock MON mode
+            LCD_Clock_MON();
+
         while (1)
         {
 

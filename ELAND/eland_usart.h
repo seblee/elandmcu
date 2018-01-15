@@ -26,7 +26,6 @@ typedef enum {
     MCU_FIRM_WARE_09,
     ALARM_READ_10,
     ALARM_SEND_11,
-    COLOR_SET_12, /*temporary*/
 } __msg_function_t;
 
 typedef enum {
