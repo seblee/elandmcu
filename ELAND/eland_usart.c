@@ -130,7 +130,7 @@ static void OprationFrame(void)
     case ELAND_STATES_05:
         MODH_Opration_05H();
         break;
-    case SEAD_FIRM_WARE_06:
+    case SEND_FIRM_WARE_06:
         MODH_Opration_06H();
         break;
     case REND_FIRM_WARE_07:
@@ -284,16 +284,16 @@ static void MODH_Opration_06H(void)
     sscanf((char const *)&msg_receive_buff[3], "%02d.%02d", &Firmware_Version_Major, &Firmware_Version_Minor);
     SendBuf = calloc(4, sizeof(uint8_t));
     *SendBuf = Uart_Packet_Header;
-    *(SendBuf + 1) = SEAD_FIRM_WARE_06;
+    *(SendBuf + 1) = SEND_FIRM_WARE_06;
     *(SendBuf + 2) = 0;
     *(SendBuf + 3) = Uart_Packet_Trail;
     USARTx_Send_Data(USART1, SendBuf, 4);
     free(SendBuf);
 
-    HT162x_LCD_Num_Set(Serial_17, Firmware_Version_Major / 10);
-    HT162x_LCD_Num_Set(Serial_18, Firmware_Version_Major % 10);
-    HT162x_LCD_Num_Set(Serial_19, Firmware_Version_Minor / 10);
-    HT162x_LCD_Num_Set(Serial_20, Firmware_Version_Minor % 10);
+    // HT162x_LCD_Num_Set(Serial_17, Firmware_Version_Major / 10);
+    // HT162x_LCD_Num_Set(Serial_18, Firmware_Version_Major % 10);
+    // HT162x_LCD_Num_Set(Serial_19, Firmware_Version_Minor / 10);
+    // HT162x_LCD_Num_Set(Serial_20, Firmware_Version_Minor % 10);
 }
 /**
  ****************************************************************************

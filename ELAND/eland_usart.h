@@ -15,17 +15,17 @@
 #include "syscfg.h"
 /* Private typedef -----------------------------------------------------------*/
 typedef enum {
-    KEY_FUN_NONE = 0x00, /*空命令*/
-    KEY_READ_02 = 0X02,
-    TIME_SET_03,
-    TIME_READ_04,
-    ELAND_STATES_05,
-    SEAD_FIRM_WARE_06,
-    REND_FIRM_WARE_07,
-    SEND_LINK_STATE_08,
-    MCU_FIRM_WARE_09,
-    ALARM_READ_10,
-    ALARM_SEND_11,
+    KEY_FUN_NONE = 0x00, /* 空命令*/
+    KEY_READ_02 = 0X02,  /* READ MCU KEY STATE*/
+    TIME_SET_03,         /* SEND ELAND TIME*/
+    TIME_READ_04,        /* READ MCU TIME*/
+    ELAND_STATES_05,     /* SEND ELAND STATES*/
+    SEND_FIRM_WARE_06,   /* SEND ELAND FIRMWARE VERSION*/
+    REND_FIRM_WARE_07,   /* READ MUC FIRMWARE VERSION*/
+    SEND_LINK_STATE_08,  /* SEND WIFI LINK STATE*/
+    MCU_FIRM_WARE_09,    /* START MCU FIRM WARE UPDATE*/
+    ALARM_READ_10,       /* READ MCU ALARM*/
+    ALARM_SEND_11,       /* SEND NEXT ALARM STATE*/
 } __msg_function_t;
 
 typedef enum {

@@ -57,6 +57,6 @@ extern _ELAND_MODE_t Eland_mode;
 void LCD_Display_Rssi_State(Eland_Status_type_t state);
 void LCD_NetMode(void);
 void LCD_Clock_MON(void);
-void LCD_Clock_Alarm(void);
 void LCD_data_init(void);
+
 #endif /*__LCD_DISPLAY_H_*/
