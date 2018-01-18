@@ -173,6 +173,7 @@ typedef enum {
     AM = 0,
     PM,
     AMPMMAX,
+    AMPMNUM,
 } LCD_AMPM_Distinguish_t;
 
 typedef enum {

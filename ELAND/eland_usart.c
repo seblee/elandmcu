@@ -167,7 +167,7 @@ static void MODH_Opration_02H(void)
     SendBuf = calloc(9, sizeof(uint8_t));
     *SendBuf = Uart_Packet_Header;
     *(SendBuf + 1) = KEY_READ_02;
-    *(SendBuf + 2) = 4;
+    *(SendBuf + 2) = 5;
     *(SendBuf + 3) = (uint8_t)(Key_Count >> 8);
     *(SendBuf + 4) = (uint8_t)(Key_Count & 0xff);
     *(SendBuf + 5) = (uint8_t)(Key_Restain >> 8);

@@ -688,12 +688,12 @@ void HT162x_LCD_RSSI_Set(LCD_Wifi_Rssi_t value)
 **/
 void HT162x_LCD_AMPM_Set(LCD_Time_Type_t type, LCD_AMPM_Distinguish_t value)
 {
-    static LCD_AMPM_Distinguish_t timepart = AMPMMAX, alarmpart = AMPMMAX;
+    static LCD_AMPM_Distinguish_t timepart = AMPMNUM, alarmpart = AMPMNUM;
     if ((type > ALARM_PART) || (value > AMPMMAX))
         return;
     if (type == TIME_PART)
     {
-        if (timepart == AMPMMAX)
+        if (timepart == AMPMNUM)
         {
             HT162x_LCD_Change_Pixel(COM7, TIME_PART_AMPM_seg[0], RESET);
             HT162x_LCD_Change_Pixel(COM7, TIME_PART_AMPM_seg[1], RESET);
@@ -710,7 +710,7 @@ void HT162x_LCD_AMPM_Set(LCD_Time_Type_t type, LCD_AMPM_Distinguish_t value)
     }
     else if (type == ALARM_PART)
     {
-        if (alarmpart == AMPMMAX)
+        if (alarmpart == AMPMNUM)
         {
             HT162x_LCD_Change_Pixel(COM7, ALARM_PART_AMPM_seg[0], RESET);
             HT162x_LCD_Change_Pixel(COM7, ALARM_PART_AMPM_seg[1], RESET);
@@ -788,7 +788,8 @@ void HT162x_LCD_Time_Display(LCD_Time_Type_t type, mico_rtc_time_t time)
     uint8_t cache;
 
     if ((time_cache[type].hr != time.hr) ||
-        (time_cache[type].min != time.min))
+        (time_cache[type].min != time.min) ||
+        (time_cache[type].sec != time.sec))
     {
         cache = time.hr;
 
@@ -814,6 +815,9 @@ void HT162x_LCD_Time_Display(LCD_Time_Type_t type, mico_rtc_time_t time)
 
         HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_09 + 10 * type), ((time.min / 10) % 10)); //min
         HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_10 + 10 * type), (time.min % 10));        //min
+
+        HT162x_LCD_Num_Set(Serial_11, ((time.sec / 10) % 10)); //sec
+        HT162x_LCD_Num_Set(Serial_12, (time.sec % 10));        //sec
     }
     if (type == ALARM_PART)
     {

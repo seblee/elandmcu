@@ -177,6 +177,7 @@ void LCD_Clock_MON(void)
         {
             time_set_mode = 3;
             memcpy(&Time_cache, &CurrentMicoTime, sizeof(mico_rtc_time_t));
+            Time_cache.sec = 0;
             number_flash_cache = Time_cache.year;
         }
         if (Key_Up_Trg & KEY_Set)
@@ -193,9 +194,22 @@ void LCD_Clock_MON(void)
                 alarm_data.alarm_moment.hr++;
             else
                 alarm_data.alarm_moment.hr = 0;
-            number_flash_cache = alarm_data.alarm_moment.hr;
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10)); //minute
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));        //minute
+
+            if ((eland_data.time_display_format == 1) && (alarm_data.alarm_moment.hr > 12))
+                number_flash_cache = alarm_data.alarm_moment.hr - 12;
+            else
+                number_flash_cache = alarm_data.alarm_moment.hr;
+            if (eland_data.time_display_format == 1)
+            {
+                if (alarm_data.alarm_moment.hr >= 12)
+                    HT162x_LCD_AMPM_Set(ALARM_PART, PM);
+                else
+                    HT162x_LCD_AMPM_Set(ALARM_PART, AM);
+            }
+            else
+                HT162x_LCD_AMPM_Set(ALARM_PART, AMPMMAX);
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10));
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));
         }
         else if ((Key_Up_Trg & KEY_Minus) || ((key_delay >= ChangeSpeed) && (Key_Restain & KEY_Minus)))
         {
@@ -204,9 +218,21 @@ void LCD_Clock_MON(void)
                 alarm_data.alarm_moment.hr--;
             else
                 alarm_data.alarm_moment.hr = 23;
-            number_flash_cache = alarm_data.alarm_moment.hr;
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10)); //minute
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));        //minute
+            if ((eland_data.time_display_format == 1) && (alarm_data.alarm_moment.hr > 12))
+                number_flash_cache = alarm_data.alarm_moment.hr - 12;
+            else
+                number_flash_cache = alarm_data.alarm_moment.hr;
+            if (eland_data.time_display_format == 1)
+            {
+                if (alarm_data.alarm_moment.hr >= 12)
+                    HT162x_LCD_AMPM_Set(ALARM_PART, PM);
+                else
+                    HT162x_LCD_AMPM_Set(ALARM_PART, AM);
+            }
+            else
+                HT162x_LCD_AMPM_Set(ALARM_PART, AMPMMAX);
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10));
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));
         }
         else
         {
@@ -215,8 +241,8 @@ void LCD_Clock_MON(void)
         }
         if (Key_Up_Trg & KEY_Set)
         {
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10)); //minute
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));        //minute
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10));
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));
             time_set_mode = 2;
             number_flash_cache = alarm_data.alarm_moment.min;
         }
@@ -230,8 +256,8 @@ void LCD_Clock_MON(void)
             else
                 alarm_data.alarm_moment.min = 0;
             number_flash_cache = alarm_data.alarm_moment.min;
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10)); //minute
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));        //minute
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10));
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));
         }
         else if ((Key_Up_Trg & KEY_Minus) || ((key_delay >= ChangeSpeed) && (Key_Restain & KEY_Minus)))
         {
@@ -241,8 +267,8 @@ void LCD_Clock_MON(void)
             else
                 alarm_data.alarm_moment.min = 59;
             number_flash_cache = alarm_data.alarm_moment.min;
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10)); //minute
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));        //minute
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10));
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));
         }
         else
         {
@@ -251,8 +277,8 @@ void LCD_Clock_MON(void)
         }
         if (Key_Up_Trg & KEY_Set)
         {
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10)); //minute
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));        //minute
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10));
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));
             changeflag |= 2;
             time_set_mode = 0;
             number_flash_cache = 0;
@@ -264,8 +290,8 @@ void LCD_Clock_MON(void)
         {
             key_delay = 0;
             number_flash_cache = ++Time_cache.year;
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10)); //minute
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));        //minute
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10));
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));
         }
         else if ((Key_Up_Trg & KEY_Minus) || ((key_delay >= ChangeSpeed) && (Key_Restain & KEY_Minus)))
         {
@@ -275,8 +301,8 @@ void LCD_Clock_MON(void)
             else
                 Time_cache.year = 99;
             number_flash_cache = Time_cache.year;
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10)); //minute
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));        //minute
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10));
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));
         }
         else
         {
@@ -285,8 +311,8 @@ void LCD_Clock_MON(void)
         }
         if (Key_Up_Trg & KEY_Set)
         {
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10)); //minute
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));        //minute
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10));
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));
             number_flash_cache = Time_cache.month;
             time_set_mode = 4;
         }
@@ -300,8 +326,8 @@ void LCD_Clock_MON(void)
             else
                 Time_cache.month = 1;
             number_flash_cache = Time_cache.month;
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10)); //minute
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));        //minute
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10));
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));
         }
         else if ((Key_Up_Trg & KEY_Minus) || ((key_delay >= ChangeSpeed) && (Key_Restain & KEY_Minus)))
         {
@@ -311,8 +337,8 @@ void LCD_Clock_MON(void)
             else
                 Time_cache.month = 12;
             number_flash_cache = Time_cache.month;
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10)); //minute
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));        //minute
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10));
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));
         }
         else
         {
@@ -321,8 +347,8 @@ void LCD_Clock_MON(void)
         }
         if (Key_Up_Trg & KEY_Set)
         {
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10)); //minute
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));        //minute
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10));
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));
             number_flash_cache = Time_cache.date;
             time_set_mode = 5;
         }
@@ -336,8 +362,8 @@ void LCD_Clock_MON(void)
             else
                 Time_cache.date = 1;
             number_flash_cache = Time_cache.date;
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10)); //minute
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));        //minute
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10));
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));
         }
         else if ((Key_Up_Trg & KEY_Minus) || ((key_delay >= ChangeSpeed) && (Key_Restain & KEY_Minus)))
         {
@@ -347,8 +373,8 @@ void LCD_Clock_MON(void)
             else
                 Time_cache.date = DayOfMon[Time_cache.month - 1][(Time_cache.year % 4 == 0) ? 1 : 0];
             number_flash_cache = Time_cache.date;
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10)); //minute
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));        //minute
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10));
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));
         }
         else
         {
@@ -357,8 +383,8 @@ void LCD_Clock_MON(void)
         }
         if (Key_Up_Trg & KEY_Set)
         {
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10)); //minute
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));        //minute
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10));
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));
             time_set_mode = 6;
             if ((eland_data.time_display_format == 1) && (Time_cache.hr > 12))
                 number_flash_cache = Time_cache.hr - 12;
@@ -373,18 +399,27 @@ void LCD_Clock_MON(void)
             if (Time_cache.hr < 23)
                 Time_cache.hr++;
             else
-                Time_cache.hr = 1;
+                Time_cache.hr = 0;
             if ((eland_data.time_display_format == 1) && (Time_cache.hr > 12))
                 number_flash_cache = Time_cache.hr - 12;
             else
                 number_flash_cache = Time_cache.hr;
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10)); //minute
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));        //minute
+            if (eland_data.time_display_format == 1)
+            {
+                if (Time_cache.hr >= 12)
+                    HT162x_LCD_AMPM_Set(TIME_PART, PM);
+                else
+                    HT162x_LCD_AMPM_Set(TIME_PART, AM);
+            }
+            else
+                HT162x_LCD_AMPM_Set(TIME_PART, AMPMMAX);
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10));
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));
         }
         else if ((Key_Up_Trg & KEY_Minus) || ((key_delay >= ChangeSpeed) && (Key_Restain & KEY_Minus)))
         {
             key_delay = 0;
-            if (Time_cache.hr > 1)
+            if (Time_cache.hr > 0)
                 Time_cache.hr--;
             else
                 Time_cache.hr = 23;
@@ -392,8 +427,18 @@ void LCD_Clock_MON(void)
                 number_flash_cache = Time_cache.hr - 12;
             else
                 number_flash_cache = Time_cache.hr;
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10)); //minute
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));        //minute
+            if (eland_data.time_display_format == 1)
+            {
+                if (Time_cache.hr >= 12)
+                    HT162x_LCD_AMPM_Set(TIME_PART, PM);
+                else
+                    HT162x_LCD_AMPM_Set(TIME_PART, AM);
+            }
+            else
+                HT162x_LCD_AMPM_Set(TIME_PART, AMPMMAX);
+
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10));
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));
         }
         else
         {
@@ -402,8 +447,8 @@ void LCD_Clock_MON(void)
         }
         if (Key_Up_Trg & KEY_Set)
         {
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10)); //minute
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));        //minute
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10));
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));
             number_flash_cache = Time_cache.min;
             time_set_mode = 7;
         }
@@ -415,23 +460,23 @@ void LCD_Clock_MON(void)
             if (Time_cache.min < 59)
                 Time_cache.min++;
             else
-                Time_cache.min = 1;
+                Time_cache.min = 0;
 
             number_flash_cache = Time_cache.min;
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10)); //minute
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));        //minute
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10));
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));
         }
         else if ((Key_Up_Trg & KEY_Minus) || ((key_delay >= ChangeSpeed) && (Key_Restain & KEY_Minus)))
         {
             key_delay = 0;
-            if (Time_cache.min > 1)
+            if (Time_cache.min > 0)
                 Time_cache.min--;
             else
                 Time_cache.min = 59;
 
             number_flash_cache = Time_cache.min;
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10)); //minute
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));        //minute
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10));
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));
         }
         else
         {
@@ -440,8 +485,8 @@ void LCD_Clock_MON(void)
         }
         if (Key_Up_Trg & KEY_Set)
         {
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10)); //minute
-            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));        //minute
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10));
+            HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));
             time_set_mode = 0;
             memset(&mcutimeCache, 0, sizeof(_eland_date_time_t));
             ELAND_Time_Convert(&Time_cache, &mcutimeCache, MICO_2_MCU);
