@@ -13,6 +13,7 @@
 #define __ELAND_USART_H_
 /* Private include -----------------------------------------------------------*/
 #include "syscfg.h"
+#include "ht162x.h"
 /* Private typedef -----------------------------------------------------------*/
 typedef enum {
     KEY_FUN_NONE = 0x00, /* 空命令*/
@@ -77,7 +78,7 @@ typedef enum {
 /* Private variables ---------------------------------------------------------*/
 extern uint8_t Firmware_Conter;
 extern Eland_Status_type_t eland_state;
-extern int32_t RSSI_Value;
+extern LCD_Wifi_Rssi_t RSSI_Value;
 extern MCU_Refresh_type_t MCU_Refreshed;
 /* Private function prototypes -----------------------------------------------*/
 void ReceiveUsart(u8 Cache);

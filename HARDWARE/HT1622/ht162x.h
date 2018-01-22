@@ -182,6 +182,7 @@ typedef enum {
     LEVEL2 = 0x0C,
     LEVEL3 = 0x0E,
     LEVEL4 = 0x0F,
+    LEVELNUM = 0xFF,
 } LCD_Wifi_Rssi_t;
 
 /* Private define ------------------------------------------------------------*/

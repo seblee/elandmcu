@@ -28,7 +28,7 @@
 uint8_t Firmware_Conter = 0;
 uint8_t msg_receive_buff[30];
 Eland_Status_type_t eland_state = ElandNone;
-int32_t RSSI_Value = -120;
+LCD_Wifi_Rssi_t RSSI_Value = LEVELNUM;
 MCU_Refresh_type_t MCU_Refreshed = REFRESH_NONE;
 
 /* Private function prototypes -----------------------------------------------*/
@@ -331,11 +331,7 @@ static void MODH_Opration_07H(void)
 static void MODH_Opration_08H(void)
 {
     uint8_t *SendBuf;
-    RSSI_Value = (int32_t)((uint32_t)msg_receive_buff[3] |
-                           ((uint32_t)msg_receive_buff[4] << 8) |
-                           ((uint32_t)msg_receive_buff[5] << 16) |
-                           ((uint32_t)msg_receive_buff[6] << 24));
-
+    RSSI_Value = (LCD_Wifi_Rssi_t)msg_receive_buff[3];
     SendBuf = calloc(4, sizeof(uint8_t));
     *SendBuf = Uart_Packet_Header;
     *(SendBuf + 1) = SEND_LINK_STATE_08;

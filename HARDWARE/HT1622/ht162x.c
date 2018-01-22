@@ -660,7 +660,7 @@ void HT162x_LCD_Week_Set(LCD_Time_Type_t type, LCD_Week_Day_t day)
 **/
 void HT162x_LCD_RSSI_Set(LCD_Wifi_Rssi_t value)
 {
-    static LCD_Wifi_Rssi_t value_BAK = 0xff;
+    static LCD_Wifi_Rssi_t value_BAK = LEVELNUM;
     if (value > LEVEL4)
         return;
     if (value_BAK != value)
