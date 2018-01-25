@@ -26,7 +26,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 uint8_t Firmware_Conter = 0;
-uint8_t msg_receive_buff[30];
+uint8_t msg_receive_buff[300];
 Eland_Status_type_t eland_state = ElandNone;
 LCD_Wifi_Rssi_t RSSI_Value = LEVELNUM;
 MCU_Refresh_type_t MCU_Refreshed = REFRESH_NONE;

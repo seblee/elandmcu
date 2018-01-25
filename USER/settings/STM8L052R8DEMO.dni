@@ -28,7 +28,11 @@ ActionState=1
 Enabled=0
 ShowSource=1
 [DebugChecksum]
+<<<<<<< HEAD
 Checksum=-101452644
+=======
+Checksum=-2074508045
+>>>>>>> master
 [CallStack]
 ShowArgs=0
 [Disassembly]
@@ -62,7 +66,11 @@ Category=_ 0
 LoggingEnabled=_ 0
 LogFile=_ ""
 [Breakpoints]
+<<<<<<< HEAD
 Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\LCD_DISPLAY\lcd_display.c}.524.9" 1 0 0 0 "" 0 ""
+=======
+Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\SYSTEM\RTC\rtc.c}.85.5" 1 0 0 0 "" 0 ""
+>>>>>>> master
 Count=1
 [Aliases]
 Count=0

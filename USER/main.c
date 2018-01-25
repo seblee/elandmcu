@@ -44,16 +44,16 @@ void main(void)
 {
     disableInterrupts();
     OTA_bootloader_disable();
+    enableInterrupts();
     /* System clock */
     LCD_data_init();
     SysClock_Init();
+    HT162x_init();
+    ELAND_RTC_Init();
     TIM4_Init();
     UART1_Init();
     ElandKeyInit();
-    ELAND_RTC_Init();
     IWDG_Config();
-    enableInterrupts();
-    HT162x_init();
     RGBLED_CFG();
     /* Reload IWDG counter */
     IWDG_ReloadCounter();
@@ -72,7 +72,6 @@ void main(void)
 
         while (1)
         {
-
             if (Timer_Counter_1ms > 20) //20ms
             {
                 Timer_Counter_1ms = 0;

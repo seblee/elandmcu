@@ -11,6 +11,8 @@
 **/
 /* Private include -----------------------------------------------------------*/
 #include "rtc.h"
+#include "ht162x.h"
+#include "timing_delay.h"
 //#include "lcd_eland.h"
 /* Private typedef -----------------------------------------------------------*/
 
@@ -50,7 +52,8 @@ const uint8_t DayOfMon[12][2] = {
     {31, 31}, //12
 };
 /* Private function prototypes -----------------------------------------------*/
-void Calendar_Init(void);
+static ErrorStatus Calendar_Init(void);
+static void Calendar_Init_register(void);
 static void Get_built_DateTime(_eland_date_time_t *time);
 /* Private functions ---------------------------------------------------------*/
 /**
@@ -64,34 +67,91 @@ static void Get_built_DateTime(_eland_date_time_t *time);
 **/
 void ELAND_RTC_Init(void)
 {
-    RTC_DeInit();
+#ifndef RTC_LSE
+    CLK_LSICmd(ENABLE); // 使能内部LSI OSC（38KHz）
+    while (CLK_GetFlagStatus(CLK_FLAG_LSIRDY) == RESET)
+        ; //等待直到LSI稳定
+#else
+    CLK_LSEConfig(CLK_LSE_ON); // 使能外部LSE OSC（32.768KHz）
+    while (CLK_GetFlagStatus(CLK_FLAG_LSERDY) == RESET)
+        ; //等待直到LSE稳定
+          /* wait for 1 second for the LSE Stabilisation */
+          //Delay_By_nop(50000);
+          //Delay_By_nop(50000);
+          // Delay_By_nop(10000);
+#endif
+    //CLK_CCOConfig(CLK_CCOSource_LSE, CLK_CCODiv_1);
+
+    CLK_PeripheralClockConfig(CLK_Peripheral_RTC, ENABLE);
     /* Select LSE (32.768 KHz) as RTC clock source */
     CLK_RTCClockConfig(CLK_RTCCLKSource_LSE, CLK_RTCCLKDiv_1);
 
-    CLK_PeripheralClockConfig(CLK_Peripheral_RTC, ENABLE);
+    //Calendar_Init();
+    Calendar_Init_register();
     /* Configures the RTC wakeup timer_step = RTCCLK/16 = LSE/16 = 488.28125 us */
     RTC_WakeUpClockConfig(RTC_WakeUpClock_RTCCLK_Div16);
-
     /* Enable wake up unit Interrupt */
     RTC_ITConfig(RTC_IT_WUT, ENABLE);
 
     RTC_SetWakeUpCounter(1023);
     RTC_WakeUpCmd(ENABLE);
     /* Calendar Configuration */
-    Calendar_Init();
-}
 
-/**
+    ELAND_RTC_Read(&CurrentMicoTime);
+}
+static void Calendar_Init_register(void)
+{
+
+    //关闭RTC寄存器的写保护功能
+    RTC->WPR = 0XCA;
+    RTC->WPR = 0x53;
+    /* Set the Initialization mode */
+    RTC->ISR1 = (uint8_t)RTC_ISR1_INIT;
+    /* Wait until INITF flag is set */
+    while ((RTC->ISR1 & RTC_ISR1_INITF) == RESET)
+        ;
+    /*24小时模式*/
+    RTC->CR1 &= ((uint8_t) ~(RTC_CR1_FMT));
+
+    //最终提供给日历模块的时钟为 32768Hz/( (127+1)*(255+1) ) =1Hz
+
+    /* Exit Initialization mode */
+    RTC->ISR1 &= (uint8_t)~RTC_ISR1_INIT;
+    RTC->WPR = 0x55; //使能写保护
+    RTC->WPR = 0x55;
+
+    RTC_AlarmStructInit(&RTC_AlarmStr);
+    RTC_AlarmStr.RTC_AlarmTime.RTC_Hours = 01;
+    RTC_AlarmStr.RTC_AlarmTime.RTC_Minutes = 01;
+    RTC_AlarmStr.RTC_AlarmTime.RTC_Seconds = 00;
+    RTC_AlarmStr.RTC_AlarmMask = RTC_AlarmMask_All; //屏蔽了所有时间,导致闹钟1秒中执行一次,进入一次闹钟中断
+    RTC_SetAlarm(RTC_Format_BIN, &RTC_AlarmStr);
+    RTC_ITConfig(RTC_IT_ALRA, ENABLE);
+
+    RTC_AlarmCmd(ENABLE);
+}
+/**register
   * @brief  Calendar Configuration.
   * @param  None
   * @retval None
   */
-void Calendar_Init(void)
+static ErrorStatus Calendar_Init(void)
 {
+    uint8_t times = 0;
+    ErrorStatus err;
     RTC_InitStr.RTC_HourFormat = RTC_HourFormat_24;
     RTC_InitStr.RTC_AsynchPrediv = 0x7f;
     RTC_InitStr.RTC_SynchPrediv = 0x00ff;
-    RTC_Init(&RTC_InitStr);
+rtcstart:
+    if (RTC_Init(&RTC_InitStr) == ERROR)
+    {
+        times++;
+        RTC_DeInit();
+        goto rtcstart;
+    }
+    HT162x_LCD_Num_Set(Serial_13, ((times / 10) % 10));
+    HT162x_LCD_Num_Set(Serial_14, (times % 10));
+
     Get_built_DateTime(&CurrentMCUTime);
 
     RTC_DateStructInit(&RTC_DateStr);
@@ -99,13 +159,13 @@ void Calendar_Init(void)
     RTC_DateStr.RTC_Date = CurrentMCUTime.day;
     RTC_DateStr.RTC_Month = CurrentMCUTime.month;
     RTC_DateStr.RTC_Year = CurrentMCUTime.yea % 100;
-    RTC_SetDate(RTC_Format_BIN, &RTC_DateStr);
+    //RTC_SetDate(RTC_Format_BIN, &RTC_DateStr);
 
     RTC_TimeStructInit(&RTC_TimeStr);
     RTC_TimeStr.RTC_Hours = CurrentMCUTime.hour;
     RTC_TimeStr.RTC_Minutes = CurrentMCUTime.minute;
     RTC_TimeStr.RTC_Seconds = CurrentMCUTime.second;
-    RTC_SetTime(RTC_Format_BIN, &RTC_TimeStr);
+    //RTC_SetTime(RTC_Format_BIN, &RTC_TimeStr);
     Today_Second = (uint32_t)((uint32_t)CurrentMCUTime.hour * 3600);
     Today_Second += (uint32_t)((uint32_t)CurrentMCUTime.minute * 60);
     Today_Second += (uint32_t)CurrentMCUTime.second;
@@ -116,10 +176,10 @@ void Calendar_Init(void)
     RTC_AlarmStr.RTC_AlarmTime.RTC_Seconds = 00;
     RTC_AlarmStr.RTC_AlarmMask = RTC_AlarmMask_All; //屏蔽了所有时间,导致闹钟1秒中执行一次,进入一次闹钟中断
     RTC_SetAlarm(RTC_Format_BIN, &RTC_AlarmStr);
-
     RTC_ITConfig(RTC_IT_ALRA, ENABLE);
-    RTC_AlarmCmd(ENABLE);
-    ELAND_RTC_Read(&CurrentMicoTime);
+    err = RTC_AlarmCmd(ENABLE);
+
+    return err;
 }
 /**
  ****************************************************************************
