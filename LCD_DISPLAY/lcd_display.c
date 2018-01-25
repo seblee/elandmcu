@@ -578,8 +578,8 @@ void LCD_NetMode(void)
         /*clear alarm -- snooze*/
         HT162x_LCD_Change_Pixel(COM7, SEG13, RESET);
         /*clear alarm -- alarm date and time */
-        for (i = (uint8_t)Serial_11; i < (uint8_t)Serial_17; i++)
-            HT162x_LCD_Num_Set((LCD_Digital_Serial_t)i, 10);
+        // for (i = (uint8_t)Serial_11; i < (uint8_t)Serial_17; i++)
+        //     HT162x_LCD_Num_Set((LCD_Digital_Serial_t)i, 10);
         /**refresh alarm time**/
         //HT162x_LCD_Time_Display(ALARM_PART, alarm_data.alarm_moment);
         /*clear alarm -- alarm week*/

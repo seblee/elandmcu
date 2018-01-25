@@ -76,6 +76,8 @@ void OTA_bootloader_disable(void)
         FLASH_ProgramOptionByte(0x487f, 0x00);
 #endif
     FLASH_Lock(FLASH_MemType_Data);
+
+    FLASH_ReadByte(0x487e)    ;
 }
 
 /**
