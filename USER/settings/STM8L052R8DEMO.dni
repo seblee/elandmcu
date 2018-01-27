@@ -29,7 +29,7 @@ Enabled=0
 ShowSource=1
 [DebugChecksum]
 <<<<<<< HEAD
-Checksum=-101452644
+Checksum=1491652927
 =======
 Checksum=-2074508045
 >>>>>>> master
@@ -58,6 +58,9 @@ Fmt13={W}42:opt_M	4	0
 LogEnabled=0
 GraphEnabled=0
 ShowTimeLog=1
+[Breakpoints]
+Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\HARDWARE\HT1622\ht162x.c}.690.9" 1 0 0 0 "" 0 ""
+Count=1
 [Log file]
 LoggingEnabled=_ 0
 LogFile=_ ""
@@ -65,13 +68,6 @@ Category=_ 0
 [TermIOLog]
 LoggingEnabled=_ 0
 LogFile=_ ""
-[Breakpoints]
-<<<<<<< HEAD
-Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\LCD_DISPLAY\lcd_display.c}.524.9" 1 0 0 0 "" 0 ""
-=======
-Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\SYSTEM\RTC\rtc.c}.85.5" 1 0 0 0 "" 0 ""
->>>>>>> master
-Count=1
 [Aliases]
 Count=0
 SuppressDialog=0

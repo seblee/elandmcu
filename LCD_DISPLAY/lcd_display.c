@@ -93,6 +93,9 @@ void LCD_Display_State(Eland_Status_type_t state)
 void LCD_Display_Rssi_State(Eland_Status_type_t state)
 {
     static LCD_Wifi_Rssi_t rssi_value = LEVEL0;
+
+    HT162x_LCD_TCP_STATE_Set((state > TCP_CN00) ? RESET : SET);
+
     if ((state == APStatus) || (state == HttpServerStatus))
     {
         if (rssi_value == LEVEL0)
@@ -576,21 +579,6 @@ void LCD_NetMode(void)
         WakeupOccurred = FALSE;
         HT162x_LCD_Toggle_Pixel(COM0, SEG32);
         HT162x_LCD_Toggle_Pixel(COM0, SEG33);
-        // if (time_set_mode != 0)
-        // {
-        //     if (number_flash_flag == 0)
-        //     {
-        //         HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], ((number_flash_cache / 10) % 10)); //minute
-        //         HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], (number_flash_cache % 10));        //minute
-        //         number_flash_flag = 1;
-        //     }
-        //     else
-        //     {
-        //         HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][0], 10); //minute
-        //         HT162x_LCD_Num_Set(Clock_number_table[time_set_mode][1], 10); //minute
-        //         number_flash_flag = 0;
-        //     }
-        // }
     }
     if (AlarmOccurred == TRUE) //1s update time
     {

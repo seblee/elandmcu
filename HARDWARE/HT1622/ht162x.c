@@ -674,6 +674,26 @@ void HT162x_LCD_RSSI_Set(LCD_Wifi_Rssi_t value)
 }
 /**
  ****************************************************************************
+ * @Function : void HT162x_LCD_TCP_STATE_Set(FlagStatus state)
+ * @File     : ht162x.c
+ * @Program  : state:connected SET disconnected RESET
+ * @Created  : 2018/1/27 by seblee
+ * @Brief    : Set elsv state
+ * @Version  : V1.0
+**/
+void HT162x_LCD_TCP_STATE_Set(FlagStatus state)
+{
+    static FlagStatus state_bak = RESET;
+
+    if (state != state_bak)
+    {
+        HT162x_LCD_Change_Pixel(COM7, SEG21, state);
+        state_bak = state;
+    }
+}
+
+/**
+ ****************************************************************************
  * @Function : void HT162x_LCD_AMPM_Set(LCD_Time_Type_t type,LCD_AMPM_Distinguish_t value)
  * @File     : ht162x.c
  * @Program  : type:witch is time or alarm  value:witch is AM or PM
@@ -783,8 +803,8 @@ void HT162x_LCD_Time_Display(LCD_Time_Type_t type, mico_rtc_time_t time)
     uint8_t cache;
 
     if ((time_cache[type].hr != time.hr) ||
-        (time_cache[type].min != time.min) ||
-        (time_cache[type].sec != time.sec))
+        (time_cache[type].min != time.min) /* ||
+        (time_cache[type].sec != time.sec)*/)
     {
         cache = time.hr;
 
@@ -811,8 +831,8 @@ void HT162x_LCD_Time_Display(LCD_Time_Type_t type, mico_rtc_time_t time)
         HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_09 + 10 * type), ((time.min / 10) % 10)); //min
         HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_10 + 10 * type), (time.min % 10));        //min
 
-        HT162x_LCD_Num_Set(Serial_11, ((time.sec / 10) % 10)); //sec
-        HT162x_LCD_Num_Set(Serial_12, (time.sec % 10));        //sec
+        // HT162x_LCD_Num_Set(Serial_11, ((time.sec / 10) % 10)); //sec
+        // HT162x_LCD_Num_Set(Serial_12, (time.sec % 10));        //sec
     }
     if (type == ALARM_PART)
     {
