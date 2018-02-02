@@ -39,17 +39,15 @@ typedef enum {
 typedef enum {
     ElandNone = 0,
     ElandBegin,
-    APStatus,
+    APStatusStart,
     APStatusClosed,
-    HttpServerStatus,
+    APServerStart,
     HttpServerStop,
     ELAPPConnected,
     WifyConnected,
     WifyDisConnected,
     WifyConnectedFailed,
-    ElandAliloPlay,
-    ElandAliloPause,
-    ElandAliloStop,
+    CONNECTED_NET,
     HTTP_Get_HOST_INFO,
     TCP_CN00,
     TCP_DV00,
@@ -64,15 +62,11 @@ typedef enum {
     REFRESH_ALARM,
     REFRESH_MAX,
 } MCU_Refresh_type_t;
+
 /* Private define ------------------------------------------------------------*/
 #define Uart_Packet_Header (uint8_t)(0x55)
 #define Uart_Packet_Trail (uint8_t)(0xaa)
 
-#define RSSI_STATE_STAGE0 (int)(-85)
-#define RSSI_STATE_STAGE1 (int)(-70)
-#define RSSI_STATE_STAGE2 (int)(-60)
-#define RSSI_STATE_STAGE3 (int)(-50)
-#define RSSI_STATE_STAGE4 (int)(-40)
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/

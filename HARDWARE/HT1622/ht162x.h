@@ -224,7 +224,8 @@ typedef enum {
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-
+extern const LCD_SEGx_TypeDef TIME_PART_Week_seg[7];
+extern const LCD_SEGx_TypeDef ALARM_PART_Week_seg[7];
 /* Private function prototypes -----------------------------------------------*/
 void HT162x_init(void);
 void HT162x_LCD_Clear(FlagStatus value);

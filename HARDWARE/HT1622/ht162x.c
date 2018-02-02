@@ -743,7 +743,7 @@ void HT162x_LCD_AMPM_Set(LCD_Time_Type_t type, LCD_AMPM_Distinguish_t value)
 }
 /**
  ****************************************************************************
- * @Function : void HT162x_LCD_Date_Display(mico_rtc_time_t time)
+ * @Function : void HT162x_LCD_Date_Display(LCD_Time_Type_t type, mico_rtc_time_t time)
  * @File     : ht162x.c
  * @Program  : time:the time to display
  * @Created  : 2017/12/5 by seblee

@@ -42,6 +42,7 @@ static void MODH_Opration_07H(void);
 static void MODH_Opration_08H(void);
 static void MODH_Opration_09H(void);
 static void MODH_Opration_10H(void);
+static void MODH_Opration_11H(void);
 /* Private functions ---------------------------------------------------------*/
 
 /**
@@ -145,7 +146,8 @@ static void OprationFrame(void)
     case ALARM_READ_10:
         MODH_Opration_10H();
         break;
-
+    case ALARM_SEND_11:
+        MODH_Opration_11H();
         break;
     default:
         break;
@@ -312,8 +314,8 @@ static void MODH_Opration_08H(void)
 {
     uint8_t *SendBuf;
     RSSI_Value = (LCD_Wifi_Rssi_t)msg_receive_buff[3];
-    eland_state = (Eland_Status_type_t)msg_receive_buff[4];
     Eland_mode = (_ELAND_MODE_t)msg_receive_buff[4];
+    eland_state = (Eland_Status_type_t)msg_receive_buff[5];
     SendBuf = calloc(4, sizeof(uint8_t));
     *SendBuf = Uart_Packet_Header;
     *(SendBuf + 1) = SEND_LINK_STATE_08;
@@ -357,12 +359,34 @@ static void MODH_Opration_09H(void)
 static void MODH_Opration_10H(void)
 {
     uint8_t *SendBuf;
-    SendBuf = calloc(4 + sizeof(_alarm_MCU_data_t), sizeof(uint8_t));
+    SendBuf = calloc(4 + sizeof(_alarm_mcu_data_t), sizeof(uint8_t));
     *SendBuf = Uart_Packet_Header;
     *(SendBuf + 1) = ALARM_READ_10;
-    *(SendBuf + 2) = sizeof(_alarm_MCU_data_t);
-    memcpy((SendBuf + 3), &alarm_data, sizeof(_alarm_MCU_data_t));
-    *(SendBuf + 3 + sizeof(_alarm_MCU_data_t)) = Uart_Packet_Trail;
-    USARTx_Send_Data(USART1, SendBuf, 4 + sizeof(_alarm_MCU_data_t));
+    *(SendBuf + 2) = sizeof(_alarm_mcu_data_t);
+    memcpy((SendBuf + 3), &alarm_data, sizeof(_alarm_mcu_data_t));
+    *(SendBuf + 3 + sizeof(_alarm_mcu_data_t)) = Uart_Packet_Trail;
+    USARTx_Send_Data(USART1, SendBuf, 4 + sizeof(_alarm_mcu_data_t));
     free(SendBuf);
+} /**
+ ****************************************************************************
+ * @Function : static void MODH_Opration_11H(void)
+ * @File     : eland_usart.c
+ * @Program  : H08 header fun len  alarmdata   tral
+ *                  55     0b len  alarmdata   aa
+ * @Created  : 2018/1/11 by seblee
+ * @Brief    :   MCU_ALARM TO display
+ * @Version  : V1.0
+**/
+static void MODH_Opration_11H(void)
+{
+    uint8_t *SendBuf;
+    memcpy(&alarm_data_eland, &msg_receive_buff[3], sizeof(_alarm_mcu_data_t));
+    SendBuf = calloc(4, sizeof(uint8_t));
+    *SendBuf = Uart_Packet_Header;
+    *(SendBuf + 1) = ALARM_SEND_11;
+    *(SendBuf + 2) = 0;
+    *(SendBuf + 3) = Uart_Packet_Trail;
+    USARTx_Send_Data(USART1, SendBuf, 4);
+    free(SendBuf);
+    Alarm_need_Refresh = TRUE;
 }

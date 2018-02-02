@@ -28,18 +28,20 @@ typedef struct
 
 typedef struct
 {
-    mico_rtc_time_t alarm_moment; //
-    int8_t alarm_color;
+    mico_rtc_time_t moment_time; //
+    int8_t color;
     int8_t snooze_count;
+    int8_t alarm_repeat;
     uint8_t alarm_on_days_of_week;
-} _alarm_MCU_data_t;
+} _alarm_mcu_data_t;
 
 typedef enum _eland_mode {
-    ELAND_MODE_NONE,
+    ELAND_MODE_NONE = (uint8_t)0x00,
     ELAND_CLOCK_MON,
     ELAND_CLOCK_ALARM,
     ELAND_NC,
     ELAND_NA,
+    ELAND_AP,
     ELAND_MODE_MAX,
 } _ELAND_MODE_t;
 
@@ -48,8 +50,10 @@ typedef enum _eland_mode {
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
+extern bool Alarm_need_Refresh;
 extern _eland_data_t eland_data;
-extern _alarm_MCU_data_t alarm_data;
+extern _alarm_mcu_data_t alarm_data;
+extern _alarm_mcu_data_t alarm_data_eland;
 extern _ELAND_MODE_t Eland_mode;
 /* Private function prototypes -----------------------------------------------*/
 
@@ -58,5 +62,5 @@ void LCD_Display_Rssi_State(Eland_Status_type_t state);
 void LCD_NetMode(void);
 void LCD_Clock_MON(void);
 void LCD_data_init(void);
-
+void ALARM_Alarm_Refresh(void);
 #endif /*__LCD_DISPLAY_H_*/
