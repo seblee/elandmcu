@@ -96,7 +96,7 @@ void LCD_Display_Rssi_State(Eland_Status_type_t state)
 {
     static LCD_Wifi_Rssi_t rssi_value = LEVEL0;
 
-    HT162x_LCD_TCP_STATE_Set((state > CONNECTED_NET) ? SET : RESET);
+    HT162x_LCD_TCP_STATE_Set((state > CONNECTED_NET) ? RESET : SET);
 
     if ((state == APStatusStart) || (state == APServerStart))
     {
