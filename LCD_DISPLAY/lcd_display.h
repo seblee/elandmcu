@@ -16,15 +16,15 @@
 #include "eland_usart.h"
 #include "ht162x.h"
 /* Private typedef -----------------------------------------------------------*/
-typedef struct
+typedef struct eland_data_2_mcu
 {
     int8_t time_display_format;
+    int8_t night_mode_enabled;
     int8_t brightness_normal;
     int8_t brightness_night;
-    int8_t night_mode_enable;
     uint32_t night_mode_begin_time;
     uint32_t night_mode_end_time;
-} _eland_data_t;
+} __ELAND_DATA_2_MCU_t;
 
 typedef struct
 {
@@ -51,7 +51,8 @@ typedef enum _eland_mode {
 
 /* Private variables ---------------------------------------------------------*/
 extern bool Alarm_need_Refresh;
-extern _eland_data_t eland_data;
+extern bool ELAND_DATA_Refreshed;
+extern __ELAND_DATA_2_MCU_t eland_data;
 extern _alarm_mcu_data_t alarm_data;
 extern _alarm_mcu_data_t alarm_data_eland;
 extern _ELAND_MODE_t Eland_mode;
@@ -63,4 +64,6 @@ void LCD_NetMode(void);
 void LCD_Clock_MON(void);
 void LCD_data_init(void);
 void ALARM_Alarm_Refresh(void);
+void Eland_data_Refresh(void);
+
 #endif /*__LCD_DISPLAY_H_*/

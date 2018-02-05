@@ -24,10 +24,11 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* Private function prototypes -----------------------------------------------*/
-_eland_data_t eland_data;
+__ELAND_DATA_2_MCU_t eland_data;
 _alarm_mcu_data_t alarm_data;
 _alarm_mcu_data_t alarm_data_eland;
 bool Alarm_need_Refresh = TRUE;
+bool ELAND_DATA_Refreshed = TRUE;
 _ELAND_MODE_t Eland_mode = ELAND_MODE_NONE;
 
 const LCD_Digital_Serial_t Clock_number_table[8][2] = {
@@ -57,7 +58,7 @@ void LCD_data_init(void)
     eland_data.time_display_format = 1;
     eland_data.brightness_normal = 80;
     eland_data.brightness_night = 20;
-    eland_data.night_mode_enable = 0;
+    eland_data.night_mode_enabled = 0;
     eland_data.night_mode_begin_time = 79200;
     eland_data.night_mode_end_time = 21600;
 
@@ -596,6 +597,7 @@ void LCD_NetMode(void)
         AlarmOccurred = FALSE;
     }
     ALARM_Alarm_Refresh();
+    Eland_data_Refresh();
 }
 /**
  ****************************************************************************
@@ -628,4 +630,35 @@ void ALARM_Alarm_Refresh(void)
     HT162x_LCD_Time_Display(ALARM_PART, alarm_data_eland.moment_time);
     /*refresh snooze point*/
     HT162x_LCD_Change_Pixel(COM7, SEG13, (FlagStatus)alarm_data_eland.snooze_count);
+
+    RGBLED_Color_Set((__eland_color_t)alarm_data_eland.color);
+}
+/**
+ ****************************************************************************
+ * @Function : void Eland_data_Refresh(void)
+ * @File     : lcd_display.c
+ * @Program  : none
+ * @Created  : 2018/1/11 by seblee
+ * @Brief    : refresh data refresh
+ * @Version  : V1.0
+**/
+void Eland_data_Refresh(void)
+{
+    if (!ELAND_DATA_Refreshed)
+        return;
+    ELAND_DATA_Refreshed = FALSE;
+
+    /*refresh brightness*/
+    if (eland_data.night_mode_enabled)
+    {
+        if (Today_Second < eland_data.night_mode_end_time)
+            RGBLED_Set_Brightness(eland_data.brightness_night);
+        else if (Today_Second < eland_data.night_mode_begin_time)
+            RGBLED_Set_Brightness(eland_data.brightness_normal);
+        else
+            RGBLED_Set_Brightness(eland_data.brightness_night);
+    }
+    else
+        RGBLED_Set_Brightness(eland_data.brightness_normal);
+    Alarm_need_Refresh = TRUE;
 }

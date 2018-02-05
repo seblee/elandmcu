@@ -57,7 +57,6 @@ void main(void)
     RGBLED_CFG();
     /* Reload IWDG counter */
     IWDG_ReloadCounter();
-    RGBLED_Rainbow_Set(RAINBOW_RED);
     /* Infinite loop */
     while (1)
     {

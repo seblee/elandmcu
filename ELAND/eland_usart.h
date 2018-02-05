@@ -27,6 +27,7 @@ typedef enum {
     MCU_FIRM_WARE_09,    /* START MCU FIRM WARE UPDATE*/
     ALARM_READ_10,       /* READ MCU ALARM*/
     ALARM_SEND_11,       /* SEND NEXT ALARM STATE*/
+    ELAND_DATA_0C,       /* SEND ELAND DATA TO MCU*/
 } __msg_function_t;
 
 typedef enum {
@@ -35,6 +36,7 @@ typedef enum {
     FrameTrailSataus,
     FrameEndStatus,
 } __msg_state_t;
+
 /*Eland 状态*/
 typedef enum {
     ElandNone = 0,
@@ -47,14 +49,15 @@ typedef enum {
     WifyConnected,
     WifyDisConnected,
     WifyConnectedFailed,
-    CONNECTED_NET,
     HTTP_Get_HOST_INFO,
     TCP_CN00,
+    CONNECTED_NET,
     TCP_DV00,
     TCP_AL00,
     TCP_HD00,
     TCP_HC00,
 } Eland_Status_type_t;
+
 /**need **/
 typedef enum {
     REFRESH_NONE = 0,

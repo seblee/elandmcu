@@ -43,6 +43,7 @@ static void MODH_Opration_08H(void);
 static void MODH_Opration_09H(void);
 static void MODH_Opration_10H(void);
 static void MODH_Opration_11H(void);
+static void MODH_Opration_0CH(void);
 /* Private functions ---------------------------------------------------------*/
 
 /**
@@ -148,6 +149,9 @@ static void OprationFrame(void)
         break;
     case ALARM_SEND_11:
         MODH_Opration_11H();
+        break;
+    case ELAND_DATA_0C:
+        MODH_Opration_0CH();
         break;
     default:
         break;
@@ -367,7 +371,8 @@ static void MODH_Opration_10H(void)
     *(SendBuf + 3 + sizeof(_alarm_mcu_data_t)) = Uart_Packet_Trail;
     USARTx_Send_Data(USART1, SendBuf, 4 + sizeof(_alarm_mcu_data_t));
     free(SendBuf);
-} /**
+}
+/**
  ****************************************************************************
  * @Function : static void MODH_Opration_11H(void)
  * @File     : eland_usart.c
@@ -380,7 +385,10 @@ static void MODH_Opration_10H(void)
 static void MODH_Opration_11H(void)
 {
     uint8_t *SendBuf;
-    memcpy(&alarm_data_eland, &msg_receive_buff[3], sizeof(_alarm_mcu_data_t));
+    if (msg_receive_buff[2] == sizeof(_alarm_mcu_data_t))
+        memcpy(&alarm_data_eland, &msg_receive_buff[3], sizeof(_alarm_mcu_data_t));
+    else if (msg_receive_buff[2] == 0)
+        memset(&alarm_data_eland, 0, sizeof(_alarm_mcu_data_t));
     SendBuf = calloc(4, sizeof(uint8_t));
     *SendBuf = Uart_Packet_Header;
     *(SendBuf + 1) = ALARM_SEND_11;
@@ -389,4 +397,27 @@ static void MODH_Opration_11H(void)
     USARTx_Send_Data(USART1, SendBuf, 4);
     free(SendBuf);
     Alarm_need_Refresh = TRUE;
+}
+/**
+ ****************************************************************************
+ * @Function : static void MODH_Opration_0CH(void)
+ * @File     : eland_usart.c
+ * @Program  : H08 header fun len  elanddata   tral
+ *                  55     0b len  elanddata   aa
+ * @Created  : 2018/1/11 by seblee
+ * @Brief    : MCU_ALARM TO display
+ * @Version  : V1.0
+**/
+static void MODH_Opration_0CH(void)
+{
+    uint8_t *SendBuf;
+    memcpy(&eland_data, &msg_receive_buff[3], sizeof(__ELAND_DATA_2_MCU_t));
+    SendBuf = calloc(4, sizeof(uint8_t));
+    *SendBuf = Uart_Packet_Header;
+    *(SendBuf + 1) = ELAND_DATA_0C;
+    *(SendBuf + 2) = 0;
+    *(SendBuf + 3) = Uart_Packet_Trail;
+    USARTx_Send_Data(USART1, SendBuf, 4);
+    free(SendBuf);
+    ELAND_DATA_Refreshed = TRUE;
 }
