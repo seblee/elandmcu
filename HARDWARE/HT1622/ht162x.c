@@ -800,15 +800,17 @@ void HT162x_LCD_Time_Display(LCD_Time_Type_t type, mico_rtc_time_t time)
         {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
         {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
     };
+    static uint8_t time_format = 0;
     uint8_t cache;
 
     if ((time_cache[type].hr != time.hr) ||
-        (time_cache[type].min != time.min) /* ||
+        (time_cache[type].min != time.min) ||
+        (time_format != eland_data.time_display_format) /* ||
         (time_cache[type].sec != time.sec)*/)
     {
         cache = time.hr;
-
-        if (eland_data.time_display_format)
+        time_format = eland_data.time_display_format;
+        if (eland_data.time_display_format==1)
         {
             if (time.hr >= 12)
             {

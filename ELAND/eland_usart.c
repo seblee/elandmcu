@@ -42,7 +42,7 @@ static void MODH_Opration_07H(void);
 static void MODH_Opration_08H(void);
 static void MODH_Opration_09H(void);
 static void MODH_Opration_10H(void);
-static void MODH_Opration_11H(void);
+static void MODH_Opration_0BH(void);
 static void MODH_Opration_0CH(void);
 /* Private functions ---------------------------------------------------------*/
 
@@ -144,11 +144,11 @@ static void OprationFrame(void)
     case MCU_FIRM_WARE_09:
         MODH_Opration_09H();
         break;
-    case ALARM_READ_10:
+    case ALARM_READ_0A:
         MODH_Opration_10H();
         break;
-    case ALARM_SEND_11:
-        MODH_Opration_11H();
+    case ALARM_SEND_0B:
+        MODH_Opration_0BH();
         break;
     case ELAND_DATA_0C:
         MODH_Opration_0CH();
@@ -365,7 +365,7 @@ static void MODH_Opration_10H(void)
     uint8_t *SendBuf;
     SendBuf = calloc(4 + sizeof(_alarm_mcu_data_t), sizeof(uint8_t));
     *SendBuf = Uart_Packet_Header;
-    *(SendBuf + 1) = ALARM_READ_10;
+    *(SendBuf + 1) = ALARM_READ_0A;
     *(SendBuf + 2) = sizeof(_alarm_mcu_data_t);
     memcpy((SendBuf + 3), &alarm_data, sizeof(_alarm_mcu_data_t));
     *(SendBuf + 3 + sizeof(_alarm_mcu_data_t)) = Uart_Packet_Trail;
@@ -374,7 +374,7 @@ static void MODH_Opration_10H(void)
 }
 /**
  ****************************************************************************
- * @Function : static void MODH_Opration_11H(void)
+ * @Function : static void MODH_Opration_0BH(void)
  * @File     : eland_usart.c
  * @Program  : H08 header fun len  alarmdata   tral
  *                  55     0b len  alarmdata   aa
@@ -382,7 +382,7 @@ static void MODH_Opration_10H(void)
  * @Brief    :   MCU_ALARM TO display
  * @Version  : V1.0
 **/
-static void MODH_Opration_11H(void)
+static void MODH_Opration_0BH(void)
 {
     uint8_t *SendBuf;
     if (msg_receive_buff[2] == sizeof(_alarm_mcu_data_t))
@@ -391,7 +391,7 @@ static void MODH_Opration_11H(void)
         memset(&alarm_data_eland, 0, sizeof(_alarm_mcu_data_t));
     SendBuf = calloc(4, sizeof(uint8_t));
     *SendBuf = Uart_Packet_Header;
-    *(SendBuf + 1) = ALARM_SEND_11;
+    *(SendBuf + 1) = ALARM_SEND_0B;
     *(SendBuf + 2) = 0;
     *(SendBuf + 3) = Uart_Packet_Trail;
     USARTx_Send_Data(USART1, SendBuf, 4);

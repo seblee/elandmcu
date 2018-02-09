@@ -29,7 +29,7 @@ Enabled=0
 ShowSource=1
 [DebugChecksum]
 <<<<<<< HEAD
-Checksum=1023408275
+Checksum=-750600284
 =======
 Checksum=-2074508045
 >>>>>>> master
@@ -37,6 +37,13 @@ Checksum=-2074508045
 ShowArgs=0
 [Disassembly]
 MixedMode=1
+[struct_types]
+Fmt0=__ELAND_DATA_2_MCU_t-brightness_night	3	0
+Fmt1=__ELAND_DATA_2_MCU_t-brightness_normal	3	0
+Fmt2=__ELAND_DATA_2_MCU_t-night_mode_begin_time	3	0
+Fmt3=__ELAND_DATA_2_MCU_t-night_mode_enabled	3	0
+Fmt4=__ELAND_DATA_2_MCU_t-night_mode_end_time	3	0
+Fmt5=__ELAND_DATA_2_MCU_t-time_display_format	3	0
 [array_types]
 Fmt0=uint8_t[300]	4	0
 Fmt1=uint8_t[5]	4	0
@@ -67,8 +74,7 @@ Category=_ 0
 LoggingEnabled=_ 0
 LogFile=_ ""
 [Breakpoints]
-Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\ELAND\eland_usart.c}.392.5" 1 0 0 0 "" 0 ""
-Count=1
+Count=0
 [Aliases]
 Count=0
 SuppressDialog=0
