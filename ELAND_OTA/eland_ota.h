@@ -27,6 +27,6 @@
 void OTA_bootloader_enable(void);
 void OTA_bootloader_disable(void);
 void OTA_start(void);
-
+void MCU_RESET_STATE(void);
 /****************************/
 #endif /*__ELAND_OTA_H_*/

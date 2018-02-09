@@ -21,7 +21,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* Private function prototypes -----------------------------------------------*/
-static void MCU_RESET_STATE(void);
+
 /* Private functions ---------------------------------------------------------*/
 /**
  ****************************************************************************
@@ -77,7 +77,7 @@ void OTA_bootloader_disable(void)
 #endif
     FLASH_Lock(FLASH_MemType_Data);
 
-    FLASH_ReadByte(0x487e)    ;
+    FLASH_ReadByte(0x487e);
 }
 
 /**
@@ -98,14 +98,14 @@ void OTA_start(void)
 
 /**
  ****************************************************************************
- * @Function : static void MCU_RESET_STATE(void)
+ * @Function : void MCU_RESET_STATE(void)
  * @File     : eland_ota.c
  * @Program  : none
  * @Created  : 2018/1/4 by seblee
  * @Brief    : reset state
  * @Version  : V1.0
 **/
-static void MCU_RESET_STATE(void)
+void MCU_RESET_STATE(void)
 {
     IWDG_ReloadCounter();
     disableInterrupts();

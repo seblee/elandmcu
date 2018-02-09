@@ -75,10 +75,10 @@ void ELAND_RTC_Init(void)
     CLK_LSEConfig(CLK_LSE_ON); // 使能外部LSE OSC（32.768KHz）
     while (CLK_GetFlagStatus(CLK_FLAG_LSERDY) == RESET)
         ; //等待直到LSE稳定
-          /* wait for 1 second for the LSE Stabilisation */
-          //Delay_By_nop(50000);
-          //Delay_By_nop(50000);
-          // Delay_By_nop(10000);
+    /* wait for 1 second for the LSE Stabilisation */
+    // Delay_By_nop(50000);
+    // Delay_By_nop(50000);
+    Delay_By_nop(10000);
 #endif
     //CLK_CCOConfig(CLK_CCOSource_LSE, CLK_CCODiv_1);
 
@@ -98,6 +98,9 @@ void ELAND_RTC_Init(void)
     /* Calendar Configuration */
 
     ELAND_RTC_Read(&CurrentMicoTime);
+    Today_Second = (uint32_t)((uint32_t)CurrentMCUTime.hour * 3600);
+    Today_Second += (uint32_t)((uint32_t)CurrentMCUTime.minute * 60);
+    Today_Second += (uint32_t)CurrentMCUTime.second;
 }
 static void Calendar_Init_register(void)
 {

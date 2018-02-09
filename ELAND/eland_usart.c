@@ -44,6 +44,7 @@ static void MODH_Opration_09H(void);
 static void MODH_Opration_10H(void);
 static void MODH_Opration_0BH(void);
 static void MODH_Opration_0CH(void);
+static void MODH_Opration_0DH(void);
 /* Private functions ---------------------------------------------------------*/
 
 /**
@@ -152,6 +153,9 @@ static void OprationFrame(void)
         break;
     case ELAND_DATA_0C:
         MODH_Opration_0CH();
+        break;
+    case ELAND_RESET_0D:
+        MODH_Opration_0DH();
         break;
     default:
         break;
@@ -412,6 +416,14 @@ static void MODH_Opration_0CH(void)
 {
     uint8_t *SendBuf;
     memcpy(&eland_data, &msg_receive_buff[3], sizeof(__ELAND_DATA_2_MCU_t));
+    eland_data.night_mode_begin_time = msg_receive_buff[7] |
+                                       (uint32_t)msg_receive_buff[8] << 8 |
+                                       (uint32_t)msg_receive_buff[9] << 16 |
+                                       (uint32_t)msg_receive_buff[10] << 24;
+    eland_data.night_mode_end_time = msg_receive_buff[11] |
+                                     (uint32_t)msg_receive_buff[12] << 8 |
+                                     (uint32_t)msg_receive_buff[13] << 16 |
+                                     (uint32_t)msg_receive_buff[14] << 24;
     SendBuf = calloc(4, sizeof(uint8_t));
     *SendBuf = Uart_Packet_Header;
     *(SendBuf + 1) = ELAND_DATA_0C;
@@ -420,4 +432,23 @@ static void MODH_Opration_0CH(void)
     USARTx_Send_Data(USART1, SendBuf, 4);
     free(SendBuf);
     ELAND_DATA_Refreshed = TRUE;
+}
+
+/**
+ ****************************************************************************
+ * @Function : static void MODH_Opration_0DH(void)
+ * @File     : eland_usart.c
+ * @Program  : H08 header fun len   tral
+ *                  55     0b  0     aa
+ * @Created  : 2018/1/11 by seblee
+ * @Brief    : MCU_ALARM TO display
+ * @Version  : V1.0
+**/
+static void MODH_Opration_0DH(void)
+{
+    HT162x_LCD_Clear(RESET);
+    eland_state = ElandNone;
+    RSSI_Value = LEVELNUM;
+    MCU_RESET_STATE();
+    asm("jp 0x8000"); // jump to given entry point address
 }
