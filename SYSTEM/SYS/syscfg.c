@@ -48,4 +48,19 @@ void SysClock_Init(void)
     CLK_SYSCLKSourceSwitchCmd(ENABLE);
     CLK_SYSCLKDivConfig(CLK_SYSCLKDiv_1); //設置分頻
 #endif
+
+#ifndef RTC_LSE
+    CLK_LSICmd(ENABLE); // 使能内部LSI OSC（38KHz）
+    while (CLK_GetFlagStatus(CLK_FLAG_LSIRDY) == RESET)
+        ; //等待直到LSI稳定
+#else
+    CLK_LSEConfig(CLK_LSE_ON); // 使能外部LSE OSC（32.768KHz）
+    while (CLK_GetFlagStatus(CLK_FLAG_LSERDY) == RESET)
+        ; //等待直到LSE稳定
+    /* wait for 1 second for the LSE Stabilisation */
+    // Delay_By_nop(50000);
+    // Delay_By_nop(50000);
+    Delay_By_nop(10000);
+#endif
+    //CLK_CCOConfig(CLK_CCOSource_LSE, CLK_CCODiv_1);
 }

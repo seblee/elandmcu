@@ -800,17 +800,16 @@ void HT162x_LCD_Time_Display(LCD_Time_Type_t type, mico_rtc_time_t time)
         {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
         {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
     };
-    static uint8_t time_format = 0;
+    static uint8_t time_format[2] = {0};
     uint8_t cache;
 
     if ((time_cache[type].hr != time.hr) ||
         (time_cache[type].min != time.min) ||
-        (time_format != eland_data.time_display_format) /* ||
+        (time_format[type] != eland_data.time_display_format) /* ||
         (time_cache[type].sec != time.sec)*/)
     {
         cache = time.hr;
-        time_format = eland_data.time_display_format;
-        if (eland_data.time_display_format==1)
+        if (eland_data.time_display_format == 1)
         {
             if (time.hr >= 12)
             {
@@ -841,5 +840,6 @@ void HT162x_LCD_Time_Display(LCD_Time_Type_t type, mico_rtc_time_t time)
         HT162x_LCD_Change_Pixel(COM7, SEG31, SET);
         HT162x_LCD_Change_Pixel(COM7, SEG30, SET);
     }
+    time_format[type] = eland_data.time_display_format;
     memcpy(&time_cache[type], &time, sizeof(mico_rtc_time_t));
 }

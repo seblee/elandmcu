@@ -99,7 +99,9 @@ void LCD_Display_Rssi_State(Eland_Status_type_t state)
 
     HT162x_LCD_TCP_STATE_Set((state > CONNECTED_NET) ? RESET : SET);
 
-    if ((state == APStatusStart) || (state == APServerStart))
+    if ((state == APStatusStart) ||
+        (state == APServerStart) ||
+        (state == ELAPPConnected))
     {
         if (rssi_value == LEVEL0)
             rssi_value = LEVEL4;

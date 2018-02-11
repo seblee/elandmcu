@@ -67,21 +67,6 @@ static void Get_built_DateTime(_eland_date_time_t *time);
 **/
 void ELAND_RTC_Init(void)
 {
-#ifndef RTC_LSE
-    CLK_LSICmd(ENABLE); // 使能内部LSI OSC（38KHz）
-    while (CLK_GetFlagStatus(CLK_FLAG_LSIRDY) == RESET)
-        ; //等待直到LSI稳定
-#else
-    CLK_LSEConfig(CLK_LSE_ON); // 使能外部LSE OSC（32.768KHz）
-    while (CLK_GetFlagStatus(CLK_FLAG_LSERDY) == RESET)
-        ; //等待直到LSE稳定
-    /* wait for 1 second for the LSE Stabilisation */
-    // Delay_By_nop(50000);
-    // Delay_By_nop(50000);
-    Delay_By_nop(10000);
-#endif
-    //CLK_CCOConfig(CLK_CCOSource_LSE, CLK_CCODiv_1);
-
     CLK_PeripheralClockConfig(CLK_Peripheral_RTC, ENABLE);
     /* Select LSE (32.768 KHz) as RTC clock source */
     CLK_RTCClockConfig(CLK_RTCCLKSource_LSE, CLK_RTCCLKDiv_1);
@@ -96,11 +81,6 @@ void ELAND_RTC_Init(void)
     RTC_SetWakeUpCounter(1023);
     RTC_WakeUpCmd(ENABLE);
     /* Calendar Configuration */
-
-    ELAND_RTC_Read(&CurrentMicoTime);
-    Today_Second = (uint32_t)((uint32_t)CurrentMCUTime.hour * 3600);
-    Today_Second += (uint32_t)((uint32_t)CurrentMCUTime.minute * 60);
-    Today_Second += (uint32_t)CurrentMCUTime.second;
 }
 static void Calendar_Init_register(void)
 {
@@ -197,6 +177,7 @@ void RTC_Time_Set(_eland_date_time_t time)
 {
     RTC_TimeTypeDef TimeStr;
     RTC_DateTypeDef DateStr;
+    ELAND_RTC_Init();
 
     RTC_DateStructInit(&DateStr);
     DateStr.RTC_WeekDay = time.week;
