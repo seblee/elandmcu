@@ -624,6 +624,15 @@ void ALARM_Alarm_Refresh(void)
         for (i = 0; i < 7; i++)
             HT162x_LCD_Change_Pixel(COM7, ALARM_PART_Week_seg[i], (FlagStatus)(((1 << i) & alarm_data_eland.alarm_on_days_of_week)));
     }
+    /*refresh alarm date*/
+    HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_11), ((alarm_data_eland.moment_time.year / 10) % 10)); //year
+    HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_12), (alarm_data_eland.moment_time.year % 10));        //year
+
+    HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_13), ((alarm_data_eland.moment_time.month / 10) % 10)); //month
+    HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_14), (alarm_data_eland.moment_time.month % 10));        //month
+
+    HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_15), ((alarm_data_eland.moment_time.date / 10) % 10)); //day
+    HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_16), (alarm_data_eland.moment_time.date % 10));        //day
     /*refresh alarm time*/
     HT162x_LCD_Time_Display(ALARM_PART, alarm_data_eland.moment_time);
     /*refresh snooze point*/

@@ -33,18 +33,18 @@ MCU_Refresh_type_t MCU_Refreshed = REFRESH_NONE;
 
 /* Private function prototypes -----------------------------------------------*/
 static void OprationFrame(void);
-static void MODH_Opration_02H(void);
-static void MODH_Opration_03H(void);
-static void MODH_Opration_04H(void);
-static void MODH_Opration_05H(void);
-static void MODH_Opration_06H(void);
-static void MODH_Opration_07H(void);
-static void MODH_Opration_08H(void);
-static void MODH_Opration_09H(void);
-static void MODH_Opration_10H(void);
-static void MODH_Opration_0BH(void);
-static void MODH_Opration_0CH(void);
-static void MODH_Opration_0DH(void);
+static void MODH_Opration_02H(void); /* READ MCU KEY STATE*/
+static void MODH_Opration_03H(void); /* SEND ELAND TIME*/
+static void MODH_Opration_04H(void); /* READ MCU TIME*/
+static void MODH_Opration_05H(void); /* SEND ELAND STATES*/
+static void MODH_Opration_06H(void); /* SEND ELAND FIRMWARE VERSION*/
+static void MODH_Opration_07H(void); /* READ MUC FIRMWARE VERSION*/
+static void MODH_Opration_08H(void); /* SEND WIFI LINK STATE*/
+static void MODH_Opration_09H(void); /* START MCU FIRM WARE UPDATE*/
+static void MODH_Opration_10H(void); /* READ MCU ALARM*/
+static void MODH_Opration_0BH(void); /* SEND NEXT ALARM STATE*/
+static void MODH_Opration_0CH(void); /* SEND ELAND DATA TO MCU*/
+static void MODH_Opration_0DH(void); /* RESET SYSTEM */
 /* Private functions ---------------------------------------------------------*/
 
 /**
