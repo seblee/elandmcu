@@ -154,7 +154,7 @@ typedef enum {
 
 typedef enum {
     TIME_PART = 0,
-    ALARM_PART,
+    ALARM_PART = 1,
     WEEKTYPEMAX,
 } LCD_Time_Type_t;
 
@@ -171,7 +171,7 @@ typedef enum {
 
 typedef enum {
     AM = 0,
-    PM,
+    PM = 1,
     AMPMMAX,
     AMPMNUM,
 } LCD_AMPM_Distinguish_t;
