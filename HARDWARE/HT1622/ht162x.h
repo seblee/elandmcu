@@ -135,6 +135,20 @@ typedef enum {
     Serial_MAX,
 } LCD_Digital_Serial_t;
 
+typedef enum {
+    TENS = 0X00,
+    UNITS,
+} __Double_Digits_p_t;
+
+typedef enum {
+    DIGIT_YEAR = 0X00,
+    DIGIT_MONTH,
+    DIGIT_DAY,
+    DIGIT_HOUR,
+    DIGIT_MINUTE,
+    DIGIT_SECOND,
+} __Digits_p_t;
+
 typedef union {
     uint16_t WORD;
     uint8_t BYTE[2];

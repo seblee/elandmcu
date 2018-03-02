@@ -91,6 +91,18 @@ const LCD_SEGx_TypeDef AMPM_seg[2][2] = {
     /*AM    PM */
     {SEG38, SEG39},
 };
+const LCD_Digital_Serial_t Double_Digits_Position[2][10] = {
+    /*AM    PM */
+    {Serial_01, Serial_03, Serial_05, Serial_07, Serial_09, Serial_11, Serial_13, Serial_15, Serial_17, Serial_19},
+    /*AM    PM */
+    {Serial_02, Serial_04, Serial_06, Serial_08, Serial_10, Serial_12, Serial_14, Serial_16, Serial_18, Serial_20},
+};
+const uint8_t Position[2][5] = {
+    /*AM    PM */
+    {0, 1, 2, 3, 4},
+    /*AM    PM */
+    {5, 6, 7, 8, 9},
+};
 
 /**
  ****************************************************************************
@@ -599,6 +611,24 @@ void HT162x_LCD_Num_Set(LCD_Digital_Serial_t Serial, u8 data)
 }
 /**
  ****************************************************************************
+ * @Function : void HT162x_LCD_Double_Digits_Write(uint8_t position,uint8_t num)
+ * @File     : ht162x.c
+ * @Program  : position:the posoition of num   num:number to write
+ * @Created  : 2018/3/2 by seblee
+ * @Brief    :
+ * @Version  : V1.0
+**/
+void HT162x_LCD_Double_Digits_Write(uint8_t position, uint8_t num)
+{
+    if (num < 10)
+        HT162x_LCD_Num_Set(Double_Digits_Position[TENS][position], 10);
+    else
+        HT162x_LCD_Num_Set(Double_Digits_Position[TENS][position], ((num / 10) % 10));
+    HT162x_LCD_Num_Set(Double_Digits_Position[UNITS][position], (num % 10));
+}
+
+/**
+ ****************************************************************************
  * @Function : void HT162x_LCD_Week_Set(LCD_Time_Type_t type, LCD_Week_Day_t day)
  * @File     : ht162x.c
  * @Program  : type: TIME_PART/ALARM_PART day : The day of the week
@@ -606,7 +636,6 @@ void HT162x_LCD_Num_Set(LCD_Digital_Serial_t Serial, u8 data)
  * @Brief    : set week dat
  * @Version  : V1.0
 **/
-
 void HT162x_LCD_Week_Set(LCD_Time_Type_t type, LCD_Week_Day_t day)
 {
     uint8_t i;
@@ -737,14 +766,12 @@ void HT162x_LCD_Date_Display(LCD_Time_Type_t type, mico_rtc_time_t time)
         (time_cache[type].date != time.date) ||
         (time_cache[type].weekday != time.weekday))
     {
-        HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_01 + 10 * type), ((time.year / 10) % 10)); //year
-        HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_02 + 10 * type), (time.year % 10));        //year
-
-        HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_03 + 10 * type), ((time.month / 10) % 10)); //month
-        HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_04 + 10 * type), (time.month % 10));        //month
-
-        HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_05 + 10 * type), ((time.date / 10) % 10)); //day
-        HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_06 + 10 * type), (time.date % 10));        //day
+        /*****hour*******/
+        HT162x_LCD_Double_Digits_Write(Position[type][DIGIT_YEAR], time.year);
+        /****minute******/
+        HT162x_LCD_Double_Digits_Write(Position[type][DIGIT_MONTH], time.month);
+        /****minute******/
+        HT162x_LCD_Double_Digits_Write(Position[type][DIGIT_DAY], time.date);
 
         if (type == TIME_PART)
         {
@@ -794,12 +821,19 @@ void HT162x_LCD_Time_Display(LCD_Time_Type_t type, mico_rtc_time_t time)
         }
         else
             HT162x_LCD_AMPM_Set(type, AMPMMAX);
+        /*****hour*******/
+        HT162x_LCD_Double_Digits_Write(Position[type][DIGIT_HOUR], cache);
+        /****minute******/
+        HT162x_LCD_Double_Digits_Write(Position[type][DIGIT_MINUTE], time.min);
 
-        HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_07 + 10 * type), ((cache / 10) % 10)); //hour
-        HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_08 + 10 * type), (cache % 10));        //hour
+        // /*****hour*******/
 
-        HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_09 + 10 * type), ((time.min / 10) % 10)); //min
-        HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_10 + 10 * type), (time.min % 10));        //min
+        // HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_07 + 10 * type), ((cache / 10) % 10));
+        // HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_08 + 10 * type), (cache % 10));
+        // /****minute******/
+
+        // HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_09 + 10 * type), ((time.min / 10) % 10));
+        // HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_10 + 10 * type), (time.min % 10));
     }
     if (type == ALARM_PART)
     {

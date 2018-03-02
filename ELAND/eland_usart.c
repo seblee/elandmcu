@@ -449,6 +449,8 @@ static void MODH_Opration_0DH(void)
     HT162x_LCD_Clear(RESET);
     eland_state = ElandNone;
     RSSI_Value = LEVELNUM;
+    memset(&alarm_data_eland, 0, sizeof(_alarm_mcu_data_t));
+
     MCU_RESET_STATE();
     asm("jp 0x8000"); // jump to given entry point address
 }
