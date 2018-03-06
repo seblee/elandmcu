@@ -81,6 +81,7 @@ void RTC_Time_Set(_eland_date_time_t time);
 void ELAND_RTC_Read(mico_rtc_time_t *time);
 void ELAND_Time_Convert(mico_rtc_time_t *mico_time, _eland_date_time_t *mcu_time, __mico2mcu_t mico2mcu);
 RTC_Weekday_TypeDef CaculateWeekDay(int y, int m, int d);
+FlagStatus RTC_Compare_Time(mico_rtc_time_t timeAlarm, mico_rtc_time_t timeRTC);
 /* Private functions ---------------------------------------------------------*/
 
 #endif /*__RTC_H_*/

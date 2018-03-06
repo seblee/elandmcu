@@ -158,7 +158,7 @@ void LCD_Clock_MON(void)
         HT162x_LCD_Week_Set(ALARM_PART, WEEKDAYMAX);
         /**SHOW the line**/
         HT162x_LCD_Change_Pixel(COM7, SEG33, SET);
-
+        /**backup mode**/
         Eland_modeBak = Eland_mode;
         time_set_mode = 0;
     }
@@ -568,13 +568,6 @@ void LCD_NetMode(void)
             HT162x_LCD_Change_Pixel(COM7, SEG11, SET);
         /*clear alarm -- snooze*/
         HT162x_LCD_Change_Pixel(COM7, SEG13, RESET);
-        /*clear alarm -- alarm date and time */
-        // for (i = (uint8_t)Serial_11; i < (uint8_t)Serial_17; i++)
-        //     HT162x_LCD_Num_Set((LCD_Digital_Serial_t)i, 10);
-        /**refresh alarm time**/
-        //HT162x_LCD_Time_Display(ALARM_PART, alarm_data.moment_time);
-        /*clear alarm -- alarm week*/
-        HT162x_LCD_Week_Set(ALARM_PART, WEEKDAYMAX);
         /**SHOW the line**/
         HT162x_LCD_Change_Pixel(COM7, SEG33, SET);
 
@@ -618,12 +611,13 @@ void ALARM_Alarm_Refresh(void)
     /**refresh week**/
     for (i = 0; i < 7; i++)
         HT162x_LCD_Change_Pixel(COM7, ALARM_PART_Week_seg[i], (FlagStatus)(((1 << i) & alarm_data_eland.alarm_on_days_of_week)));
-
     /*refresh alarm time*/
     HT162x_LCD_Time_Display(ALARM_PART, alarm_data_eland.moment_time);
     /*refresh snooze point*/
-    HT162x_LCD_Change_Pixel(COM7, SEG13, (FlagStatus)alarm_data_eland.snooze_count);
-
+    HT162x_LCD_Change_Pixel(COM7, SEG13, (FlagStatus)(alarm_data_eland.snooze_count > 1));
+    /*next alarm display*/
+    HT162x_LCD_Change_Pixel(COM7, SEG11, RTC_Compare_Time(alarm_data_eland.moment_time, CurrentMicoTime));
+    /*set alarm color*/
     RGBLED_Color_Set((__eland_color_t)alarm_data_eland.color);
 }
 /**
@@ -640,20 +634,25 @@ void Eland_data_Refresh(void)
     if (!ELAND_DATA_Refreshed)
         return;
     ELAND_DATA_Refreshed = FALSE;
-
     /*refresh brightness*/
     /* back light turn brightest */
-
-    if (eland_data.night_mode_enabled)
+    if (Key_Light_counter < SW_LIGHT_TIMES)
     {
-        if (Today_Second < eland_data.night_mode_end_time)
-            RGBLED_Set_Brightness(eland_data.brightness_night);
-        else if (Today_Second < eland_data.night_mode_begin_time)
-            RGBLED_Set_Brightness(eland_data.brightness_normal);
-        else
-            RGBLED_Set_Brightness(eland_data.brightness_night);
+        RGBLED_Set_Brightness(100);
     }
     else
-        RGBLED_Set_Brightness(eland_data.brightness_normal);
+    {
+        if (eland_data.night_mode_enabled)
+        {
+            if (Today_Second < eland_data.night_mode_end_time)
+                RGBLED_Set_Brightness(eland_data.brightness_night);
+            else if (Today_Second < eland_data.night_mode_begin_time)
+                RGBLED_Set_Brightness(eland_data.brightness_normal);
+            else
+                RGBLED_Set_Brightness(eland_data.brightness_night);
+        }
+        else
+            RGBLED_Set_Brightness(eland_data.brightness_normal);
+    }
     Alarm_need_Refresh = TRUE;
 }

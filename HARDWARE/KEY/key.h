@@ -59,14 +59,16 @@ typedef enum {
 #define ELAND_KEY_ALARM_PIN GPIO_Pin_4
 
 #define LONG_PRESS_TIMES 250 //100×20ms=2s
+#define SW_LIGHT_TIMES 250   //250×20=5s
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-extern uint16_t Key_Down_Trg;    //按鍵單次狀態 按下執行一次
-extern uint16_t Key_Up_Trg;      //按鍵短按 放開執行一次
-extern uint16_t Key_Count;       //按鍵長按狀態
-extern uint16_t Key_Restain;     //按鍵按捺狀態
-extern uint16_t Key_Restain_Trg; //按鍵按捺狀態 按下執行一次
+extern uint16_t Key_Down_Trg;      //按鍵單次狀態 按下執行一次
+extern uint16_t Key_Up_Trg;        //按鍵短按 放開執行一次
+extern uint16_t Key_Count;         //按鍵長按狀態
+extern uint16_t Key_Restain;       //按鍵按捺狀態
+extern uint16_t Key_Restain_Trg;   //按鍵按捺狀態 按下執行一次
+extern uint16_t Key_Light_counter; //SW_light mode counter
 /* Private function prototypes -----------------------------------------------*/
 void ElandKeyInit(void); //按键初始化
 void Eland_KeyState_Read(void);

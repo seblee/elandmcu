@@ -51,6 +51,7 @@ const uint8_t DayOfMon[12][2] = {
     {30, 30}, //11
     {31, 31}, //12
 };
+
 /* Private function prototypes -----------------------------------------------*/
 static ErrorStatus Calendar_Init(void);
 static void Calendar_Init_register(void);
@@ -370,4 +371,47 @@ RTC_Weekday_TypeDef CaculateWeekDay(int y, int m, int d)
 uint32_t RTC_Get_Time_Seconds(void)
 {
     return Today_Second;
+}
+/**
+ ****************************************************************************
+ * @Function : FlagStatus RTC_Compare_Time(mico_rtc_time_t timeAlarm,mico_rtc_time_t timeRTC)
+ * @File     : rtc.c
+ * @Program  : timeAlarm & timeRTC:time to Convert
+ * @Created  : 2018/3/3 by seblee
+ * @Brief    : if((timeAlarm > timeRTC) & ((timeAlarm - timeRTC) < 86400)) return true
+ * @Version  : V1.0
+**/
+FlagStatus RTC_Compare_Time(mico_rtc_time_t timeAlarm, mico_rtc_time_t timeRTC)
+{
+    uint8_t i;
+    int8_t year;
+    uint32_t second_Alarm = 0, second_RTC = 0;
+
+    year = timeAlarm.year - timeRTC.year;
+    if ((year > 1) || (year < 0))
+        return RESET;
+    for (i = 1; i < timeAlarm.month; i++)
+    {
+        second_Alarm += DayOfMon[i - 1][(timeAlarm.year % 4 == 0) ? 1 : 0] * 86400;
+    }
+    second_Alarm += (timeAlarm.date - 1) * 86400;
+    second_Alarm += timeAlarm.hr * 3600;
+    second_Alarm += timeAlarm.min * 60;
+    second_Alarm += timeAlarm.sec;
+
+    for (i = 1; i < timeRTC.month; i++)
+    {
+        second_RTC += DayOfMon[i - 1][(timeRTC.year % 4 == 0) ? 1 : 0] * 86400;
+    }
+    second_RTC += (timeRTC.date - 1) * 86400;
+    second_RTC += timeRTC.hr * 3600;
+    second_RTC += timeRTC.min * 60;
+    second_RTC += timeRTC.sec;
+    if (year == 1)
+        second_RTC += (timeRTC.year % 4 == 0) ? 31622400 : 31536000;
+
+    if (((second_Alarm - second_RTC) > 86400) ||
+        (second_Alarm < second_RTC))
+        return RESET;
+    return SET;
 }

@@ -11,7 +11,7 @@
 **/
 /* Private include -----------------------------------------------------------*/
 #include "key.h"
-
+#include "lcd_display.h"
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
@@ -24,7 +24,7 @@ uint16_t Key_Up_Trg = 0;      //按鍵短按 放開
 uint16_t Key_Count = 0;       //按鍵長按狀態 按下/放開狀態
 uint16_t Key_Restain = 0;     //按鍵按捺狀態
 uint16_t Key_Restain_Trg = 0; //按鍵按捺狀態
-
+uint16_t Key_Light_counter = 0;
 /* Private function prototypes -----------------------------------------------*/
 static void Eland_Key_Long_Press_State(void);
 /* Private functions ---------------------------------------------------------*/
@@ -103,6 +103,20 @@ void Eland_KeyState_Read(void)
         ReadData = KeyValue_present ^ 0x01ff;
         Key_Down_Trg = ReadData & (ReadData ^ Key_Count);
         Key_Count = ReadData;
+    }
+    if ((Key_Down_Trg & KEY_Snooze) ||
+        (Key_Down_Trg & KEY_Alarm) ||
+        (Key_Down_Trg & KEY_Set) ||
+        (Key_Down_Trg & KEY_Add) ||
+        (Key_Down_Trg & KEY_Minus))
+    {
+        Key_Light_counter = 0;
+        ELAND_DATA_Refreshed = TRUE;
+    }
+    else if (Key_Light_counter < 0xffff)
+    {
+        if (Key_Light_counter++ == SW_LIGHT_TIMES)
+            ELAND_DATA_Refreshed = TRUE;
     }
     KeyValue_last = KeyValue_present;
     Eland_Key_Long_Press_State();
