@@ -41,7 +41,7 @@ static void MODH_Opration_06H(void); /* SEND ELAND FIRMWARE VERSION*/
 static void MODH_Opration_07H(void); /* READ MUC FIRMWARE VERSION*/
 static void MODH_Opration_08H(void); /* SEND WIFI LINK STATE*/
 static void MODH_Opration_09H(void); /* START MCU FIRM WARE UPDATE*/
-static void MODH_Opration_10H(void); /* READ MCU ALARM*/
+static void MODH_Opration_0AH(void); /* READ MCU ALARM*/
 static void MODH_Opration_0BH(void); /* SEND NEXT ALARM STATE*/
 static void MODH_Opration_0CH(void); /* SEND ELAND DATA TO MCU*/
 static void MODH_Opration_0DH(void); /* RESET SYSTEM */
@@ -146,7 +146,7 @@ static void OprationFrame(void)
         MODH_Opration_09H();
         break;
     case ALARM_READ_0A:
-        MODH_Opration_10H();
+        MODH_Opration_0AH();
         break;
     case ALARM_SEND_0B:
         MODH_Opration_0BH();
@@ -357,21 +357,21 @@ static void MODH_Opration_09H(void)
 }
 /**
  ****************************************************************************
- * @Function : static void MODH_Opration_10H(void)
+ * @Function : static void MODH_Opration_0AH(void)
  * @File     : eland_usart.c
  * @Program  : H08 header fun len   tral
  * @Created  : 2018/1/11 by seblee
  * @Brief    : SEND MCU_ALARM TO ELAND
  * @Version  : V1.0
 **/
-static void MODH_Opration_10H(void)
+static void MODH_Opration_0AH(void)
 {
     uint8_t *SendBuf;
     SendBuf = calloc(4 + sizeof(_alarm_mcu_data_t), sizeof(uint8_t));
     *SendBuf = Uart_Packet_Header;
     *(SendBuf + 1) = ALARM_READ_0A;
     *(SendBuf + 2) = sizeof(_alarm_mcu_data_t);
-    memcpy((SendBuf + 3), &alarm_data, sizeof(_alarm_mcu_data_t));
+    memcpy((SendBuf + 3), &alarm_data_simple, sizeof(_alarm_mcu_data_t));
     *(SendBuf + 3 + sizeof(_alarm_mcu_data_t)) = Uart_Packet_Trail;
     USARTx_Send_Data(USART1, SendBuf, 4 + sizeof(_alarm_mcu_data_t));
     free(SendBuf);
@@ -390,9 +390,9 @@ static void MODH_Opration_0BH(void)
 {
     uint8_t *SendBuf;
     if (msg_receive_buff[2] == sizeof(_alarm_mcu_data_t))
-        memcpy(&alarm_data_eland, &msg_receive_buff[3], sizeof(_alarm_mcu_data_t));
+        memcpy(&alarm_data_display, &msg_receive_buff[3], sizeof(_alarm_mcu_data_t));
     else if (msg_receive_buff[2] == 0)
-        memset(&alarm_data_eland, 0, sizeof(_alarm_mcu_data_t));
+        memset(&alarm_data_display, 0, sizeof(_alarm_mcu_data_t));
     SendBuf = calloc(4, sizeof(uint8_t));
     *SendBuf = Uart_Packet_Header;
     *(SendBuf + 1) = ALARM_SEND_0B;
@@ -449,7 +449,7 @@ static void MODH_Opration_0DH(void)
     HT162x_LCD_Clear(RESET);
     eland_state = ElandNone;
     RSSI_Value = LEVELNUM;
-    memset(&alarm_data_eland, 0, sizeof(_alarm_mcu_data_t));
+    memset(&alarm_data_display, 0, sizeof(_alarm_mcu_data_t));
 
     MCU_RESET_STATE();
     asm("jp 0x8000"); // jump to given entry point address

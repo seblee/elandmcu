@@ -53,8 +53,8 @@ typedef enum _eland_mode {
 extern bool Alarm_need_Refresh;
 extern bool ELAND_DATA_Refreshed;
 extern __ELAND_DATA_2_MCU_t eland_data;
-extern _alarm_mcu_data_t alarm_data;
-extern _alarm_mcu_data_t alarm_data_eland;
+extern _alarm_mcu_data_t alarm_data_simple;
+extern _alarm_mcu_data_t alarm_data_display;
 extern _ELAND_MODE_t Eland_mode;
 /* Private function prototypes -----------------------------------------------*/
 

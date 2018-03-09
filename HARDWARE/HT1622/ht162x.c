@@ -98,10 +98,8 @@ const LCD_Digital_Serial_t Double_Digits_Position[2][10] = {
     {Serial_02, Serial_04, Serial_06, Serial_08, Serial_10, Serial_12, Serial_14, Serial_16, Serial_18, Serial_20},
 };
 const uint8_t Position[2][5] = {
-    /*AM    PM */
-    {0, 1, 2, 3, 4},
-    /*AM    PM */
-    {5, 6, 7, 8, 9},
+    {0, 1, 2, 3, 4}, //time part
+    {5, 6, 7, 8, 9}, //alarm part
 };
 
 /**

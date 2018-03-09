@@ -256,6 +256,7 @@ void HT162x_LCD_TCP_STATE_Set(FlagStatus state);
 void HT162x_LCD_AMPM_Set(LCD_Time_Type_t type, LCD_AMPM_Distinguish_t value);
 void HT162x_LCD_Time_Display(LCD_Time_Type_t type, mico_rtc_time_t time);
 void HT162x_LCD_Date_Display(LCD_Time_Type_t type, mico_rtc_time_t time);
+void HT162x_LCD_Double_Digits_Write(uint8_t position, uint8_t num);
 /* Private functions ---------------------------------------------------------*/
 
 #endif /*__HT162x_H_*/
