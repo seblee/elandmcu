@@ -54,7 +54,7 @@ const uint8_t DayOfMon[12][2] = {
 
 uint32_t second_Alarm = 0, second_RTC = 0;
 /* Private function prototypes -----------------------------------------------*/
-static ErrorStatus Calendar_Init(void);
+//static ErrorStatus Calendar_Init(void);
 static void Calendar_Init_register(void);
 static void Get_built_DateTime(_eland_date_time_t *time);
 /* Private functions ---------------------------------------------------------*/
@@ -120,7 +120,7 @@ static void Calendar_Init_register(void)
   * @param  None
   * @retval None
   */
-static ErrorStatus Calendar_Init(void)
+  ErrorStatus Calendar_Init(void)
 {
     uint8_t times = 0;
     ErrorStatus err;

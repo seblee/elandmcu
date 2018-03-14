@@ -68,15 +68,16 @@ void main(void)
         else if ((Key_Count & KEY_MON) ||
                  (Key_Count & KEY_AlarmMode)) //clock MON mode
             LCD_Clock_MON();
-
-        while (1)
-        {
-            if (Timer_Counter_1ms > 20) //20ms
+        else
+             LCD_OtherMode();
+            while (1)
             {
-                Timer_Counter_1ms = 0;
-                break;
+                if (Timer_Counter_1ms > 20) //20ms
+                {
+                    Timer_Counter_1ms = 0;
+                    break;
+                }
             }
-        }
     }
 }
 #ifdef USE_FULL_ASSERT

@@ -611,15 +611,23 @@ void HT162x_LCD_Num_Set(LCD_Digital_Serial_t Serial, u8 data)
  ****************************************************************************
  * @Function : void HT162x_LCD_Double_Digits_Write(uint8_t position,uint8_t num)
  * @File     : ht162x.c
- * @Program  : position:the posoition of num   num:number to write
+ * @Program  : position:the posoition of num
+ *             num:number to write
+ *             mode: 1 2
  * @Created  : 2018/3/2 by seblee
  * @Brief    :
  * @Version  : V1.0
 **/
-void HT162x_LCD_Double_Digits_Write(uint8_t position, uint8_t num)
+void HT162x_LCD_Double_Digits_Write(uint8_t position, uint8_t num, uint8_t mode)
 {
-    if (num < 10)
+    if (mode == 0)
+    {
         HT162x_LCD_Num_Set(Double_Digits_Position[TENS][position], 10);
+        HT162x_LCD_Num_Set(Double_Digits_Position[UNITS][position], 10);
+        return;
+    }
+    if (num < 10)
+        HT162x_LCD_Num_Set(Double_Digits_Position[TENS][position], (mode == 1) ? 10 : 0);
     else
         HT162x_LCD_Num_Set(Double_Digits_Position[TENS][position], ((num / 10) % 10));
     HT162x_LCD_Num_Set(Double_Digits_Position[UNITS][position], (num % 10));
@@ -764,12 +772,12 @@ void HT162x_LCD_Date_Display(LCD_Time_Type_t type, mico_rtc_time_t time)
         (time_cache[type].date != time.date) ||
         (time_cache[type].weekday != time.weekday))
     {
-        /*****hour*******/
-        HT162x_LCD_Double_Digits_Write(Position[type][DIGIT_YEAR], time.year);
-        /****minute******/
-        HT162x_LCD_Double_Digits_Write(Position[type][DIGIT_MONTH], time.month);
-        /****minute******/
-        HT162x_LCD_Double_Digits_Write(Position[type][DIGIT_DAY], time.date);
+        /*****year*******/
+        HT162x_LCD_Double_Digits_Write(Position[type][DIGIT_YEAR], time.year, 1);
+        /*****month******/
+        HT162x_LCD_Double_Digits_Write(Position[type][DIGIT_MONTH], time.month, 1);
+        /*****date******/
+        HT162x_LCD_Double_Digits_Write(Position[type][DIGIT_DAY], time.date, 1);
 
         if (type == TIME_PART)
         {
@@ -820,16 +828,14 @@ void HT162x_LCD_Time_Display(LCD_Time_Type_t type, mico_rtc_time_t time)
         else
             HT162x_LCD_AMPM_Set(type, AMPMMAX);
         /*****hour*******/
-        HT162x_LCD_Double_Digits_Write(Position[type][DIGIT_HOUR], cache);
+        HT162x_LCD_Double_Digits_Write(Position[type][DIGIT_HOUR], cache, 1);
         /****minute******/
-        HT162x_LCD_Double_Digits_Write(Position[type][DIGIT_MINUTE], time.min);
+        HT162x_LCD_Double_Digits_Write(Position[type][DIGIT_MINUTE], time.min, 2);
 
         // /*****hour*******/
-
         // HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_07 + 10 * type), ((cache / 10) % 10));
         // HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_08 + 10 * type), (cache % 10));
         // /****minute******/
-
         // HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_09 + 10 * type), ((time.min / 10) % 10));
         // HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_10 + 10 * type), (time.min % 10));
     }
