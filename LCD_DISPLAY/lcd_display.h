@@ -56,6 +56,8 @@ extern __ELAND_DATA_2_MCU_t eland_data;
 extern _alarm_mcu_data_t alarm_data_simple;
 extern _alarm_mcu_data_t alarm_data_display;
 extern _ELAND_MODE_t Eland_mode;
+extern uint8_t alarm_jump_flag;
+
 /* Private function prototypes -----------------------------------------------*/
 
 /* Private functions ---------------------------------------------------------*/
