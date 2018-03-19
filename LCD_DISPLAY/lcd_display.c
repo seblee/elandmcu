@@ -479,15 +479,11 @@ void LCD_Clock_MON(void)
     {
         HT162x_LCD_Time_Display(TIME_PART, CurrentMicoTime);
         HT162x_LCD_Date_Display(TIME_PART, CurrentMicoTime);
-        /* back light turn brightest */
-        if ((Today_Second > eland_data.night_mode_begin_time) || (Today_Second < eland_data.night_mode_end_time))
-            RGBLED_Set_Brightness(eland_data.brightness_night);
-        else
-            RGBLED_Set_Brightness(eland_data.brightness_normal);
-
         AlarmOccurred = FALSE;
+        ELAND_DATA_Refreshed = TRUE;
     }
     ALARM_Alarm_Refresh();
+    Eland_data_Refresh();
 }
 /**
  ****************************************************************************
@@ -526,6 +522,7 @@ void LCD_NetMode(void)
         HT162x_LCD_Time_Display(TIME_PART, CurrentMicoTime);
         HT162x_LCD_Date_Display(TIME_PART, CurrentMicoTime);
         AlarmOccurred = FALSE;
+        ELAND_DATA_Refreshed = TRUE;
     }
     ALARM_Alarm_Refresh();
     Eland_data_Refresh();
