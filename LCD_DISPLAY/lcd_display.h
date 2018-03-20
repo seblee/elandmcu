@@ -26,15 +26,6 @@ typedef struct eland_data_2_mcu
     uint32_t night_mode_end_time;
 } __ELAND_DATA_2_MCU_t;
 
-typedef struct
-{
-    mico_rtc_time_t moment_time; //
-    int8_t color;
-    int8_t snooze_count;
-    int8_t alarm_repeat;
-    uint8_t alarm_on_days_of_week;
-} _alarm_mcu_data_t;
-
 typedef enum _eland_mode {
     ELAND_MODE_NONE = (uint8_t)0x00,
     ELAND_CLOCK_MON,
@@ -44,6 +35,16 @@ typedef enum _eland_mode {
     ELAND_AP,
     ELAND_MODE_MAX,
 } _ELAND_MODE_t;
+
+typedef struct
+{
+    mico_rtc_time_t moment_time; //
+    int8_t color;
+    int8_t snooze_count;
+    int8_t alarm_repeat;
+    uint8_t alarm_on_days_of_week;
+    _ELAND_MODE_t mode;
+} _alarm_mcu_data_t;
 
 /* Private define ------------------------------------------------------------*/
 #define ChangeSpeed 5 //speed of continued +/- =

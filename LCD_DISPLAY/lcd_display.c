@@ -32,6 +32,7 @@ bool ELAND_DATA_Refreshed = TRUE;
 _ELAND_MODE_t Eland_mode = ELAND_MODE_NONE;
 uint8_t alarm_jump_flag = 0;
 bool alarm_jump_flash_500ms = FALSE;
+bool alarm_NA_flash_1s = FALSE;
 
 const LCD_Digital_Serial_t Clock_number_table[8][2] = {
     /*          */
@@ -523,6 +524,7 @@ void LCD_NetMode(void)
         HT162x_LCD_Date_Display(TIME_PART, CurrentMicoTime);
         AlarmOccurred = FALSE;
         ELAND_DATA_Refreshed = TRUE;
+        alarm_NA_flash_1s = TRUE;
     }
     ALARM_Alarm_Refresh();
     Eland_data_Refresh();
@@ -538,8 +540,9 @@ void LCD_NetMode(void)
 **/
 void ALARM_Alarm_Refresh(void)
 {
-    uint8_t i;
+    uint8_t i, cache;
     static uint8_t alarm_jump_flash_count = 0;
+    static bool display_flag = TRUE;
     if (alarm_jump_flag > 0)
     {
         if (alarm_jump_flash_500ms)
@@ -552,6 +555,41 @@ void ALARM_Alarm_Refresh(void)
             }
             if (alarm_jump_flash_count == 1) /*next alarm display*/
                 HT162x_LCD_Change_Pixel(COM7, SEG11, SET);
+        }
+    }
+    cache = alarm_data_display.moment_time.hr;
+    if ((eland_data.time_display_format == 1) && (alarm_data_display.moment_time.hr > 12))
+        cache -= 12;
+    if (alarm_NA_flash_1s)
+    {
+        alarm_NA_flash_1s = FALSE;
+        if (display_flag)
+        {
+            display_flag = FALSE;
+            /*****year*******/
+            HT162x_LCD_Double_Digits_Write(Position[ALARM_PART][DIGIT_YEAR], alarm_data_display.moment_time.year, 1);
+            /*****month******/
+            HT162x_LCD_Double_Digits_Write(Position[ALARM_PART][DIGIT_MONTH], alarm_data_display.moment_time.month, 1);
+            /*****date******/
+            HT162x_LCD_Double_Digits_Write(Position[ALARM_PART][DIGIT_DAY], alarm_data_display.moment_time.date, 1);
+            /*****hour*******/
+            HT162x_LCD_Double_Digits_Write(Position[ALARM_PART][DIGIT_HOUR], cache, 1);
+            /****minute******/
+            HT162x_LCD_Double_Digits_Write(Position[ALARM_PART][DIGIT_MINUTE], alarm_data_display.moment_time.min, 2);
+        }
+        else if (alarm_data_display.mode == ELAND_NA)
+        {
+            display_flag = TRUE;
+            /*****year*******/
+            HT162x_LCD_Double_Digits_Write(Position[ALARM_PART][DIGIT_YEAR], alarm_data_display.moment_time.year, 0);
+            /*****month******/
+            HT162x_LCD_Double_Digits_Write(Position[ALARM_PART][DIGIT_MONTH], alarm_data_display.moment_time.month, 0);
+            /*****date******/
+            HT162x_LCD_Double_Digits_Write(Position[ALARM_PART][DIGIT_DAY], alarm_data_display.moment_time.date, 0);
+            /*****hour*******/
+            HT162x_LCD_Double_Digits_Write(Position[ALARM_PART][DIGIT_HOUR], cache, 0);
+            /****minute******/
+            HT162x_LCD_Double_Digits_Write(Position[ALARM_PART][DIGIT_MINUTE], alarm_data_display.moment_time.min, 0);
         }
     }
 
