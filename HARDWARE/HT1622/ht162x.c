@@ -102,6 +102,8 @@ const uint8_t Position[2][5] = {
     {5, 6, 7, 8, 9}, //alarm part
 };
 
+const LCD_Wifi_Rssi_t RSS_Array[5] = {LEVEL0, LEVEL1, LEVEL2, LEVEL3, LEVEL4};
+
 /**
  ****************************************************************************
  * @Function : void HT162x_init(void)

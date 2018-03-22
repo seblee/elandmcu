@@ -241,6 +241,7 @@ typedef enum {
 extern const LCD_SEGx_TypeDef TIME_PART_Week_seg[7];
 extern const LCD_SEGx_TypeDef ALARM_PART_Week_seg[7];
 extern const uint8_t Position[2][5];
+extern const LCD_Wifi_Rssi_t RSS_Array[5];
 /* Private function prototypes -----------------------------------------------*/
 void HT162x_init(void);
 void HT162x_LCD_Clear(FlagStatus value);

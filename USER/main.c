@@ -42,6 +42,8 @@
 **/
 void main(void)
 {
+    uint8_t number = 0;
+    uint8_t i;
     disableInterrupts();
     OTA_bootloader_disable();
     enableInterrupts();
@@ -57,27 +59,85 @@ void main(void)
     RGBLED_CFG();
     /* Reload IWDG counter */
     IWDG_ReloadCounter();
+    HT162x_LCD_Clear(SET);
     /* Infinite loop */
     while (1)
     {
         /* Reload IWDG counter */
         IWDG_ReloadCounter();
         Eland_KeyState_Read();
-        if (Key_Count & KEY_Wifi) //NC/NA mode
-            LCD_NetMode();
-        else if ((Key_Count & KEY_MON) ||
-                 (Key_Count & KEY_AlarmMode)) //clock MON mode
-            LCD_Clock_MON();
-        else
-             LCD_OtherMode();
-            while (1)
+        if ((Key_Down_Trg & KEY_Set) ||
+            (Key_Down_Trg & KEY_Reset) ||
+            (Key_Down_Trg & KEY_Add) ||
+            (Key_Down_Trg & KEY_Minus) ||
+            (Key_Down_Trg & KEY_MON) ||
+            (Key_Down_Trg & KEY_AlarmMode) ||
+            (Key_Down_Trg & KEY_Wifi) ||
+            (Key_Down_Trg & KEY_Snooze) ||
+            (Key_Down_Trg & KEY_Alarm))
+            break;
+        while (1)
+        {
+            if (Timer_Counter_1ms > 20) //20ms
             {
-                if (Timer_Counter_1ms > 20) //20ms
-                {
-                    Timer_Counter_1ms = 0;
-                    break;
-                }
+                Timer_Counter_1ms = 0;
+                break;
             }
+        }
+    }
+
+    while (1)
+    {
+        /* Reload IWDG counter */
+        IWDG_ReloadCounter();
+        Eland_KeyState_Read();
+        if ((Key_Down_Trg & KEY_Set) ||
+            (Key_Down_Trg & KEY_Reset) ||
+            (Key_Down_Trg & KEY_Add) ||
+            (Key_Down_Trg & KEY_Minus) ||
+            (Key_Down_Trg & KEY_MON) ||
+            (Key_Down_Trg & KEY_AlarmMode) ||
+            (Key_Down_Trg & KEY_Wifi) ||
+            (Key_Down_Trg & KEY_Snooze) ||
+            (Key_Down_Trg & KEY_Alarm))
+        {
+            number++;
+            for (i = Serial_01; i < Serial_MAX; i++)
+                HT162x_LCD_Num_Set((LCD_Digital_Serial_t)i, number % 10);
+            HT162x_LCD_Week_Set(TIME_PART, (LCD_Week_Day_t)(number % WEEKDAYMAX));
+            HT162x_LCD_Week_Set(ALARM_PART, (LCD_Week_Day_t)(number % WEEKDAYMAX));
+            HT162x_LCD_RSSI_Set(RSS_Array[number % 5]);
+            HT162x_LCD_AMPM_Set(TIME_PART, (LCD_AMPM_Distinguish_t)(number % 2));
+            HT162x_LCD_AMPM_Set(ALARM_PART, (LCD_AMPM_Distinguish_t)(number % 2));
+            HT162x_LCD_TCP_STATE_Set((number % 2) ? RESET : SET);
+            /*refresh snooze point*/
+            HT162x_LCD_Change_Pixel(COM7, SEG13, (number % 2) ? RESET : SET);
+            /*next alarm display*/
+            HT162x_LCD_Change_Pixel(COM7, SEG11, (number % 2) ? RESET : SET);
+
+            HT162x_LCD_Toggle_Pixel(COM0, SEG32);
+            HT162x_LCD_Toggle_Pixel(COM0, SEG33);
+
+            HT162x_LCD_Toggle_Pixel(COM0, SEG08);
+            HT162x_LCD_Toggle_Pixel(COM0, SEG16);
+
+            HT162x_LCD_Toggle_Pixel(COM7, SEG15);
+            HT162x_LCD_Toggle_Pixel(COM7, SEG07);
+
+            HT162x_LCD_Toggle_Pixel(COM7, SEG30);
+            HT162x_LCD_Toggle_Pixel(COM7, SEG31);
+
+            RGBLED_RGBCode_Set(RGB_Buff[number % 3]);
+        }
+
+        while (1)
+        {
+            if (Timer_Counter_1ms > 20) //20ms
+            {
+                Timer_Counter_1ms = 0;
+                break;
+            }
+        }
     }
 }
 #ifdef USE_FULL_ASSERT

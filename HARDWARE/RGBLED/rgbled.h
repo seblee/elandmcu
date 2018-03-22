@@ -64,6 +64,8 @@ extern __IO uint16_t TIM3_CCR1_Val;
 extern __IO uint16_t TIM3_CCR2_Val;
 extern __IO uint16_t TIM5_CCR1_Val;
 extern __IO uint16_t TIM5_CCR2_Val;
+
+extern const uint32_t RGB_Buff[3];
 /* Private function prototypes -----------------------------------------------*/
 void RGBLED_CFG(void);
 void RGBLED_Input_RGB(u8 Red, u8 Green, u8 Blue);

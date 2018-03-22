@@ -26,6 +26,9 @@ __IO uint16_t TIM3_CCR1_Val = 0;
 __IO uint16_t TIM3_CCR2_Val = 0;
 __IO uint16_t TIM5_CCR1_Val = 0;
 __IO uint16_t TIM5_CCR2_Val = 0;
+
+const uint32_t RGB_Buff[3] = {0x00ff0000, 0x0000ff00, 0x000000ff};
+
 /* Private function prototypes -----------------------------------------------*/
 static void RGBLED_GPIO_Cfg(void);
 static void TIM3_Config(void);
@@ -314,9 +317,9 @@ void RGBLED_Set_Brightness(uint8_t Brightness)
     static uint8_t BrightnessBak = 0;
     if (Brightness != BrightnessBak)
     {
-        if (Brightness > 100)
-            Brightness = 100;
-        TIM3_SetCompare2(TIM3_PERIOD / 100 * Brightness); //back light turn brightest
+        if (Brightness > 32)
+            Brightness = 32;
+        TIM3_SetCompare2(TIM3_PERIOD / 32 * Brightness); //back light turn brightest
         BrightnessBak = Brightness;
     }
 }
