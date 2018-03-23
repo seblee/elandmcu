@@ -32,7 +32,7 @@ bool ELAND_DATA_Refreshed = TRUE;
 _ELAND_MODE_t Eland_mode = ELAND_MODE_NONE;
 uint8_t alarm_jump_flag = 0;
 bool alarm_jump_flash_500ms = FALSE;
-bool alarm_NA_flash_1s = FALSE;
+bool alarm_NA_flash_500ms = FALSE;
 
 const LCD_Digital_Serial_t Clock_number_table[8][2] = {
     /*          */
@@ -514,6 +514,7 @@ void LCD_NetMode(void)
     {
         WakeupOccurred = FALSE;
         alarm_jump_flash_500ms = TRUE;
+        alarm_NA_flash_500ms = TRUE;
         HT162x_LCD_Toggle_Pixel(COM0, SEG32);
         HT162x_LCD_Toggle_Pixel(COM0, SEG33);
         LCD_Display_Rssi_State(eland_state);
@@ -524,7 +525,6 @@ void LCD_NetMode(void)
         HT162x_LCD_Date_Display(TIME_PART, CurrentMicoTime);
         AlarmOccurred = FALSE;
         ELAND_DATA_Refreshed = TRUE;
-        alarm_NA_flash_1s = TRUE;
     }
     ALARM_Alarm_Refresh();
     Eland_data_Refresh();
@@ -560,9 +560,9 @@ void ALARM_Alarm_Refresh(void)
     cache = alarm_data_display.moment_time.hr;
     if ((eland_data.time_display_format == 1) && (alarm_data_display.moment_time.hr > 12))
         cache -= 12;
-    if (alarm_NA_flash_1s)
+    if (alarm_NA_flash_500ms)
     {
-        alarm_NA_flash_1s = FALSE;
+        alarm_NA_flash_500ms = FALSE;
         if (display_flag)
         {
             display_flag = FALSE;
