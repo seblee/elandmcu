@@ -169,6 +169,8 @@ typedef enum {
 typedef enum {
     TIME_PART = 0,
     ALARM_PART = 1,
+    TIME_CLEAR = 2,
+    ALARM_CLEAR = 3,
     WEEKTYPEMAX,
 } LCD_Time_Type_t;
 
@@ -181,6 +183,7 @@ typedef enum {
     FRIDAY,
     SATURDAY,
     WEEKDAYMAX,
+    WEEKDAYNUM,
 } LCD_Week_Day_t;
 
 typedef enum {
@@ -238,8 +241,7 @@ typedef enum {
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-extern const LCD_SEGx_TypeDef TIME_PART_Week_seg[7];
-extern const LCD_SEGx_TypeDef ALARM_PART_Week_seg[7];
+extern const LCD_SEGx_TypeDef Week_seg[2][7];
 extern const uint8_t Position[2][5];
 /* Private function prototypes -----------------------------------------------*/
 void HT162x_init(void);

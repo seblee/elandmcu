@@ -69,4 +69,5 @@ void LCD_data_init(void);
 void ALARM_Alarm_Refresh(void);
 void Eland_data_Refresh(void);
 void LCD_OtherMode(void);
+void Brightness_refresh(void);
 #endif /*__LCD_DISPLAY_H_*/

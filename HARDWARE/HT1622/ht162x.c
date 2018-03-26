@@ -76,14 +76,16 @@ const uint16_t NumberMap[11] = {
     0xDEE6, 0xDEEE, 0xF620, 0xFEEE, 0xFEE6,
     /*空*/
     0x0000};
-/* time week register*/
-const LCD_SEGx_TypeDef TIME_PART_Week_seg[7] = {
+const LCD_SEGx_TypeDef Week_seg[2][7] = {
+    /* time week register*/
     /*SUN    MON    TUE    WED    THU    FRI    SAT */
-    SEG06, SEG14, SEG22, SEG26, SEG30, SEG34, SEG38};
-/* alarm week register*/
-const LCD_SEGx_TypeDef ALARM_PART_Week_seg[7] = {
+    {SEG06, SEG14, SEG22, SEG26, SEG30, SEG34, SEG38},
+    /* alarm week register*/
     /*SUN    MON    TUE    WED    THU    FRI    SAT */
-    SEG10, SEG09, SEG06, SEG05, SEG01, SEG37, SEG35};
+    {SEG10, SEG09, SEG06, SEG05, SEG01, SEG37, SEG35},
+};
+
+const LCD_COMx_TypeDef Week_com[2] = {COM0, COM7};
 
 const LCD_SEGx_TypeDef AMPM_seg[2][2] = {
     /*AM    PM */
@@ -645,45 +647,26 @@ void HT162x_LCD_Double_Digits_Write(uint8_t position, uint8_t num, uint8_t mode)
 void HT162x_LCD_Week_Set(LCD_Time_Type_t type, LCD_Week_Day_t day)
 {
     uint8_t i;
-    static LCD_Week_Day_t TIME_PARTday = WEEKDAYMAX, ALARM_PARTday = WEEKDAYMAX;
-    if ((type > ALARM_PART) || (day > WEEKDAYMAX))
+    static LCD_Week_Day_t weekday[2] = {WEEKDAYNUM, WEEKDAYNUM};
+    if (type > ALARM_PART)
         return;
-    if (type == TIME_PART)
+
+    if (weekday[type] == WEEKDAYNUM)
     {
-        if (TIME_PARTday == WEEKDAYMAX)
-        {
-            /*clear all TIME_PART display*/
-            for (i = 0; i < 7; i++)
-                HT162x_LCD_Change_Pixel(COM0, TIME_PART_Week_seg[i], RESET); //clear week
-            if (day < WEEKDAYMAX)
-                HT162x_LCD_Change_Pixel(COM0, TIME_PART_Week_seg[day], SET); //clear week
-        }
-        else if (TIME_PARTday != day)
-        {
-            HT162x_LCD_Change_Pixel(COM0, TIME_PART_Week_seg[TIME_PARTday], RESET); //clear week
-            if (day < WEEKDAYMAX)
-                HT162x_LCD_Change_Pixel(COM0, TIME_PART_Week_seg[day], SET); //clear week
-        }
-        TIME_PARTday = day;
+        /*clear all TIME_PART display*/
+        for (i = 0; i < 7; i++)
+            HT162x_LCD_Change_Pixel(Week_com[type], Week_seg[type][i], RESET);
     }
-    else if (type == ALARM_PART)
+    else if (weekday[type] == WEEKDAYMAX)
     {
-        if (ALARM_PARTday == WEEKDAYMAX)
-        {
-            /*clear all ALARM_PART display*/
-            for (i = 0; i < 7; i++)
-                HT162x_LCD_Change_Pixel(COM7, ALARM_PART_Week_seg[i], RESET); //clear week
-            if (day < WEEKDAYMAX)
-                HT162x_LCD_Change_Pixel(COM7, ALARM_PART_Week_seg[day], SET); //clear week
-        }
-        else if (ALARM_PARTday != day)
-        {
-            HT162x_LCD_Change_Pixel(COM7, ALARM_PART_Week_seg[ALARM_PARTday], RESET); //clear week
-            if (day < WEEKDAYMAX)
-                HT162x_LCD_Change_Pixel(COM7, ALARM_PART_Week_seg[day], SET); //clear week
-        }
-        ALARM_PARTday = day;
     }
+    else if (weekday[type] != day)
+    {
+        HT162x_LCD_Change_Pixel(Week_com[type], Week_seg[type][weekday[type]], RESET); //clear week
+    }
+    if (day < WEEKDAYMAX)
+        HT162x_LCD_Change_Pixel(Week_com[type], Week_seg[type][day], SET); //clear week
+    weekday[type] = day;
 }
 /**
  ****************************************************************************
@@ -765,8 +748,31 @@ void HT162x_LCD_Date_Display(LCD_Time_Type_t type, mico_rtc_time_t time)
         {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
         {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
     };
-    if (type >= WEEKTYPEMAX)
+    if (type >= TIME_CLEAR)
+    {
+        if (time_cache[type - TIME_CLEAR].year == 0xff)
+            return;
+        memset(&time_cache[type - TIME_CLEAR], 0xff, sizeof(mico_rtc_time_t));
+        /*****year*******/
+        HT162x_LCD_Double_Digits_Write(Position[type - TIME_CLEAR][DIGIT_YEAR], time.year, 0);
+        /*****month******/
+        HT162x_LCD_Double_Digits_Write(Position[type - TIME_CLEAR][DIGIT_MONTH], time.month, 0);
+        /*****date******/
+        HT162x_LCD_Double_Digits_Write(Position[type - TIME_CLEAR][DIGIT_DAY], time.date, 0);
+        /*******point**********/
+        if ((type - TIME_CLEAR) == TIME_PART)
+        {
+            HT162x_LCD_Change_Pixel(COM0, SEG08, RESET);
+            HT162x_LCD_Change_Pixel(COM0, SEG16, RESET);
+        }
+        else if ((type - TIME_CLEAR) == ALARM_PART)
+        {
+            HT162x_LCD_Change_Pixel(COM7, SEG15, RESET);
+            HT162x_LCD_Change_Pixel(COM7, SEG07, RESET);
+        }
+        HT162x_LCD_Week_Set((LCD_Time_Type_t)(type - TIME_CLEAR), WEEKDAYMAX); //week
         return;
+    }
     if ((time_cache[type].year != time.year) ||
         (time_cache[type].month != time.month) ||
         (time_cache[type].date != time.date) ||
@@ -783,13 +789,13 @@ void HT162x_LCD_Date_Display(LCD_Time_Type_t type, mico_rtc_time_t time)
         {
             HT162x_LCD_Change_Pixel(COM0, SEG08, SET);
             HT162x_LCD_Change_Pixel(COM0, SEG16, SET);
-            HT162x_LCD_Week_Set(type, (LCD_Week_Day_t)(time.weekday - 1)); //week
         }
         else if (type == ALARM_PART)
         {
             HT162x_LCD_Change_Pixel(COM7, SEG15, SET);
             HT162x_LCD_Change_Pixel(COM7, SEG07, SET);
         }
+        HT162x_LCD_Week_Set(type, (LCD_Week_Day_t)(time.weekday - 1)); //week
         memcpy(&time_cache[type], &time, sizeof(mico_rtc_time_t));
     }
 }
@@ -811,6 +817,26 @@ void HT162x_LCD_Time_Display(LCD_Time_Type_t type, mico_rtc_time_t time)
     static uint8_t time_format[2] = {0};
     uint8_t cache;
 
+    if (type >= TIME_CLEAR)
+    {
+        if (time_cache[type - TIME_CLEAR].year == 0xff)
+            return;
+        memset(&time_cache[type - TIME_CLEAR], 0xff, sizeof(mico_rtc_time_t));
+        /*****hour*******/
+        HT162x_LCD_Double_Digits_Write(Position[type - TIME_CLEAR][DIGIT_HOUR], time.hr, 0);
+        /*******point**********/
+        if ((type - TIME_CLEAR) == ALARM_PART)
+        {
+            HT162x_LCD_Change_Pixel(COM7, SEG31, RESET);
+            HT162x_LCD_Change_Pixel(COM7, SEG30, RESET);
+        }
+        /****minute******/
+        HT162x_LCD_Double_Digits_Write(Position[type - TIME_CLEAR][DIGIT_MINUTE], time.min, 0);
+        /*******am pm***********/
+        HT162x_LCD_AMPM_Set((LCD_Time_Type_t)(type - TIME_CLEAR), AMPMMAX);
+        return;
+    }
+
     if ((time_cache[type].hr != time.hr) ||
         (time_cache[type].min != time.min) ||
         (time_format[type] != eland_data.time_display_format))
@@ -831,13 +857,6 @@ void HT162x_LCD_Time_Display(LCD_Time_Type_t type, mico_rtc_time_t time)
         HT162x_LCD_Double_Digits_Write(Position[type][DIGIT_HOUR], cache, 1);
         /****minute******/
         HT162x_LCD_Double_Digits_Write(Position[type][DIGIT_MINUTE], time.min, 2);
-
-        // /*****hour*******/
-        // HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_07 + 10 * type), ((cache / 10) % 10));
-        // HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_08 + 10 * type), (cache % 10));
-        // /****minute******/
-        // HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_09 + 10 * type), ((time.min / 10) % 10));
-        // HT162x_LCD_Num_Set((LCD_Digital_Serial_t)(Serial_10 + 10 * type), (time.min % 10));
     }
     if (type == ALARM_PART)
     {
