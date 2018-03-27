@@ -545,8 +545,6 @@ void ALARM_Alarm_Refresh(void)
     uint8_t cache;
     static uint8_t alarm_jump_flash_count = 0;
     static bool display_flag = TRUE;
-    FlagStatus snooze_flash_flag = RESET;
-    FlagStatus next_flash_flag = RESET;
 
     if (alarm_jump_flag > 0)
     {
