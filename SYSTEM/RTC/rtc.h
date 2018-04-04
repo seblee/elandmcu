@@ -74,6 +74,7 @@ extern __IO uint32_t Today_Second;
 extern const uint8_t DayOfMon[12][2];
 /* Private function prototypes -----------------------------------------------*/
 void ELAND_RTC_Init(void);
+void ELAND_RTC_Check(void);
 void ELAND_RTC_ALARM_ISR(void);
 void ELAND_RTC_WAKEUP_ISR(void);
 void RTC_Time_Set(_eland_date_time_t time);

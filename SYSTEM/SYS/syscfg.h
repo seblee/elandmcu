@@ -19,8 +19,8 @@
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
-#define MCU_VERSION_MAJOR 1
-#define MCU_VERSION_MINOR 6
+#define MCU_VERSION_MAJOR (uint8_t)1
+#define MCU_VERSION_MINOR (uint8_t)10
 #define RTC_LSE
 #define CLK_SUE_HSI
 /* Private macro -------------------------------------------------------------*/

@@ -50,14 +50,16 @@ typedef enum _SEQUENT_ {
 } _SEQUENT_t;
 
 typedef enum {
-    COM0 = (uint8_t)0x00, /*!< COM 0  */
-    COM1 = (uint8_t)0x01, /*!< COM 1  */
-    COM2 = (uint8_t)0x02, /*!< COM 2  */
-    COM3 = (uint8_t)0x03, /*!< COM 3  */
-    COM4 = (uint8_t)0x04, /*!< COM 4  */
-    COM5 = (uint8_t)0x05, /*!< COM 5  */
-    COM6 = (uint8_t)0x06, /*!< COM 6  */
-    COM7 = (uint8_t)0x07, /*!< COM 7  */
+    COM0 = (uint8_t)0x00,   /*!< COM 0  */
+    COM1 = (uint8_t)0x01,   /*!< COM 1  */
+    COM2 = (uint8_t)0x02,   /*!< COM 2  */
+    COM3 = (uint8_t)0x03,   /*!< COM 3  */
+    COM4 = (uint8_t)0x04,   /*!< COM 4  */
+    COM5 = (uint8_t)0x05,   /*!< COM 5  */
+    COM6 = (uint8_t)0x06,   /*!< COM 6  */
+    COM7 = (uint8_t)0x07,   /*!< COM 7  */
+    COMMAX = (uint8_t)0x08, /*!< COM 8  */
+
 } LCD_COMx_TypeDef;
 
 typedef enum {
@@ -241,7 +243,7 @@ typedef enum {
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-extern const LCD_SEGx_TypeDef Week_seg[2][7];
+extern const LCD_SEGx_TypeDef Week_seg[2][8];
 extern const uint8_t Position[2][5];
 /* Private function prototypes -----------------------------------------------*/
 void HT162x_init(void);
