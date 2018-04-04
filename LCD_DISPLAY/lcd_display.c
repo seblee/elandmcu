@@ -59,7 +59,7 @@ const uint8_t Position_alarm_simple[7] = {8, 9, 0, 1, 2, 3, 4};
 void LCD_data_init(void)
 {
     eland_data.time_display_format = 1;
-    eland_data.brightness_normal = 80;
+    eland_data.brightness_normal = 100;
     eland_data.brightness_night = 20;
     eland_data.night_mode_enabled = 0;
     eland_data.night_mode_begin_time = 79200;
@@ -82,22 +82,32 @@ void LCD_Display_Rssi_State(Eland_Status_type_t state)
 {
     static LCD_Wifi_Rssi_t rssi_value = LEVEL0;
 
-    HT162x_LCD_TCP_STATE_Set((state > CONNECTED_NET) ? RESET : SET);
-
-    if ((state == APStatusStart) ||
-        (state == APServerStart) ||
-        (state == ELAPPConnected))
+    switch (Eland_mode)
     {
+    case ELAND_CLOCK_MON:
+    case ELAND_CLOCK_ALARM:
+        HT162x_LCD_TCP_STATE_Set(RESET);
+        HT162x_LCD_RSSI_Set(LEVEL0);
+        break;
+    case ELAND_NC:
+    case ELAND_NA:
+        HT162x_LCD_TCP_STATE_Set((state > CONNECTED_NET) ? RESET : SET);
+        if (state < WifyConnected)
+            HT162x_LCD_RSSI_Set(LEVEL0);
+        else
+            HT162x_LCD_RSSI_Set(RSSI_Value);
+        break;
+    case ELAND_AP:
+        HT162x_LCD_TCP_STATE_Set(RESET);
         if (rssi_value == LEVEL0)
             rssi_value = LEVEL4;
         else
             rssi_value = LEVEL0;
         HT162x_LCD_RSSI_Set(rssi_value);
+        break;
+    default:
+        break;
     }
-    else if (state < WifyConnected)
-        HT162x_LCD_RSSI_Set(LEVEL0);
-    else
-        HT162x_LCD_RSSI_Set(RSSI_Value);
 }
 /**
  ****************************************************************************
@@ -248,11 +258,14 @@ void LCD_Clock_MON(void)
         }
         break;
     case 3: //date year
-
         if ((Key_Up_Trg & KEY_Add) || ((key_delay >= ChangeSpeed) && (Key_Restain & KEY_Add)))
         {
             key_delay = 0;
-            number_flash_cache = ++Time_cache.year;
+            if (Time_cache.year < 37)
+                Time_cache.year++;
+            else
+                Time_cache.year = 0;
+            number_flash_cache = Time_cache.year;
             HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, 1);
         }
         else if ((Key_Up_Trg & KEY_Minus) || ((key_delay >= ChangeSpeed) && (Key_Restain & KEY_Minus)))
@@ -261,7 +274,7 @@ void LCD_Clock_MON(void)
             if (Time_cache.year > 0)
                 Time_cache.year--;
             else
-                Time_cache.year = 99;
+                Time_cache.year = 37;
             number_flash_cache = Time_cache.year;
             HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, 1);
         }

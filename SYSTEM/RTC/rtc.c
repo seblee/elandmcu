@@ -31,9 +31,9 @@ __IO bool WakeupOccurred = FALSE;
 __IO uint32_t Today_Second = 0;
 
 _eland_date_time_t CurrentMCUTime = {
-    2017, RTC_Month_December, 20, 15, 30, 00};
+    0, RTC_Month_January, 1, 0, 0, 0, RTC_Weekday_Saturday};
 mico_rtc_time_t CurrentMicoTime = {
-    0, 0, 0, 0, 1, 1, 0};
+    0, 0, 0, 7, 1, 1, 0};
 
 const char MonthStr[12][4] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 const RTC_Month_TypeDef MonthValue[12] = {RTC_Month_January, RTC_Month_February, RTC_Month_March, RTC_Month_April, RTC_Month_May, RTC_Month_June, RTC_Month_July, RTC_Month_August, RTC_Month_September, RTC_Month_October, RTC_Month_November, RTC_Month_December};
@@ -84,6 +84,25 @@ void ELAND_RTC_Init(void)
     RTC_WakeUpCmd(ENABLE);
     /* Calendar Configuration */
 }
+/**
+ ****************************************************************************
+ * @Function : void ELAND_RTC_Check(void)
+ * @File     : rtc.c
+ * @Program  : none
+ * @Created  : 2018/4/3 by seblee
+ * @Brief    : check rtc is first power on
+ * @Version  : V1.0
+**/
+void ELAND_RTC_Check(void)
+{
+    ELAND_RTC_Read(&CurrentMicoTime);
+    if (CurrentMicoTime.year == 0)
+    {
+        RTC_Time_Set(CurrentMCUTime);
+        ELAND_RTC_Read(&CurrentMicoTime);
+    }
+}
+
 static void Calendar_Init_register(void)
 {
 

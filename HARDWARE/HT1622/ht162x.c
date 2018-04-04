@@ -76,22 +76,22 @@ const uint16_t NumberMap[11] = {
     0xDEE6, 0xDEEE, 0xF620, 0xFEEE, 0xFEE6,
     /*空*/
     0x0000};
-const LCD_SEGx_TypeDef Week_seg[2][7] = {
+const LCD_SEGx_TypeDef Week_seg[2][8] = {
     /* time week register*/
     /*SUN    MON    TUE    WED    THU    FRI    SAT */
-    {SEG06, SEG14, SEG22, SEG26, SEG30, SEG34, SEG38},
+    {SEG06, SEG14, SEG22, SEG26, SEG30, SEG34, SEG38, SEG47},
     /* alarm week register*/
     /*SUN    MON    TUE    WED    THU    FRI    SAT */
-    {SEG10, SEG09, SEG06, SEG05, SEG01, SEG37, SEG35},
+    {SEG10, SEG09, SEG06, SEG05, SEG01, SEG37, SEG35, SEG47},
 };
 
-const LCD_COMx_TypeDef Week_com[2] = {COM0, COM7};
+const LCD_COMx_TypeDef Week_com[3] = {COM0, COM7, COMMAX};
 
-const LCD_SEGx_TypeDef AMPM_seg[2][2] = {
+const LCD_SEGx_TypeDef AMPM_seg[2][3] = {
     /*AM    PM */
-    {SEG22, SEG23},
+    {SEG22, SEG23, SEG47},
     /*AM    PM */
-    {SEG38, SEG39},
+    {SEG38, SEG39, SEG47},
 };
 const LCD_Digital_Serial_t Double_Digits_Position[2][10] = {
     /*AM    PM */
@@ -155,11 +155,13 @@ static void HT162x_Write_Bit(uint8_t data, uint8_t count, _SEQUENT_t sequent)
             HT162x_DATA_SET; //数据线置1
         else
             HT162x_DATA_RESET; //数据线置0
-        HT162x_WR_SET;         //“写”时钟置1
+        nop();
+        HT162x_WR_SET; //“写”时钟置1
         if (sequent == MSB)
             Temp >>= 1;
         else if (sequent == LSB)
             Temp <<= 1; //准备下一位
+        nop();
     }
 }
 /**
@@ -250,8 +252,10 @@ uint8_t HT162x_Read_Bit(uint8_t count)
     for (i = 0; i < count; i++)
     {
         HT162x_RD_RESET; //“写”时钟置0
+        nop();
         data >>= 1;
         HT162x_RD_SET; //“写”时钟置1
+        nop();
         nop();
         if (HT162x_DATA_IN) //数据线為1
             data |= 0x80;
@@ -353,6 +357,8 @@ void HT162x_LCD_Clear(FlagStatus value)
 void HT162x_LCD_Change_Pixel(LCD_COMx_TypeDef comx, LCD_SEGx_TypeDef segx, FlagStatus value)
 {
     uint8_t address, data;
+    if (comx >= COMMAX)
+        return;
     address = (uint8_t)segx * 2 + ((comx < COM4) ? 0 : 1);
     HT162x_CS_RESET;
     /*change data pin configration*/
@@ -391,6 +397,8 @@ void HT162x_LCD_Change_Pixel(LCD_COMx_TypeDef comx, LCD_SEGx_TypeDef segx, FlagS
 void HT162x_LCD_Toggle_Pixel(LCD_COMx_TypeDef comx, LCD_SEGx_TypeDef segx)
 {
     uint8_t address, data;
+    if (comx >= COMMAX)
+        return;
     address = (uint8_t)segx * 2 + ((comx < COM4) ? 0 : 1);
     HT162x_CS_RESET;
     /*change data pin configration*/
@@ -427,6 +435,8 @@ void HT162x_LCD_Toggle_Pixel(LCD_COMx_TypeDef comx, LCD_SEGx_TypeDef segx)
 void HT162x_LCD_Change_COMx(LCD_COMx_TypeDef comx, FlagStatus value)
 {
     uint8_t address, data, i;
+    if (comx >= COMMAX)
+        return;
     address = 0;
     HT162x_CS_RESET;
     /*change data pin configration*/

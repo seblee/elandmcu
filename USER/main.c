@@ -50,6 +50,7 @@ void main(void)
     SysClock_Init();
     HT162x_init();
     ELAND_RTC_Init();
+    ELAND_RTC_Check();
     TIM4_Init();
     UART1_Init();
     ElandKeyInit();
@@ -69,15 +70,15 @@ void main(void)
                  (Key_Count & KEY_AlarmMode)) //clock MON mode
             LCD_Clock_MON();
         else
-             LCD_OtherMode();
-            while (1)
+            LCD_OtherMode();
+        while (1)
+        {
+            if (Timer_Counter_1ms > 20) //20ms
             {
-                if (Timer_Counter_1ms > 20) //20ms
-                {
-                    Timer_Counter_1ms = 0;
-                    break;
-                }
+                Timer_Counter_1ms = 0;
+                break;
             }
+        }
     }
 }
 #ifdef USE_FULL_ASSERT
