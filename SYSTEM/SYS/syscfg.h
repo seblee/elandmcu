@@ -20,7 +20,7 @@
 
 /* Private define ------------------------------------------------------------*/
 #define MCU_VERSION_MAJOR 1
-#define MCU_VERSION_MINOR 5
+#define MCU_VERSION_MINOR 6
 #define RTC_LSE
 #define CLK_SUE_HSI
 /* Private macro -------------------------------------------------------------*/
