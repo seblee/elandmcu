@@ -29,6 +29,7 @@ typedef enum {
     ALARM_SEND_0B,       /* SEND NEXT ALARM STATE*/
     ELAND_DATA_0C,       /* SEND ELAND DATA TO MCU*/
     ELAND_RESET_0D,      /* RESET SYSTEM */
+    ELAND_DELETE_0E,     /* DEVICE DATA DELETE */
 } __msg_function_t;
 
 typedef enum {

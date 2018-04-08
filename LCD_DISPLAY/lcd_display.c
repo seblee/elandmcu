@@ -555,7 +555,6 @@ void LCD_NetMode(void)
 **/
 void ALARM_Alarm_Refresh(void)
 {
-    uint8_t cache;
     static uint8_t alarm_jump_flash_count = 0;
     static bool display_flag = TRUE;
 
@@ -573,50 +572,24 @@ void ALARM_Alarm_Refresh(void)
                 HT162x_LCD_Change_Pixel(COM7, SEG11, SET);
         }
     }
-    cache = alarm_data_display.moment_time.hr;
-    if ((eland_data.time_display_format == 1) && (alarm_data_display.moment_time.hr > 12))
-        cache -= 12;
     if ((alarm_data_display.mode == ELAND_NA) && (alarm_NA_flash_500ms))
     {
         alarm_NA_flash_500ms = FALSE;
         if (display_flag)
         {
             display_flag = FALSE;
-            /*refresh alarm time*/
-            HT162x_LCD_Date_Display(ALARM_PART, alarm_data_display.moment_time);
-            /*refresh alarm time*/
-            HT162x_LCD_Time_Display(ALARM_PART, alarm_data_display.moment_time);
-            /*refresh snooze point*/
-            HT162x_LCD_Change_Pixel(COM7, SEG13, (FlagStatus)(alarm_data_display.snooze_count > 1));
-            /*next alarm display*/
-            HT162x_LCD_Change_Pixel(COM7, SEG11, RTC_Compare_Time(alarm_data_display.moment_time, CurrentMicoTime));
+            Eland_alarm_display(SET);
         }
         else
         {
             display_flag = TRUE;
-            /*Clear alarm date*/
-            HT162x_LCD_Date_Display(ALARM_CLEAR, alarm_data_display.moment_time);
-            /*Clear alarm time*/
-            HT162x_LCD_Time_Display(ALARM_CLEAR, alarm_data_display.moment_time);
-            /*refresh snooze point*/
-            HT162x_LCD_Change_Pixel(COM7, SEG13, RESET);
-            /*next alarm display*/
-            HT162x_LCD_Change_Pixel(COM7, SEG11, RESET);
+            Eland_alarm_display(RESET);
         }
     }
-
     if (!Alarm_need_Refresh)
         return;
     Alarm_need_Refresh = FALSE;
-
-    /*refresh alarm date*/
-    HT162x_LCD_Date_Display(ALARM_PART, alarm_data_display.moment_time);
-    /*refresh alarm time*/
-    HT162x_LCD_Time_Display(ALARM_PART, alarm_data_display.moment_time);
-    /*refresh snooze point*/
-    HT162x_LCD_Change_Pixel(COM7, SEG13, (FlagStatus)(alarm_data_display.snooze_count > 1));
-    /*next alarm display*/
-    HT162x_LCD_Change_Pixel(COM7, SEG11, RTC_Compare_Time(alarm_data_display.moment_time, CurrentMicoTime));
+    Eland_alarm_display(SET);
     /*set alarm color*/
     RGBLED_Color_Set((__eland_color_t)alarm_data_display.color);
 }
@@ -700,14 +673,60 @@ void Brightness_refresh(void)
     {
         if (eland_data.night_mode_enabled)
         {
-            if (Today_Second < eland_data.night_mode_end_time)
-                RGBLED_Set_Brightness(eland_data.brightness_night);
-            else if (Today_Second < eland_data.night_mode_begin_time)
-                RGBLED_Set_Brightness(eland_data.brightness_normal);
+            if (eland_data.night_mode_end_time < eland_data.night_mode_begin_time)
+            {
+                if (Today_Second < eland_data.night_mode_end_time)
+                    RGBLED_Set_Brightness(eland_data.brightness_night);
+                else if (Today_Second < eland_data.night_mode_begin_time)
+                    RGBLED_Set_Brightness(eland_data.brightness_normal);
+                else
+                    RGBLED_Set_Brightness(eland_data.brightness_night);
+            }
             else
-                RGBLED_Set_Brightness(eland_data.brightness_night);
+            {
+                if (Today_Second < eland_data.night_mode_begin_time)
+                    RGBLED_Set_Brightness(eland_data.brightness_normal);
+                else if (Today_Second < eland_data.night_mode_end_time)
+                    RGBLED_Set_Brightness(eland_data.brightness_night);
+                else
+                    RGBLED_Set_Brightness(eland_data.brightness_normal);
+            }
         }
         else
             RGBLED_Set_Brightness(eland_data.brightness_normal);
+    }
+}
+/**
+ ****************************************************************************
+ * @Function : void Eland_alarm_display(FlagStatus status)
+ * @File     : lcd_display.c
+ * @Program  : status  SET:display RESET:clear
+ * @Created  : 2018/4/8 by seblee
+ * @Brief    : display alarm
+ * @Version  : V1.0
+**/
+void Eland_alarm_display(FlagStatus status)
+{
+    if (status == RESET)
+    {
+        /*Clear alarm date*/
+        HT162x_LCD_Date_Display(ALARM_CLEAR, alarm_data_display.moment_time);
+        /*Clear alarm time*/
+        HT162x_LCD_Time_Display(ALARM_CLEAR, alarm_data_display.moment_time);
+        /*refresh snooze point*/
+        HT162x_LCD_Change_Pixel(COM7, SEG13, RESET);
+        /*next alarm display*/
+        HT162x_LCD_Change_Pixel(COM7, SEG11, RESET);
+    }
+    else
+    {
+        /*refresh alarm time*/
+        HT162x_LCD_Date_Display(ALARM_PART, alarm_data_display.moment_time);
+        /*refresh alarm time*/
+        HT162x_LCD_Time_Display(ALARM_PART, alarm_data_display.moment_time);
+        /*refresh snooze point*/
+        HT162x_LCD_Change_Pixel(COM7, SEG13, (FlagStatus)(alarm_data_display.snooze_enabled));
+        /*next alarm display*/
+        HT162x_LCD_Change_Pixel(COM7, SEG11, (FlagStatus)(alarm_data_display.next_alarm));
     }
 }

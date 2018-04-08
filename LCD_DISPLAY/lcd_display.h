@@ -38,11 +38,10 @@ typedef enum _eland_mode {
 
 typedef struct
 {
-    mico_rtc_time_t moment_time; //
+    mico_rtc_time_t moment_time;
     int8_t color;
-    int8_t snooze_count;
-    int8_t snooze_interval_min;
-    uint8_t alarm_continue_min;
+    int8_t snooze_enabled;
+    int8_t next_alarm;
     _ELAND_MODE_t mode;
 } _alarm_mcu_data_t;
 
@@ -70,4 +69,5 @@ void ALARM_Alarm_Refresh(void);
 void Eland_data_Refresh(void);
 void LCD_OtherMode(void);
 void Brightness_refresh(void);
+void Eland_alarm_display(FlagStatus status);
 #endif /*__LCD_DISPLAY_H_*/

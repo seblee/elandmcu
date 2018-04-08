@@ -29,7 +29,7 @@ Enabled=0
 ShowSource=1
 [DebugChecksum]
 <<<<<<< HEAD
-Checksum=1559560474
+Checksum=-277837323
 =======
 Checksum=-2074508045
 >>>>>>> master
@@ -74,11 +74,7 @@ Category=_ 0
 LoggingEnabled=_ 0
 LogFile=_ ""
 [Breakpoints]
-Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\SYSTEM\RTC\rtc.c}.216.5" 1 0 0 0 "" 0 ""
-Bp1=_ "STD_CODE" "{$PROJ_DIR$\..\SYSTEM\RTC\rtc.c}.210.5" 1 0 0 0 "" 0 ""
-Bp2=_ "STD_CODE" "{$PROJ_DIR$\..\SYSTEM\RTC\rtc.c}.203.5" 1 0 0 0 "" 0 ""
-Bp3=_ "STD_CODE" "{$PROJ_DIR$\..\SYSTEM\RTC\rtc.c}.101.9" 1 0 0 0 "" 0 ""
-Count=4
+Count=0
 [Aliases]
 Count=0
 SuppressDialog=0
