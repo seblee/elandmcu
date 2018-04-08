@@ -45,6 +45,7 @@ static void MODH_Opration_0AH(void); /* READ MCU ALARM*/
 static void MODH_Opration_0BH(void); /* SEND NEXT ALARM STATE*/
 static void MODH_Opration_0CH(void); /* SEND ELAND DATA TO MCU*/
 static void MODH_Opration_0DH(void); /* RESET SYSTEM */
+static void MODH_Opration_0EH(void); /* DEVICE DATA DELETE */
 /* Private functions ---------------------------------------------------------*/
 
 /**
@@ -156,6 +157,9 @@ static void OprationFrame(void)
         break;
     case ELAND_RESET_0D:
         MODH_Opration_0DH();
+        break;
+    case ELAND_DELETE_0E:
+        MODH_Opration_0EH();
         break;
     default:
         break;
@@ -332,7 +336,6 @@ static void MODH_Opration_08H(void)
     *(SendBuf + 3) = Uart_Packet_Trail;
     USARTx_Send_Data(USART1, SendBuf, 4);
     free(SendBuf);
-    LCD_Display_Rssi_State(eland_state);
 }
 /**
  ****************************************************************************
@@ -450,8 +453,27 @@ static void MODH_Opration_0DH(void)
     HT162x_LCD_Clear(RESET);
     eland_state = ElandNone;
     RSSI_Value = LEVELNUM;
+    RTC_Time_Set(CurrentMCUTime);
+    ELAND_RTC_Read(&CurrentMicoTime);
     memset(&alarm_data_display, 0, sizeof(_alarm_mcu_data_t));
-
+    MCU_RESET_STATE();
+    asm("jp 0x8000"); // jump to given entry point address
+}
+/**
+ ****************************************************************************
+ * @Function : static void MODH_Opration_0EH(void)
+ * @File     : eland_usart.c
+ * @Program  : none
+ * @Created  : 2018/4/8 by seblee
+ * @Brief    : eland data delete
+ * @Version  : V1.0
+**/
+static void MODH_Opration_0EH(void)
+{
+    HT162x_LCD_Clear(RESET);
+    eland_state = ElandNone;
+    RSSI_Value = LEVELNUM;
+    memset(&alarm_data_display, 0, sizeof(_alarm_mcu_data_t));
     MCU_RESET_STATE();
     asm("jp 0x8000"); // jump to given entry point address
 }

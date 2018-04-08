@@ -105,7 +105,6 @@ void ELAND_RTC_Check(void)
 
 static void Calendar_Init_register(void)
 {
-
     //关闭RTC寄存器的写保护功能
     RTC->WPR = 0XCA;
     RTC->WPR = 0x53;
@@ -391,48 +390,4 @@ RTC_Weekday_TypeDef CaculateWeekDay(int y, int m, int d)
 uint32_t RTC_Get_Time_Seconds(void)
 {
     return Today_Second;
-}
-/**
- ****************************************************************************
- * @Function : FlagStatus RTC_Compare_Time(mico_rtc_time_t timeAlarm,mico_rtc_time_t timeRTC)
- * @File     : rtc.c
- * @Program  : timeAlarm & timeRTC:time to Convert
- * @Created  : 2018/3/3 by seblee
- * @Brief    : if((timeAlarm > timeRTC) & ((timeAlarm - timeRTC) < 86400)) return true
- * @Version  : V1.0
-**/
-FlagStatus RTC_Compare_Time(mico_rtc_time_t timeAlarm, mico_rtc_time_t timeRTC)
-{
-    uint8_t i;
-    if ((timeAlarm.year < timeRTC.year) || ((timeAlarm.year - timeRTC.year) > 1))
-        return RESET;
-    second_Alarm = 0;
-    second_RTC = 0;
-    for (i = 1; i < timeAlarm.month; i++)
-    {
-        second_Alarm += DayOfMon[i - 1][(timeAlarm.year % 4 == 0) ? 1 : 0];
-    }
-    second_Alarm += (uint32_t)(timeAlarm.date - 1);
-    second_Alarm *= 86400;
-    second_Alarm += (uint32_t)timeAlarm.hr * 3600;
-    second_Alarm += (uint32_t)timeAlarm.min * 60;
-    second_Alarm += (uint32_t)timeAlarm.sec;
-
-    for (i = 1; i < timeRTC.month; i++)
-    {
-        second_RTC += (uint32_t)DayOfMon[i - 1][(timeRTC.year % 4 == 0) ? 1 : 0];
-    }
-    second_RTC += (uint32_t)(timeRTC.date - 1);
-    second_RTC *= 86400;
-    second_RTC += (uint32_t)timeRTC.hr * 3600;
-    second_RTC += (uint32_t)timeRTC.min * 60;
-    second_RTC += (uint32_t)timeRTC.sec;
-
-    if ((timeAlarm.year - timeRTC.year) == 1)
-        second_Alarm += (timeRTC.year % 4 == 0) ? 31622400 : 31536000;
-
-    if (((second_Alarm - second_RTC) > 86400) ||
-        (second_Alarm < second_RTC))
-        return RESET;
-    return SET;
 }
