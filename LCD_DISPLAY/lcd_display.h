@@ -36,13 +36,25 @@ typedef enum _eland_mode {
     ELAND_MODE_MAX,
 } _ELAND_MODE_t;
 
+typedef enum {
+    ALARM_IDEL,
+    ALARM_ADD,
+    ALARM_MINUS,
+    ALARM_SORT,
+    ALARM_ING,
+    ALARM_SNOOZ_STOP,
+    ALARM_STOP,
+    ALARM_SKIP,
+} _alarm_list_state_t;
 typedef struct
 {
     mico_rtc_time_t moment_time;
     int8_t color;
     int8_t snooze_enabled;
     int8_t next_alarm;
+    int8_t alarm_skip;
     _ELAND_MODE_t mode;
+    _alarm_list_state_t alarm_state;
 } _alarm_mcu_data_t;
 
 /* Private define ------------------------------------------------------------*/
@@ -56,7 +68,7 @@ extern __ELAND_DATA_2_MCU_t eland_data;
 extern _alarm_mcu_data_t alarm_data_simple;
 extern _alarm_mcu_data_t alarm_data_display;
 extern _ELAND_MODE_t Eland_mode;
-extern uint8_t alarm_jump_flag;
+extern uint8_t alarm_skip_flag;
 
 /* Private function prototypes -----------------------------------------------*/
 

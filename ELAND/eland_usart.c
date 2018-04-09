@@ -328,7 +328,6 @@ static void MODH_Opration_08H(void)
     RSSI_Value = (LCD_Wifi_Rssi_t)msg_receive_buff[3];
     Eland_mode = (_ELAND_MODE_t)msg_receive_buff[4];
     eland_state = (Eland_Status_type_t)msg_receive_buff[5];
-    alarm_jump_flag = msg_receive_buff[6];
     SendBuf = calloc(4, sizeof(uint8_t));
     *SendBuf = Uart_Packet_Header;
     *(SendBuf + 1) = SEND_LINK_STATE_08;

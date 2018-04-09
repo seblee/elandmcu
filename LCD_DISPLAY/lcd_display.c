@@ -30,9 +30,9 @@ _alarm_mcu_data_t alarm_data_display;
 bool Alarm_need_Refresh = TRUE;
 bool ELAND_DATA_Refreshed = TRUE;
 _ELAND_MODE_t Eland_mode = ELAND_MODE_NONE;
-uint8_t alarm_jump_flag = 0;
-bool alarm_jump_flash_500ms = FALSE;
-bool alarm_NA_flash_500ms = FALSE;
+uint8_t alarm_skip_flag = 0;
+uint8_t alarm_skip_flash_count = 0;
+uint8_t alarm_snooze_flash_count = 0; //20ms
 
 const LCD_Digital_Serial_t Clock_number_table[8][2] = {
     /*          */
@@ -319,6 +319,8 @@ void LCD_Clock_MON(void)
         if (Key_Up_Trg & KEY_Set)
         {
             HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, 1);
+            if (Time_cache.date > DayOfMon[Time_cache.month - 1][(Time_cache.year % 4 == 0) ? 1 : 0])
+                Time_cache.date = DayOfMon[Time_cache.month - 1][(Time_cache.year % 4 == 0) ? 1 : 0];
             number_flash_cache = Time_cache.date;
             time_set_mode = 5;
         }
@@ -527,8 +529,8 @@ void LCD_NetMode(void)
     if (WakeupOccurred == TRUE) //500ms point flash
     {
         WakeupOccurred = FALSE;
-        alarm_jump_flash_500ms = TRUE;
-        alarm_NA_flash_500ms = TRUE;
+        alarm_skip_flash_count++;
+        alarm_snooze_flash_count++;
         HT162x_LCD_Toggle_Pixel(COM0, SEG32);
         HT162x_LCD_Toggle_Pixel(COM0, SEG33);
         LCD_Display_Rssi_State(eland_state);
@@ -555,37 +557,41 @@ void LCD_NetMode(void)
 **/
 void ALARM_Alarm_Refresh(void)
 {
-    static uint8_t alarm_jump_flash_count = 0;
-    static bool display_flag = TRUE;
 
-    if (alarm_jump_flag > 0)
+    static uint8_t alarm_NA_flash_count = 0; //20ms
+
+    if (alarm_data_display.mode == ELAND_NA)
     {
-        if (alarm_jump_flash_500ms)
-        {
-            alarm_jump_flash_500ms = FALSE;
-            if (++alarm_jump_flash_count > 6)
-            {
-                alarm_jump_flash_count = 0;
-                HT162x_LCD_Change_Pixel(COM7, SEG11, RESET);
-            }
-            if (alarm_jump_flash_count == 1) /*next alarm display*/
-                HT162x_LCD_Change_Pixel(COM7, SEG11, SET);
-        }
-    }
-    if ((alarm_data_display.mode == ELAND_NA) && (alarm_NA_flash_500ms))
-    {
-        alarm_NA_flash_500ms = FALSE;
-        if (display_flag)
-        {
-            display_flag = FALSE;
+        if (alarm_NA_flash_count == 12)
             Eland_alarm_display(SET);
-        }
-        else
-        {
-            display_flag = TRUE;
+        else if (alarm_NA_flash_count == 25)
             Eland_alarm_display(RESET);
+        if (alarm_NA_flash_count++ >= 25)
+            alarm_NA_flash_count = 0;
+        return;
+    }
+    if (alarm_data_display.alarm_skip > 0)
+    {
+        if (alarm_skip_flash_count == 1)
+            Eland_alarm_display(SET);
+        else if (alarm_skip_flash_count >= 2)
+        {
+            Eland_alarm_display(RESET);
+            alarm_skip_flash_count = 0;
+        }
+        return;
+    }
+    if (alarm_data_display.alarm_state == ALARM_SNOOZ_STOP)
+    {
+        if (alarm_snooze_flash_count == 1)
+            HT162x_LCD_Change_Pixel(COM7, SEG13, (FlagStatus)(alarm_data_display.snooze_enabled));
+        else if (alarm_snooze_flash_count >= 2)
+        {
+            HT162x_LCD_Change_Pixel(COM7, SEG13, RESET);
+            alarm_snooze_flash_count = 0;
         }
     }
+
     if (!Alarm_need_Refresh)
         return;
     Alarm_need_Refresh = FALSE;
