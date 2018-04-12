@@ -20,7 +20,10 @@
 
 /* Private define ------------------------------------------------------------*/
 #define MCU_VERSION_MAJOR (uint8_t)1
-#define MCU_VERSION_MINOR (uint8_t)11
+#define MCU_VERSION_MINOR (uint8_t)12
+
+#define LCD_All_angle_view
+
 #define RTC_LSE
 #define CLK_SUE_HSI
 /* Private macro -------------------------------------------------------------*/
