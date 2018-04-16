@@ -597,7 +597,6 @@ void ALARM_Alarm_Refresh(void)
     Alarm_need_Refresh = FALSE;
     Eland_alarm_display(SET);
     /*set alarm color*/
-    RGBLED_Color_Set((__eland_color_t)alarm_data_display.color);
 }
 /**
  ****************************************************************************
@@ -735,4 +734,5 @@ void Eland_alarm_display(FlagStatus status)
         /*next alarm display*/
         HT162x_LCD_Change_Pixel(COM7, SEG11, (FlagStatus)(alarm_data_display.next_alarm));
     }
+    RGBLED_Color_Set((__eland_color_t)alarm_data_display.color);
 }
