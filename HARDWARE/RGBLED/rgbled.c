@@ -185,52 +185,58 @@ void RGBLED_Input_RGB(u8 Red, u8 Green, u8 Blue)
 }
 /**
  ****************************************************************************
- * @Function : void RGBLED_Color_Set(__eland_color_t color)
+ * @Function : void RGBLED_Color_Set(__eland_color_t color, uint8_t brightness)
  * @File     : rgbled.c
  * @Program  : color:color to set
+ *             brightness: led bright
  * @Created  : 2017/10/27 by seblee
  * @Brief    : set led color
  * @Version  : V1.0
 **/
-void RGBLED_Color_Set(__eland_color_t color)
+void RGBLED_Color_Set(__eland_color_t color, uint8_t brightness)
 {
+    uint8_t bright = 0;
+    if (brightness > 100)
+        bright = 100;
+    else
+        bright = brightness;
     switch (color)
     {
-    case ELAND_BLACK: //
+    case ELAND_BLACK:
         RGBLED_Input_RGB(0, 0, 0);
         break;
-    case ELAND_BLUE: //
-        RGBLED_Input_RGB(0, 0, 255);
+    case ELAND_BLUE:
+        RGBLED_Input_RGB(0, 0, 255 * bright / 100);
         break;
-    case ELAND_WHITE_BLUE: //
-        RGBLED_Input_RGB(25, 25, 255);
+    case ELAND_WHITE_BLUE:
+        RGBLED_Input_RGB(25 * bright / 100, 25 * bright / 100, 255 * bright / 100);
         break;
-    case ELAND_PURPLE: //
-        RGBLED_Input_RGB(128, 0, 128);
+    case ELAND_PURPLE:
+        RGBLED_Input_RGB(128 * bright / 100, 0, 128 * bright / 100);
         break;
-    case ELAND_RED: //
-        RGBLED_Input_RGB(255, 0, 0);
+    case ELAND_RED:
+        RGBLED_Input_RGB(255 * bright / 100, 0, 0);
         break;
-    case ELAND_PINK: //
-        RGBLED_Input_RGB(255, 100, 110);
+    case ELAND_PINK:
+        RGBLED_Input_RGB(255 * bright / 100, 100 * bright / 100, 110 * bright / 100);
         break;
-    case ELAND_ORANGE: //
-        RGBLED_Input_RGB(255, 165, 0);
+    case ELAND_ORANGE:
+        RGBLED_Input_RGB(255 * bright / 100, 165 * bright / 100, 0);
         break;
-    case ELAND_YELLOW: //
-        RGBLED_Input_RGB(255, 255, 0);
+    case ELAND_YELLOW:
+        RGBLED_Input_RGB(255 * bright / 100, 255 * bright / 100, 0);
         break;
     case ELAND_YELLOW_GREEN:
-        RGBLED_Input_RGB(173, 255, 47);
+        RGBLED_Input_RGB(173 * bright / 100, 255 * bright / 100, 47 * bright / 100);
         break;
-    case ELAND_GREEN: //
-        RGBLED_Input_RGB(0, 128, 0);
+    case ELAND_GREEN:
+        RGBLED_Input_RGB(0, 128 * bright / 100, 0);
         break;
-    case ELAND_WHITE: //
-        RGBLED_Input_RGB(255, 255, 255);
+    case ELAND_WHITE:
+        RGBLED_Input_RGB(255 * bright / 100, 255 * bright / 100, 255 * bright / 100);
         break;
-    default: //
-        RGBLED_Input_RGB(255, 255, 255);
+    default:
+        RGBLED_Input_RGB(255 * bright / 100, 255 * bright / 100, 255 * bright / 100);
         break;
     }
 }

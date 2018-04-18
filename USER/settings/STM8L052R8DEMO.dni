@@ -29,7 +29,7 @@ Enabled=0
 ShowSource=1
 [DebugChecksum]
 <<<<<<< HEAD
-Checksum=1894702308
+Checksum=-1744860842
 =======
 Checksum=-2074508045
 >>>>>>> master
@@ -40,10 +40,12 @@ MixedMode=1
 [struct_types]
 Fmt0=__ELAND_DATA_2_MCU_t-brightness_night	3	0
 Fmt1=__ELAND_DATA_2_MCU_t-brightness_normal	3	0
-Fmt2=__ELAND_DATA_2_MCU_t-night_mode_begin_time	3	0
-Fmt3=__ELAND_DATA_2_MCU_t-night_mode_enabled	3	0
-Fmt4=__ELAND_DATA_2_MCU_t-night_mode_end_time	3	0
-Fmt5=__ELAND_DATA_2_MCU_t-time_display_format	3	0
+Fmt2=__ELAND_DATA_2_MCU_t-led_night	3	0
+Fmt3=__ELAND_DATA_2_MCU_t-led_normal	3	0
+Fmt4=__ELAND_DATA_2_MCU_t-night_mode_begin_time	3	0
+Fmt5=__ELAND_DATA_2_MCU_t-night_mode_enabled	3	0
+Fmt6=__ELAND_DATA_2_MCU_t-night_mode_end_time	3	0
+Fmt7=__ELAND_DATA_2_MCU_t-time_display_format	3	0
 [array_types]
 Fmt0=uint8_t[300]	4	0
 Fmt1=uint8_t[5]	4	0
@@ -56,12 +58,13 @@ Fmt4={W}1:data	4	0
 Fmt5={W}1:i	4	0
 Fmt6={W}1:timepart	4	0
 Fmt7={W}1:value	4	0
-Fmt8={W}42:Count	4	0
-Fmt9={W}42:Trg	4	0
-Fmt10={W}42:ope_L	4	0
-Fmt11={W}42:ope_M	4	0
-Fmt12={W}42:opt_L	4	0
-Fmt13={W}42:opt_M	4	0
+Fmt8={W}42:Alarm_led_brigh	3	0
+Fmt9={W}42:Count	4	0
+Fmt10={W}42:Trg	4	0
+Fmt11={W}42:ope_L	4	0
+Fmt12={W}42:ope_M	4	0
+Fmt13={W}42:opt_L	4	0
+Fmt14={W}42:opt_M	4	0
 [DataSample]
 LogEnabled=0
 GraphEnabled=0

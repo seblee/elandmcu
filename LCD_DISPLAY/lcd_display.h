@@ -22,6 +22,8 @@ typedef struct eland_data_2_mcu
     int8_t night_mode_enabled;
     int8_t brightness_normal;
     int8_t brightness_night;
+    int8_t led_normal;
+    int8_t led_night;
     uint32_t night_mode_begin_time;
     uint32_t night_mode_end_time;
 } __ELAND_DATA_2_MCU_t;
@@ -33,6 +35,7 @@ typedef enum _eland_mode {
     ELAND_NC,
     ELAND_NA,
     ELAND_AP,
+    ELAND_OTA,
     ELAND_MODE_MAX,
 } _ELAND_MODE_t;
 
@@ -64,6 +67,7 @@ typedef struct
 /* Private variables ---------------------------------------------------------*/
 extern bool Alarm_need_Refresh;
 extern bool ELAND_DATA_Refreshed;
+extern bool Alarm_is_empty;
 extern __ELAND_DATA_2_MCU_t eland_data;
 extern _alarm_mcu_data_t alarm_data_simple;
 extern _alarm_mcu_data_t alarm_data_display;
@@ -82,4 +86,5 @@ void Eland_data_Refresh(void);
 void LCD_OtherMode(void);
 void Brightness_refresh(void);
 void Eland_alarm_display(FlagStatus status);
+void ota_display(void);
 #endif /*__LCD_DISPLAY_H_*/

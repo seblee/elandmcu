@@ -27,6 +27,8 @@
 __ELAND_DATA_2_MCU_t eland_data;
 _alarm_mcu_data_t alarm_data_simple;
 _alarm_mcu_data_t alarm_data_display;
+bool Alarm_is_empty = TRUE;
+uint8_t Alarm_led_brigh = 100;
 bool Alarm_need_Refresh = TRUE;
 bool ELAND_DATA_Refreshed = TRUE;
 _ELAND_MODE_t Eland_mode = ELAND_MODE_NONE;
@@ -59,11 +61,15 @@ const uint8_t Position_alarm_simple[7] = {8, 9, 0, 1, 2, 3, 4};
 void LCD_data_init(void)
 {
     eland_data.time_display_format = 1;
-    eland_data.brightness_normal = 100;
+    eland_data.brightness_normal = 80;
     eland_data.brightness_night = 20;
+    eland_data.led_normal = 80;
+    eland_data.led_night = 20;
     eland_data.night_mode_enabled = 0;
     eland_data.night_mode_begin_time = 79200;
     eland_data.night_mode_end_time = 21600;
+
+    Alarm_is_empty = TRUE;
 
     memset(&alarm_data_simple, 0, sizeof(_alarm_mcu_data_t));
     memset(&alarm_data_display, 0, sizeof(_alarm_mcu_data_t));
@@ -105,6 +111,10 @@ void LCD_Display_Rssi_State(Eland_Status_type_t state)
             rssi_value = LEVEL0;
         HT162x_LCD_RSSI_Set(rssi_value);
         break;
+    case ELAND_OTA:
+        HT162x_LCD_TCP_STATE_Set(RESET);
+        HT162x_LCD_RSSI_Set(LEVEL0);
+        break;
     default:
         break;
     }
@@ -125,8 +135,9 @@ void LCD_Clock_MON(void)
     static mico_rtc_time_t Time_cache;
     _eland_date_time_t mcutimeCache;
     static _ELAND_MODE_t Eland_modeBak = ELAND_MODE_MAX;
+    static uint8_t One_second_count = 200;
     /***** bit0 time bit1 alarm*************/
-    uint8_t changeflag = 0;
+    static uint8_t changeflag = 0;
     if (Eland_mode != Eland_modeBak)
     {
         /**refresh wifi**/
@@ -161,11 +172,14 @@ void LCD_Clock_MON(void)
         if (Key_Up_Trg & KEY_Set)
         {
             time_set_mode = 1;
-            number_flash_cache = alarm_data_simple.moment_time.hr;
+            if ((eland_data.time_display_format == 1) && (alarm_data_simple.moment_time.hr > 12))
+                number_flash_cache = alarm_data_simple.moment_time.hr - 12;
+            else
+                number_flash_cache = alarm_data_simple.moment_time.hr;
         }
         break;
     case 1: //alarm hour
-        if ((Key_Up_Trg & KEY_Add) || ((key_delay >= ChangeSpeed) && (Key_Restain & KEY_Add)))
+        if ((Key_Up_Trg & KEY_Add) || ((key_delay >= ChangeSpeed) && (Key_Short_Restain & KEY_Add)))
         {
             key_delay = 0;
             if (alarm_data_simple.moment_time.hr < 24)
@@ -188,7 +202,7 @@ void LCD_Clock_MON(void)
                 HT162x_LCD_AMPM_Set(ALARM_PART, AMPMMAX);
             HT162x_LCD_Double_Digits_Write(Position_alarm_simple[0], number_flash_cache, 1);
         }
-        else if ((Key_Up_Trg & KEY_Minus) || ((key_delay >= ChangeSpeed) && (Key_Restain & KEY_Minus)))
+        else if ((Key_Up_Trg & KEY_Minus) || ((key_delay >= ChangeSpeed) && (Key_Short_Restain & KEY_Minus)))
         {
             key_delay = 0;
             if (alarm_data_simple.moment_time.hr > 0)
@@ -224,7 +238,7 @@ void LCD_Clock_MON(void)
         }
         break;
     case 2: //alarm minute
-        if ((Key_Up_Trg & KEY_Add) || ((key_delay >= ChangeSpeed) && (Key_Restain & KEY_Add)))
+        if ((Key_Up_Trg & KEY_Add) || ((key_delay >= ChangeSpeed) && (Key_Short_Restain & KEY_Add)))
         {
             key_delay = 0;
             if (alarm_data_simple.moment_time.min < 59)
@@ -234,7 +248,7 @@ void LCD_Clock_MON(void)
             number_flash_cache = alarm_data_simple.moment_time.min;
             HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, 2);
         }
-        else if ((Key_Up_Trg & KEY_Minus) || ((key_delay >= ChangeSpeed) && (Key_Restain & KEY_Minus)))
+        else if ((Key_Up_Trg & KEY_Minus) || ((key_delay >= ChangeSpeed) && (Key_Short_Restain & KEY_Minus)))
         {
             key_delay = 0;
             if (alarm_data_simple.moment_time.min > 0)
@@ -258,7 +272,7 @@ void LCD_Clock_MON(void)
         }
         break;
     case 3: //date year
-        if ((Key_Up_Trg & KEY_Add) || ((key_delay >= ChangeSpeed) && (Key_Restain & KEY_Add)))
+        if ((Key_Up_Trg & KEY_Add) || ((key_delay >= ChangeSpeed) && (Key_Short_Restain & KEY_Add)))
         {
             key_delay = 0;
             if (Time_cache.year < 37)
@@ -268,7 +282,7 @@ void LCD_Clock_MON(void)
             number_flash_cache = Time_cache.year;
             HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, 1);
         }
-        else if ((Key_Up_Trg & KEY_Minus) || ((key_delay >= ChangeSpeed) && (Key_Restain & KEY_Minus)))
+        else if ((Key_Up_Trg & KEY_Minus) || ((key_delay >= ChangeSpeed) && (Key_Short_Restain & KEY_Minus)))
         {
             key_delay = 0;
             if (Time_cache.year > 0)
@@ -291,7 +305,7 @@ void LCD_Clock_MON(void)
         }
         break;
     case 4: //date month
-        if ((Key_Up_Trg & KEY_Add) || ((key_delay >= ChangeSpeed) && (Key_Restain & KEY_Add)))
+        if ((Key_Up_Trg & KEY_Add) || ((key_delay >= ChangeSpeed) && (Key_Short_Restain & KEY_Add)))
         {
             key_delay = 0;
             if (Time_cache.month < 12)
@@ -301,7 +315,7 @@ void LCD_Clock_MON(void)
             number_flash_cache = Time_cache.month;
             HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, 1);
         }
-        else if ((Key_Up_Trg & KEY_Minus) || ((key_delay >= ChangeSpeed) && (Key_Restain & KEY_Minus)))
+        else if ((Key_Up_Trg & KEY_Minus) || ((key_delay >= ChangeSpeed) && (Key_Short_Restain & KEY_Minus)))
         {
             key_delay = 0;
             if (Time_cache.month > 1)
@@ -326,7 +340,7 @@ void LCD_Clock_MON(void)
         }
         break;
     case 5: //date date
-        if ((Key_Up_Trg & KEY_Add) || ((key_delay >= ChangeSpeed) && (Key_Restain & KEY_Add)))
+        if ((Key_Up_Trg & KEY_Add) || ((key_delay >= ChangeSpeed) && (Key_Short_Restain & KEY_Add)))
         {
             key_delay = 0;
             if (Time_cache.date < DayOfMon[Time_cache.month - 1][(Time_cache.year % 4 == 0) ? 1 : 0])
@@ -336,7 +350,7 @@ void LCD_Clock_MON(void)
             number_flash_cache = Time_cache.date;
             HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, 1);
         }
-        else if ((Key_Up_Trg & KEY_Minus) || ((key_delay >= ChangeSpeed) && (Key_Restain & KEY_Minus)))
+        else if ((Key_Up_Trg & KEY_Minus) || ((key_delay >= ChangeSpeed) && (Key_Short_Restain & KEY_Minus)))
         {
             key_delay = 0;
             if (Time_cache.date > 1)
@@ -362,7 +376,7 @@ void LCD_Clock_MON(void)
         }
         break;
     case 6: //time hour
-        if ((Key_Up_Trg & KEY_Add) || ((key_delay >= ChangeSpeed) && (Key_Restain & KEY_Add)))
+        if ((Key_Up_Trg & KEY_Add) || ((key_delay >= ChangeSpeed) && (Key_Short_Restain & KEY_Add)))
         {
             key_delay = 0;
             if (Time_cache.hr < 23)
@@ -384,7 +398,7 @@ void LCD_Clock_MON(void)
                 HT162x_LCD_AMPM_Set(TIME_PART, AMPMMAX);
             HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, 1);
         }
-        else if ((Key_Up_Trg & KEY_Minus) || ((key_delay >= ChangeSpeed) && (Key_Restain & KEY_Minus)))
+        else if ((Key_Up_Trg & KEY_Minus) || ((key_delay >= ChangeSpeed) && (Key_Short_Restain & KEY_Minus)))
         {
             key_delay = 0;
             if (Time_cache.hr > 0)
@@ -420,7 +434,7 @@ void LCD_Clock_MON(void)
         }
         break;
     case 7: //time minute
-        if ((Key_Up_Trg & KEY_Add) || ((key_delay >= ChangeSpeed) && (Key_Restain & KEY_Add)))
+        if ((Key_Up_Trg & KEY_Add) || ((key_delay >= ChangeSpeed) && (Key_Short_Restain & KEY_Add)))
         {
             key_delay = 0;
             if (Time_cache.min < 59)
@@ -431,7 +445,7 @@ void LCD_Clock_MON(void)
             number_flash_cache = Time_cache.min;
             HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, 2);
         }
-        else if ((Key_Up_Trg & KEY_Minus) || ((key_delay >= ChangeSpeed) && (Key_Restain & KEY_Minus)))
+        else if ((Key_Up_Trg & KEY_Minus) || ((key_delay >= ChangeSpeed) && (Key_Short_Restain & KEY_Minus)))
         {
             key_delay = 0;
             if (Time_cache.min > 0)
@@ -462,21 +476,12 @@ void LCD_Clock_MON(void)
     default:
         break;
     }
-    if (changeflag != 0) //syncchronize
-    {
-        if (MCU_Refreshed == REFRESH_NONE)
-        {
-            if (changeflag & 1)
-                MCU_Refreshed = REFRESH_TIME;
-            else if (changeflag & 2)
-                MCU_Refreshed = REFRESH_ALARM;
-        }
-    }
     if (WakeupOccurred == TRUE) //500ms point flash
     {
         WakeupOccurred = FALSE;
         HT162x_LCD_Toggle_Pixel(COM0, SEG32);
         HT162x_LCD_Toggle_Pixel(COM0, SEG33);
+        alarm_snooze_flash_count++;
         if (time_set_mode != 0)
         {
             if (number_flash_flag == 0)
@@ -491,13 +496,37 @@ void LCD_Clock_MON(void)
             }
         }
     }
-    if ((AlarmOccurred == TRUE) && (time_set_mode < 3)) //1s update time
+    if (AlarmOccurred == TRUE) //1s update time
     {
-        HT162x_LCD_Time_Display(TIME_PART, CurrentMicoTime);
-        HT162x_LCD_Date_Display(TIME_PART, CurrentMicoTime);
+        if (time_set_mode < 3)
+        {
+            HT162x_LCD_Time_Display(TIME_PART, CurrentMicoTime);
+            HT162x_LCD_Date_Display(TIME_PART, CurrentMicoTime);
+        }
         AlarmOccurred = FALSE;
         /*refresh brightness*/
         Brightness_refresh();
+        if (One_second_count++ >= 60)
+        {
+            One_second_count = 0;
+            changeflag |= 1;
+        }
+    }
+    if (changeflag & 3) //syncchronize
+    {
+        if (MCU_Refreshed == REFRESH_NONE)
+        {
+            if (changeflag & 1)
+            {
+                MCU_Refreshed = REFRESH_TIME;
+                changeflag &= 0xfe;
+            }
+            else if (changeflag & 2)
+            {
+                MCU_Refreshed = REFRESH_ALARM;
+                changeflag &= 0xfd;
+            }
+        }
     }
     ALARM_Alarm_Refresh();
     Eland_data_Refresh();
@@ -516,15 +545,39 @@ void LCD_NetMode(void)
     static _ELAND_MODE_t Eland_modeBak = ELAND_MODE_MAX;
     if (Eland_mode != Eland_modeBak)
     {
+        if (Eland_mode == ELAND_OTA)
+        {
+            /**refresh date**/
+            HT162x_LCD_Date_Display(TIME_CLEAR, CurrentMicoTime);
+            /**refresh time**/
+            HT162x_LCD_Time_Display(TIME_CLEAR, CurrentMicoTime);
+            /**SHOW the line**/
+            HT162x_LCD_Change_Pixel(COM7, SEG33, RESET);
+
+            HT162x_LCD_Change_Pixel(COM0, SEG32, RESET);
+            HT162x_LCD_Change_Pixel(COM0, SEG33, RESET);
+        }
+        else
+        {
+            /**refresh time**/
+            HT162x_LCD_Time_Display(TIME_PART, CurrentMicoTime);
+            /**refresh date**/
+            HT162x_LCD_Date_Display(TIME_PART, CurrentMicoTime);
+            /**SHOW the line**/
+            HT162x_LCD_Change_Pixel(COM7, SEG33, SET);
+        }
         /**refresh wifi**/
         LCD_Display_Rssi_State(eland_state);
-        /**refresh time**/
-        HT162x_LCD_Time_Display(TIME_PART, CurrentMicoTime);
-        /**refresh date**/
-        HT162x_LCD_Date_Display(TIME_PART, CurrentMicoTime);
-        /**SHOW the line**/
-        HT162x_LCD_Change_Pixel(COM7, SEG33, SET);
         Eland_modeBak = Eland_mode;
+    }
+    if (Eland_mode == ELAND_OTA)
+    {
+        if (WakeupOccurred == TRUE) //500ms point flash
+        {
+            WakeupOccurred = FALSE;
+            ota_display();
+        }
+        return;
     }
     if (WakeupOccurred == TRUE) //500ms point flash
     {
@@ -539,7 +592,7 @@ void LCD_NetMode(void)
     {
         HT162x_LCD_Time_Display(TIME_PART, CurrentMicoTime);
         HT162x_LCD_Date_Display(TIME_PART, CurrentMicoTime);
-        AlarmOccurred = FALSE;
+
         /*refresh brightness*/
         Brightness_refresh();
     }
@@ -557,7 +610,6 @@ void LCD_NetMode(void)
 **/
 void ALARM_Alarm_Refresh(void)
 {
-
     static uint8_t alarm_NA_flash_count = 0; //20ms
 
     if (alarm_data_display.mode == ELAND_NA)
@@ -631,22 +683,14 @@ void LCD_OtherMode(void)
         if (display_flag)
         {
             display_flag = FALSE;
-            /*****year*******/
-            HT162x_LCD_Double_Digits_Write(Position[TIME_PART][DIGIT_YEAR], CurrentMicoTime.year, 1);
-            /*****month******/
-            HT162x_LCD_Double_Digits_Write(Position[TIME_PART][DIGIT_MONTH], CurrentMicoTime.month, 1);
-            /*****date******/
-            HT162x_LCD_Double_Digits_Write(Position[TIME_PART][DIGIT_DAY], CurrentMicoTime.date, 1);
+            /**refresh date**/
+            HT162x_LCD_Date_Display(TIME_PART, CurrentMicoTime);
         }
         else
         {
             display_flag = TRUE;
-            /*****year*******/
-            HT162x_LCD_Double_Digits_Write(Position[TIME_PART][DIGIT_YEAR], CurrentMicoTime.year, 0);
-            /*****month******/
-            HT162x_LCD_Double_Digits_Write(Position[TIME_PART][DIGIT_MONTH], CurrentMicoTime.month, 0);
-            /*****date******/
-            HT162x_LCD_Double_Digits_Write(Position[TIME_PART][DIGIT_DAY], CurrentMicoTime.date, 0);
+            /**refresh date**/
+            HT162x_LCD_Date_Display(TIME_CLEAR, CurrentMicoTime);
         }
     }
     if (AlarmOccurred == TRUE) //1s update time
@@ -669,6 +713,30 @@ void LCD_OtherMode(void)
 **/
 void Brightness_refresh(void)
 {
+    bool now_is_night = FALSE;
+    if (eland_data.night_mode_enabled)
+    {
+        if (eland_data.night_mode_end_time < eland_data.night_mode_begin_time)
+        {
+            if (Today_Second < eland_data.night_mode_end_time)
+                now_is_night = TRUE;
+            else if (Today_Second < eland_data.night_mode_begin_time)
+                now_is_night = FALSE;
+            else
+                now_is_night = TRUE;
+        }
+        else
+        {
+            if (Today_Second < eland_data.night_mode_begin_time)
+                now_is_night = FALSE;
+            else if (Today_Second < eland_data.night_mode_end_time)
+                now_is_night = TRUE;
+            else
+                now_is_night = FALSE;
+        }
+    }
+    else
+        now_is_night = FALSE;
     /* back light turn brightest */
     if (Key_Light_counter < SW_LIGHT_TIMES)
     {
@@ -676,29 +744,26 @@ void Brightness_refresh(void)
     }
     else
     {
-        if (eland_data.night_mode_enabled)
-        {
-            if (eland_data.night_mode_end_time < eland_data.night_mode_begin_time)
-            {
-                if (Today_Second < eland_data.night_mode_end_time)
-                    RGBLED_Set_Brightness(eland_data.brightness_night);
-                else if (Today_Second < eland_data.night_mode_begin_time)
-                    RGBLED_Set_Brightness(eland_data.brightness_normal);
-                else
-                    RGBLED_Set_Brightness(eland_data.brightness_night);
-            }
-            else
-            {
-                if (Today_Second < eland_data.night_mode_begin_time)
-                    RGBLED_Set_Brightness(eland_data.brightness_normal);
-                else if (Today_Second < eland_data.night_mode_end_time)
-                    RGBLED_Set_Brightness(eland_data.brightness_night);
-                else
-                    RGBLED_Set_Brightness(eland_data.brightness_normal);
-            }
-        }
+        if (now_is_night)
+            RGBLED_Set_Brightness(eland_data.brightness_night);
         else
             RGBLED_Set_Brightness(eland_data.brightness_normal);
+    }
+    if (now_is_night)
+    {
+        if (Alarm_led_brigh != eland_data.led_night)
+        {
+            Alarm_led_brigh = eland_data.led_night;
+            Alarm_need_Refresh = TRUE;
+        }
+    }
+    else
+    {
+        if (Alarm_led_brigh != eland_data.led_normal)
+        {
+            Alarm_led_brigh = eland_data.led_normal;
+            Alarm_need_Refresh = TRUE;
+        }
     }
 }
 /**
@@ -712,7 +777,7 @@ void Brightness_refresh(void)
 **/
 void Eland_alarm_display(FlagStatus status)
 {
-    if (status == RESET)
+    if ((status == RESET) || Alarm_is_empty || (Eland_mode == ELAND_OTA))
     {
         /*Clear alarm date*/
         HT162x_LCD_Date_Display(ALARM_CLEAR, alarm_data_display.moment_time);
@@ -726,7 +791,10 @@ void Eland_alarm_display(FlagStatus status)
     else
     {
         /*refresh alarm time*/
-        HT162x_LCD_Date_Display(ALARM_PART, alarm_data_display.moment_time);
+        if (Eland_mode == ELAND_CLOCK_ALARM)
+            HT162x_LCD_Date_Display(ALARM_CLEAR, alarm_data_display.moment_time);
+        else
+            HT162x_LCD_Date_Display(ALARM_PART, alarm_data_display.moment_time);
         /*refresh alarm time*/
         HT162x_LCD_Time_Display(ALARM_PART, alarm_data_display.moment_time);
         /*refresh snooze point*/
@@ -734,5 +802,18 @@ void Eland_alarm_display(FlagStatus status)
         /*next alarm display*/
         HT162x_LCD_Change_Pixel(COM7, SEG11, (FlagStatus)(alarm_data_display.next_alarm));
     }
-    RGBLED_Color_Set((__eland_color_t)alarm_data_display.color);
+    RGBLED_Color_Set((__eland_color_t)alarm_data_display.color, Alarm_led_brigh);
+}
+
+void ota_display(void)
+{
+    static uint8_t flag = 1;
+    /**500ms once**/
+    HT162x_LCD_Num_Set(Serial_07, (flag & 0x01) ? 10 : 0);
+    HT162x_LCD_Num_Set(Serial_08, (flag & 0x02) ? 10 : 0);
+    HT162x_LCD_Num_Set(Serial_09, (flag & 0x04) ? 10 : 0);
+    HT162x_LCD_Num_Set(Serial_10, (flag & 0x08) ? 10 : 0);
+    flag <<= 1;
+    if (flag == 0x10)
+        flag = 1;
 }

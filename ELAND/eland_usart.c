@@ -393,9 +393,15 @@ static void MODH_Opration_0BH(void)
 {
     uint8_t *SendBuf;
     if (msg_receive_buff[2] == sizeof(_alarm_mcu_data_t))
+    {
         memcpy(&alarm_data_display, &msg_receive_buff[3], sizeof(_alarm_mcu_data_t));
+        Alarm_is_empty = FALSE;
+    }
     else if (msg_receive_buff[2] == 0)
+    {
         memset(&alarm_data_display, 0, sizeof(_alarm_mcu_data_t));
+        Alarm_is_empty = TRUE;
+    }
     SendBuf = calloc(4, sizeof(uint8_t));
     *SendBuf = Uart_Packet_Header;
     *(SendBuf + 1) = ALARM_SEND_0B;
@@ -419,14 +425,14 @@ static void MODH_Opration_0CH(void)
 {
     uint8_t *SendBuf;
     memcpy(&eland_data, &msg_receive_buff[3], sizeof(__ELAND_DATA_2_MCU_t));
-    eland_data.night_mode_begin_time = msg_receive_buff[7] |
-                                       (uint32_t)msg_receive_buff[8] << 8 |
-                                       (uint32_t)msg_receive_buff[9] << 16 |
-                                       (uint32_t)msg_receive_buff[10] << 24;
-    eland_data.night_mode_end_time = msg_receive_buff[11] |
-                                     (uint32_t)msg_receive_buff[12] << 8 |
-                                     (uint32_t)msg_receive_buff[13] << 16 |
-                                     (uint32_t)msg_receive_buff[14] << 24;
+    eland_data.night_mode_begin_time = msg_receive_buff[11] |
+                                       (uint32_t)msg_receive_buff[12] << 8 |
+                                       (uint32_t)msg_receive_buff[13] << 16 |
+                                       (uint32_t)msg_receive_buff[14] << 24;
+    eland_data.night_mode_end_time = msg_receive_buff[15] |
+                                     (uint32_t)msg_receive_buff[16] << 8 |
+                                     (uint32_t)msg_receive_buff[17] << 16 |
+                                     (uint32_t)msg_receive_buff[18] << 24;
     SendBuf = calloc(4, sizeof(uint8_t));
     *SendBuf = Uart_Packet_Header;
     *(SendBuf + 1) = ELAND_DATA_0C;

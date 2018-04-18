@@ -19,11 +19,13 @@
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-uint16_t Key_Down_Trg = 0;    //按鍵單次狀態
-uint16_t Key_Up_Trg = 0;      //按鍵短按 放開
-uint16_t Key_Count = 0;       //按鍵長按狀態 按下/放開狀態
-uint16_t Key_Restain = 0;     //按鍵按捺狀態
-uint16_t Key_Restain_Trg = 0; //按鍵按捺狀態
+uint16_t Key_Down_Trg = 0;          //按鍵單次狀態
+uint16_t Key_Up_Trg = 0;            //按鍵短按 放開
+uint16_t Key_Count = 0;             //按鍵長按狀態 按下/放開狀態
+uint16_t Key_Restain = 0;           //按鍵按捺狀態
+uint16_t Key_Restain_Trg = 0;       //按鍵按捺狀態
+uint16_t Key_Short_Restain = 0;     //按鍵按捺狀態
+uint16_t Key_Short_Restain_Trg = 0; //按鍵按捺狀態
 uint16_t Key_Light_counter = 0;
 /* Private function prototypes -----------------------------------------------*/
 static void Eland_Key_Long_Press_State(void);
@@ -135,6 +137,7 @@ static void Eland_Key_Long_Press_State(void)
     static uint8_t KEY_Timer[9];
     uint8_t i;
     static uint16_t Key_Restain_Count = 0;
+    static uint16_t Key_Short_Restain_Count = 0;
     for (i = 0; i < 9; i++)
     {
         if (Key_Count & (1 << i))
@@ -143,6 +146,9 @@ static void Eland_Key_Long_Press_State(void)
                 KEY_Timer[i]++;
             else
                 Key_Restain |= (1 << i);
+
+            if (KEY_Timer[i] > SHSORT_RESTAIN_TIMES)
+                Key_Short_Restain |= (1 << i);
         }
         else
         {
@@ -152,8 +158,11 @@ static void Eland_Key_Long_Press_State(void)
                 Key_Up_Trg &= (~(1 << i));
             KEY_Timer[i] = 0;
             Key_Restain &= (~(1 << i));
+            Key_Short_Restain &= (~(1 << i));
         }
     }
     Key_Restain_Trg = Key_Restain & (Key_Restain ^ Key_Restain_Count);
     Key_Restain_Count = Key_Restain;
+    Key_Short_Restain_Trg = Key_Short_Restain & (Key_Short_Restain ^ Key_Short_Restain_Count);
+    Key_Short_Restain_Count = Key_Short_Restain;
 }

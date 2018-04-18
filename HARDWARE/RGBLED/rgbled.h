@@ -67,7 +67,7 @@ extern __IO uint16_t TIM5_CCR2_Val;
 /* Private function prototypes -----------------------------------------------*/
 void RGBLED_CFG(void);
 void RGBLED_Input_RGB(u8 Red, u8 Green, u8 Blue);
-void RGBLED_Color_Set(__eland_color_t color);
+void RGBLED_Color_Set(__eland_color_t color, uint8_t brightness);
 void RGBLED_Rainbow_Set(__rainbow_t color);
 void RGBLED_RGBCode_Set(u32 ColorCode);
 void RGBLED_Set_Brightness(uint8_t Brightness);
