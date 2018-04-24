@@ -17,7 +17,8 @@
 /* Private typedef -----------------------------------------------------------*/
 typedef enum {
     KEY_FUN_NONE = 0x00, /* 空命令*/
-    KEY_READ_02 = 0X02,  /* READ MCU KEY STATE*/
+    SEND_ELAND_ERR_01,   /* SEND ELAND ERROR CODE*/
+    KEY_READ_02,         /* READ MCU KEY STATE*/
     TIME_SET_03,         /* SEND ELAND TIME*/
     TIME_READ_04,        /* READ MCU TIME*/
     ELAND_STATES_05,     /* SEND ELAND STATES*/
@@ -31,6 +32,13 @@ typedef enum {
     ELAND_RESET_0D,      /* RESET SYSTEM */
     ELAND_DELETE_0E,     /* DEVICE DATA DELETE */
 } __msg_function_t;
+
+typedef enum {
+    EL_ERROR_NONE = 0x00, /*error none */
+    EL_HTTP_TIMEOUT,      /*http time out*/
+    EL_HTTP_204,          /*http 204*/
+    EL_HTTP_400,          /*http 400*/
+} __eland_error_t;
 
 typedef enum {
     FrameHeadSataus,

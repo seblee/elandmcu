@@ -33,6 +33,7 @@ MCU_Refresh_type_t MCU_Refreshed = REFRESH_NONE;
 
 /* Private function prototypes -----------------------------------------------*/
 static void OprationFrame(void);
+static void MODH_Opration_01H(void); /* SEND ELAND ERROR CODE*/
 static void MODH_Opration_02H(void); /* READ MCU KEY STATE*/
 static void MODH_Opration_03H(void); /* SEND ELAND TIME*/
 static void MODH_Opration_04H(void); /* READ MCU TIME*/
@@ -122,6 +123,9 @@ static void OprationFrame(void)
 {
     switch (msg_receive_buff[1])
     {
+    case SEND_ELAND_ERR_01:
+        MODH_Opration_01H();
+        break;
     case KEY_READ_02:
         MODH_Opration_02H();
         break;
@@ -167,7 +171,29 @@ static void OprationFrame(void)
 }
 /**
  ****************************************************************************
- * @Function : void MODH_Opration_02H(void)
+ * @Function : static void MODH_Opration_01H(void)
+ * @File     : eland_usart.c
+ * @Program  : H02 header fun len error  tral
+ *                    55   01  04   xx    aa
+ * @Created  : 2017/11/1 by seblee
+ * @Brief    : oprate get eland error
+ * @Version  : V1.0
+**/
+static void MODH_Opration_01H(void)
+{
+    uint8_t *SendBuf;
+    SendBuf = calloc(9, sizeof(uint8_t));
+    *SendBuf = Uart_Packet_Header;
+    *(SendBuf + 1) = SEND_ELAND_ERR_01;
+    *(SendBuf + 2) = 0;
+    *(SendBuf + 3) = Uart_Packet_Trail;
+    USARTx_Send_Data(USART1, SendBuf, 4 + *(SendBuf + 2));
+    free(SendBuf);
+    MCU_Refreshed = REFRESH_NONE;
+}
+/**
+ ****************************************************************************
+ * @Function : static void MODH_Opration_02H(void)
  * @File     : eland_usart.c
  * @Program  : H02 header fun len 鍵值狀態(2Byte) 長按狀態(2Byte)  tral
  *                    55   02  04   xx xx             xx xx       0xaa
@@ -194,7 +220,7 @@ static void MODH_Opration_02H(void)
 }
 /**
  ****************************************************************************
- * @Function : void MODH_Opration_03H(void)
+ * @Function : static void MODH_Opration_03H(void)
  * @File     : eland_usart.c
  * @Program  : H03 header fun len cur_time(....)  tral
  *                    55   03 len cur_time        0xaa
