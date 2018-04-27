@@ -543,6 +543,9 @@ void LCD_Clock_MON(void)
 void LCD_NetMode(void)
 {
     static _ELAND_MODE_t Eland_modeBak = ELAND_MODE_MAX;
+    /***** bit0 time bit1 alarm*************/
+    static uint8_t changeflag = 2;
+    static uint8_t second_count = 0;
     if (Eland_mode != Eland_modeBak)
     {
         if (Eland_mode == ELAND_OTA)
@@ -556,6 +559,8 @@ void LCD_NetMode(void)
 
             HT162x_LCD_Change_Pixel(COM0, SEG32, RESET);
             HT162x_LCD_Change_Pixel(COM0, SEG33, RESET);
+            /**refresh alarm**/
+            Eland_alarm_display(RESET);
         }
         else
         {
@@ -566,6 +571,7 @@ void LCD_NetMode(void)
             /**SHOW the line**/
             HT162x_LCD_Change_Pixel(COM7, SEG33, SET);
         }
+        changeflag = 6;
         /**refresh wifi**/
         LCD_Display_Rssi_State(eland_state);
         Eland_modeBak = Eland_mode;
@@ -590,6 +596,15 @@ void LCD_NetMode(void)
     }
     if (AlarmOccurred == TRUE) //1s update time
     {
+        AlarmOccurred = FALSE;
+        if (eland_state < CONNECTED_NET)
+        {
+            if (second_count++ >= 60)
+            {
+                second_count = 0;
+                changeflag |= 1;
+            }
+        }
         HT162x_LCD_Time_Display(TIME_PART, CurrentMicoTime);
         HT162x_LCD_Date_Display(TIME_PART, CurrentMicoTime);
 
@@ -598,6 +613,28 @@ void LCD_NetMode(void)
     }
     ALARM_Alarm_Refresh();
     Eland_data_Refresh();
+
+    if ((changeflag & 7) && (eland_state > ElandBegin)) //syncchronize
+    {
+        if (MCU_Refreshed == REFRESH_NONE)
+        {
+            if (changeflag & 1)
+            {
+                MCU_Refreshed = REFRESH_TIME;
+                changeflag &= 0xfe;
+            }
+            else if (changeflag & 2)
+            {
+                MCU_Refreshed = REFRESH_ALARM;
+                changeflag &= 0xfd;
+            }
+            else if (changeflag & 4)
+            {
+                MCU_Refreshed = REFRESH_ELAND_DATA;
+                changeflag &= 0XFB;
+            }
+        }
+    }
 }
 /**
  ****************************************************************************

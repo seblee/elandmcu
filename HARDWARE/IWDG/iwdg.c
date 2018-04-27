@@ -30,12 +30,12 @@ void IWDG_Config(void)
     IWDG_WriteAccessCmd(IWDG_WriteAccess_Enable);
 
     /* IWDG configuration: IWDG is clocked by LSI = 38KHz */
-    IWDG_SetPrescaler(IWDG_Prescaler_32);
+    IWDG_SetPrescaler(IWDG_Prescaler_256);
 
-    /* IWDG timeout equal to 214.7 ms (the timeout may varies due to LSI frequency dispersion) */
+    /* IWDG timeout equal to 1717.89 ms (the timeout may varies due to LSI frequency dispersion) */
     /* IWDG timeout = (RELOAD_VALUE + 1) * Prescaler / LSI 
-                  = (254 + 1) * 32 / 38 000 
-                  = 214.7 ms */
+                  = (254 + 1) * 256 / 38 000 
+                  = 1717.89 ms */
     IWDG_SetReload((uint8_t)0xaa);
 
     /* Reload IWDG counter */

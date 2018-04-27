@@ -73,6 +73,7 @@ typedef enum {
     REFRESH_NONE = 0,
     REFRESH_TIME,
     REFRESH_ALARM,
+    REFRESH_ELAND_DATA,
     REFRESH_MAX,
 } MCU_Refresh_type_t;
 

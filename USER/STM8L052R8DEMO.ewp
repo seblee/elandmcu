@@ -501,7 +501,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>mcu v01.13.bin</state>
+          <state>STM8L052R8DEMO.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
