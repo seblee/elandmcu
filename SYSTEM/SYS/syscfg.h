@@ -21,7 +21,7 @@
 /* Private define ------------------------------------------------------------*/
 
 /** #if define **/
-#define LCD_All_angle_view
+//#define LCD_All_angle_view
 
 #define RTC_LSE
 #define CLK_SUE_HSI
