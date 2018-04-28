@@ -33,10 +33,10 @@ void IWDG_Config(void)
     IWDG_SetPrescaler(IWDG_Prescaler_256);
 
     /* IWDG timeout equal to 1717.89 ms (the timeout may varies due to LSI frequency dispersion) */
-    /* IWDG timeout = (RELOAD_VALUE + 1) * Prescaler / LSI 
-                  = (254 + 1) * 256 / 38 000 
+    /* IWDG timeout = (RELOAD_VALUE + 1) * Prescaler / LSI
+                  = (254 + 1) * 256 / 38 000
                   = 1717.89 ms */
-    IWDG_SetReload((uint8_t)0xaa);
+    IWDG_SetReload((uint8_t)0xfe);
 
     /* Reload IWDG counter */
     IWDG_ReloadCounter();

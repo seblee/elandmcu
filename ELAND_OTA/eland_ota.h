@@ -17,7 +17,7 @@
 
 /* Private define ------------------------------------------------------------*/
 #define MCU_VERSION_MAJOR (uint8_t)1
-#define MCU_VERSION_MINOR (uint8_t)13
+#define MCU_VERSION_MINOR (uint8_t)14
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
