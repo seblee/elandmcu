@@ -136,6 +136,7 @@ void LCD_Clock_MON(void)
     _eland_date_time_t mcutimeCache;
     static _ELAND_MODE_t Eland_modeBak = ELAND_MODE_MAX;
     static uint8_t One_second_count = 200;
+    static LCD_AMPM_Distinguish_t ampm_cache;
     /***** bit0 time bit1 alarm*************/
     static uint8_t changeflag = 0;
     if (Eland_mode != Eland_modeBak)
@@ -151,6 +152,11 @@ void LCD_Clock_MON(void)
         HT162x_LCD_Change_Pixel(COM7, SEG33, SET);
         /**backup mode**/
         Eland_modeBak = Eland_mode;
+        if ((time_set_mode != 0) && (number_flash_flag == 0))
+        {
+            HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, ((time_set_mode == 2) || (time_set_mode == 7)) ? 2 : 1);
+            number_flash_flag = 1;
+        }
         time_set_mode = 0;
     }
     /******************/
@@ -169,7 +175,7 @@ void LCD_Clock_MON(void)
             Time_cache.sec = 0;
             number_flash_cache = Time_cache.year;
         }
-        if (Key_Up_Trg & KEY_Set)
+        if ((Key_Up_Trg & KEY_Set) && (Eland_mode == ELAND_CLOCK_ALARM))
         {
             time_set_mode = 1;
             if ((eland_data.time_display_format == 1) && (alarm_data_simple.moment_time.hr > 12))
@@ -464,6 +470,31 @@ void LCD_Clock_MON(void)
         if (Key_Up_Trg & KEY_Set)
         {
             HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, 2);
+            time_set_mode = 8;
+        }
+        break;
+    case 8: //AM PM
+        if ((Key_Up_Trg & KEY_Minus) || (Key_Up_Trg & KEY_Add))
+        {
+            if (eland_data.time_display_format == 1)
+            {
+                eland_data.time_display_format = 2;
+                ampm_cache = AMPMMAX;
+            }
+            else
+            {
+                eland_data.time_display_format = 1;
+                if (Time_cache.hr >= 12)
+                    ampm_cache = PM;
+                else
+                    ampm_cache = AM;
+            }
+            HT162x_LCD_AMPM_Set(TIME_PART, ampm_cache);
+        }
+
+        if (Key_Up_Trg & KEY_Set)
+        {
+            HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, 2);
             time_set_mode = 0;
             memset(&mcutimeCache, 0, sizeof(_eland_date_time_t));
             ELAND_Time_Convert(&Time_cache, &mcutimeCache, MICO_2_MCU);
@@ -482,7 +513,7 @@ void LCD_Clock_MON(void)
         HT162x_LCD_Toggle_Pixel(COM0, SEG32);
         HT162x_LCD_Toggle_Pixel(COM0, SEG33);
         alarm_snooze_flash_count++;
-        if (time_set_mode != 0)
+        if ((time_set_mode != 0) && (time_set_mode != 8))
         {
             if (number_flash_flag == 0)
             {
@@ -493,6 +524,19 @@ void LCD_Clock_MON(void)
             {
                 HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, 0);
                 number_flash_flag = 0;
+            }
+        }
+        else if (time_set_mode == 8)
+        {
+            if (number_flash_flag == 0)
+            {
+                number_flash_flag = 1;
+                HT162x_LCD_AMPM_Set(TIME_PART, ampm_cache);
+            }
+            else
+            {
+                number_flash_flag = 0;
+                HT162x_LCD_AMPM_Set(TIME_PART, AMPMMAX);
             }
         }
     }
