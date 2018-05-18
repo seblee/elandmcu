@@ -695,11 +695,16 @@ void ALARM_Alarm_Refresh(void)
 
     if (alarm_data_display.mode == ELAND_NA)
     {
-        if (alarm_NA_flash_count == 12)
+        if (Alarm_need_Refresh)
+        {
+            alarm_NA_flash_count = 0;
+            Alarm_need_Refresh = FALSE;
+        }
+        if (alarm_NA_flash_count == 0)
             Eland_alarm_display(SET);
-        else if (alarm_NA_flash_count == 25)
+        else if (alarm_NA_flash_count == 35)
             Eland_alarm_display(RESET);
-        if (alarm_NA_flash_count++ >= 25)
+        if (alarm_NA_flash_count++ >= 50)
             alarm_NA_flash_count = 0;
         return;
     }
@@ -727,6 +732,7 @@ void ALARM_Alarm_Refresh(void)
 
     if (!Alarm_need_Refresh)
         return;
+    alarm_NA_flash_count = 0;
     Alarm_need_Refresh = FALSE;
     Eland_alarm_display(SET);
     /*set alarm color*/
