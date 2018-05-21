@@ -839,18 +839,12 @@ void Brightness_refresh(void)
     if (now_is_night)
     {
         if (Alarm_led_brigh != eland_data.led_night)
-        {
             Alarm_led_brigh = eland_data.led_night;
-            Alarm_need_Refresh = TRUE;
-        }
     }
     else
     {
         if (Alarm_led_brigh != eland_data.led_normal)
-        {
             Alarm_led_brigh = eland_data.led_normal;
-            Alarm_need_Refresh = TRUE;
-        }
     }
 }
 /**

@@ -107,7 +107,6 @@ void ReceiveUsart(u8 Cache)
         OprationFrame();
         UartStatus = FrameHeadSataus;
         count = 0;
-        IWDG_ReloadCounter();
     }
 }
 /**
