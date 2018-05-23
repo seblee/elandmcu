@@ -615,7 +615,8 @@ void LCD_NetMode(void)
             /**SHOW the line**/
             HT162x_LCD_Change_Pixel(COM7, SEG33, SET);
         }
-        changeflag = 6;
+        if (Eland_modeBak == ELAND_MODE_MAX)
+            changeflag = 6;
         /**refresh wifi**/
         LCD_Display_Rssi_State(eland_state);
         Eland_modeBak = Eland_mode;
@@ -658,7 +659,7 @@ void LCD_NetMode(void)
     ALARM_Alarm_Refresh();
     Eland_data_Refresh();
 
-    if ((changeflag & 7) && (eland_state > ElandBegin)) //syncchronize
+    if ((changeflag & 7) && (eland_state >= ElandBegin)) //syncchronize
     {
         if (MCU_Refreshed == REFRESH_NONE)
         {

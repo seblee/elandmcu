@@ -789,7 +789,7 @@ void HT162x_LCD_Date_Display(LCD_Time_Type_t type, mico_rtc_time_t time)
         (time_cache[type].weekday != time.weekday))
     {
         /*****year*******/
-        HT162x_LCD_Double_Digits_Write(Position[type][DIGIT_YEAR], time.year, 1);
+        HT162x_LCD_Double_Digits_Write(Position[type][DIGIT_YEAR], time.year, 2);
         /*****month******/
         HT162x_LCD_Double_Digits_Write(Position[type][DIGIT_MONTH], time.month, 1);
         /*****date******/
