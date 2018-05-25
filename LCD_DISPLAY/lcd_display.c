@@ -749,12 +749,16 @@ void ALARM_Alarm_Refresh(void)
 **/
 void Eland_data_Refresh(void)
 {
+    static __ELAND_DATA_2_MCU_t eland_data_bak;
     if (!ELAND_DATA_Refreshed)
         return;
     ELAND_DATA_Refreshed = FALSE;
     /*refresh brightness*/
     Brightness_refresh();
-    Alarm_need_Refresh = TRUE;
+    if (eland_data.time_display_format != eland_data_bak.time_display_format)
+        Alarm_need_Refresh = TRUE;
+
+    memcpy(&eland_data_bak, &eland_data, sizeof(__ELAND_DATA_2_MCU_t));
 }
 
 void LCD_OtherMode(void)
