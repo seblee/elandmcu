@@ -542,6 +542,7 @@ void LCD_Clock_MON(void)
     }
     if (AlarmOccurred == TRUE) //1s update time
     {
+        alarm_skip_flash_count++;
         if (time_set_mode < 3)
         {
             HT162x_LCD_Time_Display(TIME_PART, CurrentMicoTime);
@@ -633,7 +634,6 @@ void LCD_NetMode(void)
     if (WakeupOccurred == TRUE) //500ms point flash
     {
         WakeupOccurred = FALSE;
-        alarm_skip_flash_count++;
         alarm_snooze_flash_count++;
         HT162x_LCD_Toggle_Pixel(COM0, SEG32);
         HT162x_LCD_Toggle_Pixel(COM0, SEG33);
@@ -641,6 +641,7 @@ void LCD_NetMode(void)
     }
     if (AlarmOccurred == TRUE) //1s update time
     {
+        alarm_skip_flash_count++;
         AlarmOccurred = FALSE;
         if (eland_state < CONNECTED_NET)
         {
@@ -713,7 +714,7 @@ void ALARM_Alarm_Refresh(void)
     {
         if (alarm_skip_flash_count == 1)
             Eland_alarm_display(SET);
-        else if (alarm_skip_flash_count >= 2)
+        else if (alarm_skip_flash_count >= 3)
         {
             Eland_alarm_display(RESET);
             alarm_skip_flash_count = 0;
@@ -734,6 +735,7 @@ void ALARM_Alarm_Refresh(void)
     if (!Alarm_need_Refresh)
         return;
     alarm_NA_flash_count = 0;
+    alarm_skip_flash_count = 10;
     Alarm_need_Refresh = FALSE;
     Eland_alarm_display(SET);
     /*set alarm color*/

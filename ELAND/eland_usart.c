@@ -180,14 +180,12 @@ static void OprationFrame(void)
 **/
 static void MODH_Opration_01H(void)
 {
-    uint8_t *SendBuf;
-    SendBuf = calloc(9, sizeof(uint8_t));
-    *SendBuf = Uart_Packet_Header;
-    *(SendBuf + 1) = SEND_ELAND_ERR_01;
-    *(SendBuf + 2) = 0;
-    *(SendBuf + 3) = Uart_Packet_Trail;
-    USARTx_Send_Data(USART1, SendBuf, 4 + *(SendBuf + 2));
-    free(SendBuf);
+    uint8_t SendBuf[4];
+    SendBuf[0] = Uart_Packet_Header;
+    SendBuf[1] = SEND_ELAND_ERR_01;
+    SendBuf[2] = 0;
+    SendBuf[3] = Uart_Packet_Trail;
+    USARTx_Send_Data(USART1, SendBuf, 4);
 }
 /**
  ****************************************************************************
@@ -201,19 +199,18 @@ static void MODH_Opration_01H(void)
 **/
 static void MODH_Opration_02H(void)
 {
-    uint8_t *SendBuf;
-    SendBuf = calloc(9, sizeof(uint8_t));
-    *SendBuf = Uart_Packet_Header;
-    *(SendBuf + 1) = KEY_READ_02;
-    *(SendBuf + 2) = 5;
-    *(SendBuf + 3) = (uint8_t)(Key_Count >> 8);
-    *(SendBuf + 4) = (uint8_t)(Key_Count & 0xff);
-    *(SendBuf + 5) = (uint8_t)(Key_Restain >> 8);
-    *(SendBuf + 6) = (uint8_t)(Key_Restain & 0xff);
-    *(SendBuf + 7) = (uint8_t)(MCU_Refreshed);
-    *(SendBuf + 8) = Uart_Packet_Trail;
+    uint8_t SendBuf[9];
+    SendBuf[0] = Uart_Packet_Header;
+    SendBuf[1] = KEY_READ_02;
+    SendBuf[2] = 5;
+    SendBuf[3] = (uint8_t)(Key_Count >> 8);
+    SendBuf[4] = (uint8_t)(Key_Count & 0xff);
+    SendBuf[5] = (uint8_t)(Key_Restain >> 8);
+    SendBuf[6] = (uint8_t)(Key_Restain & 0xff);
+    SendBuf[7] = (uint8_t)(MCU_Refreshed);
+    SendBuf[8] = Uart_Packet_Trail;
     USARTx_Send_Data(USART1, SendBuf, 9);
-    free(SendBuf);
+
     MCU_Refreshed = REFRESH_NONE;
 }
 /**
@@ -228,19 +225,20 @@ static void MODH_Opration_02H(void)
 **/
 static void MODH_Opration_03H(void)
 {
-    uint8_t *SendBuf;
+    uint8_t SendBuf[4];
     mico_rtc_time_t mico_time;
     _eland_date_time_t mcu_time;
     memcpy(&mico_time, &msg_receive_buff[3], sizeof(mico_rtc_time_t));
-    ELAND_Time_Convert(&mico_time, &mcu_time, MICO_2_MCU);
-    RTC_Time_Set(mcu_time);
-    SendBuf = calloc(4, sizeof(uint8_t));
-    *SendBuf = Uart_Packet_Header;
-    *(SendBuf + 1) = TIME_SET_03;
-    *(SendBuf + 2) = 0;
-    *(SendBuf + 3) = Uart_Packet_Trail;
+    if (memcmp(&mico_time, &CurrentMicoTime, sizeof(mico_rtc_time_t)))
+    {
+        ELAND_Time_Convert(&mico_time, &mcu_time, MICO_2_MCU);
+        RTC_Time_Set(mcu_time);
+    }
+    SendBuf[0] = Uart_Packet_Header;
+    SendBuf[1] = TIME_SET_03;
+    SendBuf[2] = 0;
+    SendBuf[3] = Uart_Packet_Trail;
     USARTx_Send_Data(USART1, SendBuf, 4);
-    free(SendBuf);
 }
 /**
  ****************************************************************************
@@ -254,20 +252,18 @@ static void MODH_Opration_03H(void)
 **/
 static void MODH_Opration_04H(void)
 {
-    uint8_t *SendBuf;
+    uint8_t SendBuf[4 + sizeof(mico_rtc_time_t)];
     mico_rtc_time_t mico_time;
     memset(&mico_time, 0, sizeof(mico_rtc_time_t));
     ELAND_RTC_Read(&mico_time);
 
-    SendBuf = calloc(4 + sizeof(mico_rtc_time_t), sizeof(uint8_t));
-    *SendBuf = Uart_Packet_Header;
-    *(SendBuf + 1) = TIME_READ_04;
-    *(SendBuf + 2) = sizeof(mico_rtc_time_t);
+    SendBuf[0] = Uart_Packet_Header;
+    SendBuf[1] = TIME_READ_04;
+    SendBuf[2] = sizeof(mico_rtc_time_t);
     memcpy((SendBuf + 3), &mico_time, sizeof(mico_rtc_time_t));
-    *(SendBuf + sizeof(mico_rtc_time_t) + 3) = Uart_Packet_Trail;
+    SendBuf[sizeof(mico_rtc_time_t) + 3] = Uart_Packet_Trail;
 
     USARTx_Send_Data(USART1, SendBuf, 4 + sizeof(mico_rtc_time_t));
-    free(SendBuf);
 }
 /**
  ****************************************************************************
@@ -281,15 +277,13 @@ static void MODH_Opration_04H(void)
 **/
 static void MODH_Opration_05H(void)
 {
-    uint8_t *SendBuf;
+    uint8_t SendBuf[4];
     eland_state = (Eland_Status_type_t)msg_receive_buff[3];
-    SendBuf = calloc(4, sizeof(uint8_t));
-    *SendBuf = Uart_Packet_Header;
-    *(SendBuf + 1) = ELAND_STATES_05;
-    *(SendBuf + 2) = 0;
-    *(SendBuf + 3) = Uart_Packet_Trail;
+    SendBuf[0] = Uart_Packet_Header;
+    SendBuf[1] = ELAND_STATES_05;
+    SendBuf[2] = 0;
+    SendBuf[3] = Uart_Packet_Trail;
     USARTx_Send_Data(USART1, SendBuf, 4);
-    free(SendBuf);
 }
 /**
  ****************************************************************************
@@ -303,15 +297,13 @@ static void MODH_Opration_05H(void)
 **/
 static void MODH_Opration_06H(void)
 {
-    uint8_t *SendBuf;
+    uint8_t SendBuf[4];
     sscanf((char const *)&msg_receive_buff[3], "%02d.%02d", &Firmware_Version_Major, &Firmware_Version_Minor);
-    SendBuf = calloc(4, sizeof(uint8_t));
-    *SendBuf = Uart_Packet_Header;
-    *(SendBuf + 1) = SEND_FIRM_WARE_06;
-    *(SendBuf + 2) = 0;
-    *(SendBuf + 3) = Uart_Packet_Trail;
+    SendBuf[0] = Uart_Packet_Header;
+    SendBuf[1] = SEND_FIRM_WARE_06;
+    SendBuf[2] = 0;
+    SendBuf[3] = Uart_Packet_Trail;
     USARTx_Send_Data(USART1, SendBuf, 4);
-    free(SendBuf);
 }
 /**
  ****************************************************************************
@@ -324,16 +316,14 @@ static void MODH_Opration_06H(void)
 **/
 static void MODH_Opration_07H(void)
 {
-    uint8_t *SendBuf;
-    SendBuf = calloc(9, sizeof(uint8_t));
-    *SendBuf = Uart_Packet_Header;
-    *(SendBuf + 1) = REND_FIRM_WARE_07;
-    *(SendBuf + 2) = 5;
+    uint8_t SendBuf[9];
+    SendBuf[0] = Uart_Packet_Header;
+    SendBuf[1] = REND_FIRM_WARE_07;
+    SendBuf[2] = 5;
 
     sprintf((char *)(SendBuf + 3), "%02d.%02d", MCU_VERSION_MAJOR, MCU_VERSION_MINOR);
-    *(SendBuf + 8) = Uart_Packet_Trail;
+    SendBuf[8] = Uart_Packet_Trail;
     USARTx_Send_Data(USART1, SendBuf, 9);
-    free(SendBuf);
 }
 
 /**
@@ -348,17 +338,15 @@ static void MODH_Opration_07H(void)
 **/
 static void MODH_Opration_08H(void)
 {
-    uint8_t *SendBuf;
+    uint8_t SendBuf[4];
     RSSI_Value = (LCD_Wifi_Rssi_t)msg_receive_buff[3];
     Eland_mode = (_ELAND_MODE_t)msg_receive_buff[4];
     eland_state = (Eland_Status_type_t)msg_receive_buff[5];
-    SendBuf = calloc(4, sizeof(uint8_t));
-    *SendBuf = Uart_Packet_Header;
-    *(SendBuf + 1) = SEND_LINK_STATE_08;
-    *(SendBuf + 2) = 0;
-    *(SendBuf + 3) = Uart_Packet_Trail;
+    SendBuf[0] = Uart_Packet_Header;
+    SendBuf[1] = SEND_LINK_STATE_08;
+    SendBuf[2] = 0;
+    SendBuf[3] = Uart_Packet_Trail;
     USARTx_Send_Data(USART1, SendBuf, 4);
-    free(SendBuf);
 }
 /**
  ****************************************************************************
@@ -372,14 +360,12 @@ static void MODH_Opration_08H(void)
 **/
 static void MODH_Opration_09H(void)
 {
-    uint8_t *SendBuf;
-    SendBuf = calloc(4, sizeof(uint8_t));
-    *SendBuf = Uart_Packet_Header;
-    *(SendBuf + 1) = MCU_FIRM_WARE_09;
-    *(SendBuf + 2) = 0;
-    *(SendBuf + 3) = Uart_Packet_Trail;
+    uint8_t SendBuf[4];
+    SendBuf[0] = Uart_Packet_Header;
+    SendBuf[1] = MCU_FIRM_WARE_09;
+    SendBuf[2] = 0;
+    SendBuf[3] = Uart_Packet_Trail;
     USARTx_Send_Data(USART1, SendBuf, 4);
-    free(SendBuf);
     OTA_start();
 }
 /**
@@ -393,15 +379,13 @@ static void MODH_Opration_09H(void)
 **/
 static void MODH_Opration_0AH(void)
 {
-    uint8_t *SendBuf;
-    SendBuf = calloc(4 + sizeof(_alarm_mcu_data_t), sizeof(uint8_t));
-    *SendBuf = Uart_Packet_Header;
-    *(SendBuf + 1) = ALARM_READ_0A;
-    *(SendBuf + 2) = sizeof(_alarm_mcu_data_t);
+    uint8_t SendBuf[4 + sizeof(_alarm_mcu_data_t)];
+    SendBuf[0] = Uart_Packet_Header;
+    SendBuf[1] = ALARM_READ_0A;
+    SendBuf[2] = sizeof(_alarm_mcu_data_t);
     memcpy((SendBuf + 3), &alarm_data_simple, sizeof(_alarm_mcu_data_t));
-    *(SendBuf + 3 + sizeof(_alarm_mcu_data_t)) = Uart_Packet_Trail;
+    SendBuf[3 + sizeof(_alarm_mcu_data_t)] = Uart_Packet_Trail;
     USARTx_Send_Data(USART1, SendBuf, 4 + sizeof(_alarm_mcu_data_t));
-    free(SendBuf);
 }
 /**
  ****************************************************************************
@@ -415,7 +399,7 @@ static void MODH_Opration_0AH(void)
 **/
 static void MODH_Opration_0BH(void)
 {
-    uint8_t *SendBuf;
+    uint8_t SendBuf[4];
     if (msg_receive_buff[2] == sizeof(_alarm_mcu_data_t))
     {
         memcpy(&alarm_data_display, &msg_receive_buff[3], sizeof(_alarm_mcu_data_t));
@@ -426,13 +410,12 @@ static void MODH_Opration_0BH(void)
         memset(&alarm_data_display, 0, sizeof(_alarm_mcu_data_t));
         Alarm_is_empty = TRUE;
     }
-    SendBuf = calloc(4, sizeof(uint8_t));
-    *SendBuf = Uart_Packet_Header;
-    *(SendBuf + 1) = ALARM_SEND_0B;
-    *(SendBuf + 2) = 0;
-    *(SendBuf + 3) = Uart_Packet_Trail;
+    SendBuf[0] = Uart_Packet_Header;
+    SendBuf[1] = ALARM_SEND_0B;
+    SendBuf[2] = 0;
+    SendBuf[3] = Uart_Packet_Trail;
     USARTx_Send_Data(USART1, SendBuf, 4);
-    free(SendBuf);
+
     Alarm_need_Refresh = TRUE;
 }
 /**
@@ -447,7 +430,7 @@ static void MODH_Opration_0BH(void)
 **/
 static void MODH_Opration_0CH(void)
 {
-    uint8_t *SendBuf;
+    uint8_t SendBuf[4];
     memcpy(&eland_data, &msg_receive_buff[3], sizeof(__ELAND_DATA_2_MCU_t));
     eland_data.night_mode_begin_time = msg_receive_buff[11] |
                                        (uint32_t)msg_receive_buff[12] << 8 |
@@ -457,13 +440,11 @@ static void MODH_Opration_0CH(void)
                                      (uint32_t)msg_receive_buff[16] << 8 |
                                      (uint32_t)msg_receive_buff[17] << 16 |
                                      (uint32_t)msg_receive_buff[18] << 24;
-    SendBuf = calloc(4, sizeof(uint8_t));
-    *SendBuf = Uart_Packet_Header;
-    *(SendBuf + 1) = ELAND_DATA_0C;
-    *(SendBuf + 2) = 0;
-    *(SendBuf + 3) = Uart_Packet_Trail;
+    SendBuf[0] = Uart_Packet_Header;
+    SendBuf[1] = ELAND_DATA_0C;
+    SendBuf[2] = 0;
+    SendBuf[3] = Uart_Packet_Trail;
     USARTx_Send_Data(USART1, SendBuf, 4);
-    free(SendBuf);
     ELAND_DATA_Refreshed = TRUE;
 }
 
