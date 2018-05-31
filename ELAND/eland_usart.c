@@ -104,6 +104,7 @@ void ReceiveUsart(u8 Cache)
     if (UartStatus == FrameEndStatus) //接收完一帧处理数据
     {
         //add Opration function
+        IWDG_ReloadCounter();
         OprationFrame();
         UartStatus = FrameHeadSataus;
         count = 0;
