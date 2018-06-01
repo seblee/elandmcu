@@ -154,7 +154,7 @@ void LCD_Clock_MON(void)
         Eland_modeBak = Eland_mode;
         if ((time_set_mode != 0) && (number_flash_flag == 0))
         {
-            HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, ((time_set_mode == 2) || (time_set_mode == 7)) ? 2 : 1);
+            HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, ((time_set_mode == 2) || (time_set_mode == 3) || (time_set_mode == 7)) ? 2 : 1);
             number_flash_flag = 1;
         }
         time_set_mode = 0;
@@ -417,13 +417,14 @@ void LCD_Clock_MON(void)
                 number_flash_cache = Time_cache.hr;
             if (eland_data.time_display_format == 1)
             {
-                if (Time_cache.hr >= 12)
-                    HT162x_LCD_AMPM_Set(TIME_PART, PM);
-                else
-                    HT162x_LCD_AMPM_Set(TIME_PART, AM);
+                HT162x_LCD_AMPM_Set(TIME_PART, (Time_cache.hr >= 12) ? PM : AM);
+                ampm_cache = (Time_cache.hr >= 12) ? PM : AM;
             }
             else
+            {
                 HT162x_LCD_AMPM_Set(TIME_PART, AMPMMAX);
+                ampm_cache = AMPMMAX;
+            }
 
             HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, 1);
         }
@@ -517,7 +518,7 @@ void LCD_Clock_MON(void)
         {
             if (number_flash_flag == 0)
             {
-                HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, ((time_set_mode == 2) || (time_set_mode == 7)) ? 2 : 1);
+                HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, ((time_set_mode == 2) || (time_set_mode == 3) || (time_set_mode == 7)) ? 2 : 1);
                 number_flash_flag = 1;
             }
             else
@@ -846,12 +847,18 @@ void Brightness_refresh(void)
     if (now_is_night)
     {
         if (Alarm_led_brigh != eland_data.led_night)
+        {
+            Alarm_need_Refresh = TRUE;
             Alarm_led_brigh = eland_data.led_night;
+        }
     }
     else
     {
         if (Alarm_led_brigh != eland_data.led_normal)
+        {
+            Alarm_need_Refresh = TRUE;
             Alarm_led_brigh = eland_data.led_normal;
+        }
     }
 }
 /**
