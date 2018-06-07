@@ -135,7 +135,6 @@ void LCD_Clock_MON(void)
     static mico_rtc_time_t Time_cache;
     _eland_date_time_t mcutimeCache;
     static _ELAND_MODE_t Eland_modeBak = ELAND_MODE_MAX;
-    static uint8_t One_second_count = 200;
     static LCD_AMPM_Distinguish_t ampm_cache;
     /***** bit0 time bit1 alarm*************/
     static uint8_t changeflag = 0;
@@ -552,11 +551,6 @@ void LCD_Clock_MON(void)
         AlarmOccurred = FALSE;
         /*refresh brightness*/
         Brightness_refresh();
-        if (One_second_count++ >= 60)
-        {
-            One_second_count = 0;
-            changeflag |= 1;
-        }
     }
     if (changeflag & 3) //syncchronize
     {

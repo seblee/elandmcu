@@ -29,7 +29,7 @@ Enabled=0
 ShowSource=1
 [DebugChecksum]
 <<<<<<< HEAD
-Checksum=-1371310513
+Checksum=946970318
 =======
 Checksum=-2074508045
 >>>>>>> master
@@ -46,6 +46,20 @@ Fmt4=__ELAND_DATA_2_MCU_t-night_mode_begin_time	3	0
 Fmt5=__ELAND_DATA_2_MCU_t-night_mode_enabled	3	0
 Fmt6=__ELAND_DATA_2_MCU_t-night_mode_end_time	3	0
 Fmt7=__ELAND_DATA_2_MCU_t-time_display_format	3	0
+Fmt8=_eland_date_time_t-day	3	0
+Fmt9=_eland_date_time_t-hour	3	0
+Fmt10=_eland_date_time_t-minute	3	0
+Fmt11=_eland_date_time_t-month	3	0
+Fmt12=_eland_date_time_t-second	3	0
+Fmt13=_eland_date_time_t-week	3	0
+Fmt14=_eland_date_time_t-yea	3	0
+Fmt15=mico_rtc_time_t-date	3	0
+Fmt16=mico_rtc_time_t-hr	3	0
+Fmt17=mico_rtc_time_t-min	3	0
+Fmt18=mico_rtc_time_t-month	3	0
+Fmt19=mico_rtc_time_t-sec	3	0
+Fmt20=mico_rtc_time_t-weekday	3	0
+Fmt21=mico_rtc_time_t-year	3	0
 [array_types]
 Fmt0=uint8_t[300]	4	0
 Fmt1=uint8_t[5]	4	0
