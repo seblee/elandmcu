@@ -947,84 +947,196 @@ static void LCD_Check_LCD(void)
 {
     static uint8_t check_step = 0;
     uint8_t step_changed = 0;
+    uint8_t key_up = 10;
     uint8_t i;
     if (Key_Down_Trg & KEY_Add)
     {
-        check_step++;
-        step_changed = 1;
+        if (check_step < 37)
+        {
+            check_step++;
+            step_changed = 1;
+            key_up = 1;
+        }
     }
     else if (Key_Down_Trg & KEY_Minus)
     {
-        check_step--;
-        step_changed = 1;
+        if (check_step > 0)
+        {
+            check_step--;
+            step_changed = 1;
+            key_up = 0;
+        }
     }
     if (step_changed)
     {
+
         /****display all*******/
         if (check_step == 0)
             HT162x_LCD_Clear(SET);
         /****check 0-9*******/
         else if (check_step < 11)
         {
+            if (check_step == 1)
+                HT162x_LCD_Clear(RESET);
             for (i = Serial_01; i < Serial_MAX; i++)
                 HT162x_LCD_Num_Set((LCD_Digital_Serial_t)i, check_step - 1);
         }
         /****check week*******/
         else if (check_step < 18)
         {
-            HT162x_LCD_Week_Set(TIME_PART, (LCD_Week_Day_t)(check_step - 10));  //week
-            HT162x_LCD_Week_Set(ALARM_PART, (LCD_Week_Day_t)(check_step - 10)); //week
+            if (check_step == 11)
+                for (i = Serial_01; i < Serial_MAX; i++)
+                    HT162x_LCD_Num_Set((LCD_Digital_Serial_t)i, 10);
+            HT162x_LCD_Week_Set(TIME_PART, (LCD_Week_Day_t)(check_step - 11));  //week
+            HT162x_LCD_Week_Set(ALARM_PART, (LCD_Week_Day_t)(check_step - 11)); //week
         }
         /****time am*******/
         else if (check_step == 18)
-            HT162x_LCD_Toggle_Pixel(COM7, SEG22);
+        {
+            if (key_up == 1)
+            {
+                HT162x_LCD_Week_Set(TIME_PART, WEEKDAYMAX);  //week
+                HT162x_LCD_Week_Set(ALARM_PART, WEEKDAYMAX); //week
+            }
+            else if (key_up == 0)
+            {
+                HT162x_LCD_Change_Pixel(COM7, SEG23, RESET);
+            }
+            HT162x_LCD_Change_Pixel(COM7, SEG22, SET);
+        }
         /****time pm*******/
         else if (check_step == 19)
-            HT162x_LCD_Toggle_Pixel(COM7, SEG23);
+        {
+            if (key_up == 1)
+                HT162x_LCD_Change_Pixel(COM7, SEG22, RESET);
+            else if (key_up == 0)
+                HT162x_LCD_Change_Pixel(COM7, SEG38, RESET);
+            HT162x_LCD_Change_Pixel(COM7, SEG23, SET);
+        }
         /****alarm am*******/
         else if (check_step == 20)
-            HT162x_LCD_Toggle_Pixel(COM7, SEG38);
+        {
+            if (key_up == 1)
+                HT162x_LCD_Change_Pixel(COM7, SEG23, RESET);
+            else if (key_up == 0)
+                HT162x_LCD_Change_Pixel(COM7, SEG39, RESET);
+            HT162x_LCD_Change_Pixel(COM7, SEG38, SET);
+        }
         /****alarm pm*******/
         else if (check_step == 21)
-            HT162x_LCD_Toggle_Pixel(COM7, SEG39);
-
+        {
+            if (key_up == 1)
+                HT162x_LCD_Change_Pixel(COM7, SEG38, RESET);
+            HT162x_LCD_Change_Pixel(COM7, SEG39, SET);
+        }
         /****check wifi*******/
         else if (check_step < 27)
-            HT162x_LCD_RSSI_Set(Rssi_array[check_step - 18]);
+        {
+            if (key_up == 1)
+                HT162x_LCD_Change_Pixel(COM7, SEG39, RESET);
+            HT162x_LCD_RSSI_Set(Rssi_array[check_step - 22]);
+            if ((key_up == 0) && (check_step == 26))
+                HT162x_LCD_Change_Pixel(COM7, SEG21, RESET);
+        }
         /****red Exclamation*******/
         else if (check_step == 27)
-            HT162x_LCD_Toggle_Pixel(COM7, SEG21);
+        {
+            if (key_up == 1)
+                HT162x_LCD_RSSI_Set(LEVEL0);
+            else if (key_up == 0)
+                HT162x_LCD_Change_Pixel(COM7, SEG11, RESET);
+            HT162x_LCD_Change_Pixel(COM7, SEG21, SET);
+        }
         /****next alarm*******/
         else if (check_step == 28)
-            HT162x_LCD_Toggle_Pixel(COM7, SEG11);
+        {
+            if (key_up == 1)
+                HT162x_LCD_Change_Pixel(COM7, SEG21, RESET);
+            else if (key_up == 0)
+                HT162x_LCD_Change_Pixel(COM7, SEG13, RESET);
+            HT162x_LCD_Change_Pixel(COM7, SEG11, SET);
+        }
         /****snooze*******/
         else if (check_step == 29)
-            HT162x_LCD_Toggle_Pixel(COM7, SEG13);
-
+        {
+            if (key_up == 1)
+                HT162x_LCD_Change_Pixel(COM7, SEG11, RESET);
+            else if (key_up == 0)
+                HT162x_LCD_Change_Pixel(COM0, SEG08, RESET);
+            HT162x_LCD_Change_Pixel(COM7, SEG13, SET);
+        }
         /****point 1*******/
         else if (check_step == 30)
-            HT162x_LCD_Toggle_Pixel(COM0, SEG08);
+        {
+            if (key_up == 1)
+                HT162x_LCD_Change_Pixel(COM7, SEG13, RESET);
+            else if (key_up == 0)
+                HT162x_LCD_Change_Pixel(COM0, SEG16, RESET);
+            HT162x_LCD_Change_Pixel(COM0, SEG08, SET);
+        }
         /****point 2*******/
-        else if (check_step == 27)
-            HT162x_LCD_Toggle_Pixel(COM0, SEG16);
+        else if (check_step == 31)
+        {
+            if (key_up == 1)
+                HT162x_LCD_Change_Pixel(COM0, SEG08, RESET);
+            else if (key_up == 0)
+                HT162x_LCD_Change_Pixel(COM0, SEG33, RESET);
+            HT162x_LCD_Change_Pixel(COM0, SEG16, SET);
+        }
         /****point 3*******/
-        else if (check_step == 28)
-            HT162x_LCD_Toggle_Pixel(COM0, SEG33);
+        else if (check_step == 32)
+        {
+            if (key_up == 1)
+                HT162x_LCD_Change_Pixel(COM0, SEG16, RESET);
+            else if (key_up == 0)
+                HT162x_LCD_Change_Pixel(COM0, SEG32, RESET);
+            HT162x_LCD_Change_Pixel(COM0, SEG33, SET);
+        }
         /****point 4*******/
-        else if (check_step == 29)
-            HT162x_LCD_Toggle_Pixel(COM0, SEG32);
+        else if (check_step == 33)
+        {
+            if (key_up == 1)
+                HT162x_LCD_Change_Pixel(COM0, SEG33, RESET);
+            else if (key_up == 0)
+                HT162x_LCD_Change_Pixel(COM7, SEG15, RESET);
+            HT162x_LCD_Change_Pixel(COM0, SEG32, SET);
+        }
         /****point 5*******/
-        else if (check_step == 29)
-            HT162x_LCD_Toggle_Pixel(COM7, SEG15);
+        else if (check_step == 34)
+        {
+            if (key_up == 1)
+                HT162x_LCD_Change_Pixel(COM0, SEG32, RESET);
+            else if (key_up == 0)
+                HT162x_LCD_Change_Pixel(COM7, SEG07, RESET);
+            HT162x_LCD_Change_Pixel(COM7, SEG15, SET);
+        }
         /****point 6*******/
-        else if (check_step == 29)
-            HT162x_LCD_Toggle_Pixel(COM7, SEG07);
+        else if (check_step == 35)
+        {
+            if (key_up == 1)
+                HT162x_LCD_Change_Pixel(COM7, SEG15, RESET);
+            else if (key_up == 0)
+                HT162x_LCD_Change_Pixel(COM7, SEG31, RESET);
+            HT162x_LCD_Change_Pixel(COM7, SEG07, SET);
+        }
         /****point 7*******/
-        else if (check_step == 29)
-            HT162x_LCD_Toggle_Pixel(COM7, SEG31);
+        else if (check_step == 36)
+        {
+            if (key_up == 1)
+                HT162x_LCD_Change_Pixel(COM7, SEG07, RESET);
+            else if (key_up == 0)
+                HT162x_LCD_Change_Pixel(COM7, SEG30, RESET);
+            HT162x_LCD_Change_Pixel(COM7, SEG31, SET);
+        }
         /****point 8*******/
-        else if (check_step == 29)
-            HT162x_LCD_Toggle_Pixel(COM7, SEG30);
+        else if (check_step == 37)
+        {
+            if (key_up == 1)
+                HT162x_LCD_Change_Pixel(COM7, SEG31, RESET);
+            else if (key_up == 0)
+                HT162x_LCD_Change_Pixel(COM7, SEG30, RESET);
+            HT162x_LCD_Change_Pixel(COM7, SEG30, SET);
+        }
     }
 }
 static void LCD_Check_Clock(void)
@@ -1048,7 +1160,8 @@ static void LCD_Check_Clock(void)
 static void check_key(void)
 {
     uint8_t key_press_number = 0;
-    uint8_t key_well_flag = 1;   uint8_t i;
+    uint8_t key_well_flag = 1;
+    uint8_t i;
 
     __eland_color_t color = ELAND_BLACK;
     key_press_number = 0;
