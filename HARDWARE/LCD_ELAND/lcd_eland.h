@@ -15,7 +15,8 @@
 #include "syscfg.h"
 #include "rtc.h"
 /* Private typedef -----------------------------------------------------------*/
-typedef enum {
+typedef enum
+{
     COM_0 = (uint8_t)0x00, /*!< COM 0  */
     COM_1 = (uint8_t)0x01, /*!< COM 1  */
     COM_2 = (uint8_t)0x02, /*!< COM 2  */
@@ -26,7 +27,8 @@ typedef enum {
     COM_7 = (uint8_t)0x07, /*!< COM 7  */
 } LCD_COMx_TypeDef;
 
-typedef enum {
+typedef enum
+{
     Serial_01,
     Serial_02,
     Serial_03,
@@ -61,17 +63,20 @@ typedef union {
     };
 } __Digital_Coding_t;
 
-typedef enum {
+typedef enum
+{
     POSITIVE,
     NEGATIVE,
 } LCD_Coding_Dirtction_t;
 
-typedef enum {
+typedef enum
+{
     TIME_PART,
     ALARM_PART,
 } LCD_Time_Type_t;
 
-typedef enum {
+typedef enum
+{
     SUNDAY,
     MONDAY,
     TUESDAY,
@@ -81,7 +86,8 @@ typedef enum {
     SATURDAY,
 } LCD_Week_Day_t;
 
-typedef enum {
+typedef enum
+{
     LEVEL0,
     LEVEL1,
     LEVEL2,

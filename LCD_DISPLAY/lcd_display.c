@@ -22,8 +22,6 @@
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-
-/* Private function prototypes -----------------------------------------------*/
 __ELAND_DATA_2_MCU_t eland_data;
 _alarm_mcu_data_t alarm_data_simple;
 _alarm_mcu_data_t alarm_data_display;
@@ -48,6 +46,13 @@ const LCD_Digital_Serial_t Clock_number_table[8][2] = {
     {Serial_09, Serial_10}, //time minute
 };
 const uint8_t Position_alarm_simple[7] = {8, 9, 0, 1, 2, 3, 4};
+
+const LCD_Wifi_Rssi_t Rssi_array[5] = {LEVEL0, LEVEL1, LEVEL2, LEVEL3, LEVEL4};
+/* Private function prototypes -----------------------------------------------*/
+static void test_display(void);
+static void check_key(void);
+static void LCD_Check_LCD(void);
+static void LCD_Check_Clock(void);
 /* Private functions ---------------------------------------------------------*/
 /**
  ****************************************************************************
@@ -115,6 +120,8 @@ void LCD_Display_Rssi_State(Eland_Status_type_t state)
         HT162x_LCD_TCP_STATE_Set(RESET);
         HT162x_LCD_RSSI_Set(LEVEL0);
         break;
+    case ELAND_TEST:
+        break;
     default:
         break;
     }
@@ -156,7 +163,14 @@ void LCD_Clock_MON(void)
             HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, ((time_set_mode == 2) || (time_set_mode == 3) || (time_set_mode == 7)) ? 2 : 1);
             number_flash_flag = 1;
         }
+        if (Eland_mode == ELAND_TEST)
+            HT162x_LCD_Clear(RESET);
         time_set_mode = 0;
+    }
+    if (Eland_mode == ELAND_TEST)
+    {
+        test_display();
+        return;
     }
     /******************/
     if (Key_Count & KEY_MON)
@@ -602,6 +616,8 @@ void LCD_NetMode(void)
             /**refresh alarm**/
             Eland_alarm_display(RESET);
         }
+        else if (Eland_mode == ELAND_TEST)
+            HT162x_LCD_Clear(RESET);
         else
         {
             /**refresh time**/
@@ -624,6 +640,11 @@ void LCD_NetMode(void)
             WakeupOccurred = FALSE;
             ota_display();
         }
+        return;
+    }
+    else if (Eland_mode == ELAND_TEST)
+    {
+        test_display();
         return;
     }
     if (WakeupOccurred == TRUE) //500ms point flash
@@ -761,6 +782,12 @@ void Eland_data_Refresh(void)
 void LCD_OtherMode(void)
 {
     static bool display_flag = TRUE;
+
+    if (Eland_mode == ELAND_TEST)
+    {
+        test_display();
+        return;
+    }
     Eland_mode = ELAND_MODE_NONE;
     if (WakeupOccurred == TRUE) //500ms point flash
     {
@@ -905,4 +932,160 @@ void ota_display(void)
     flag <<= 1;
     if (flag == 0x10)
         flag = 1;
+}
+static void test_display(void)
+{
+    if (Key_Count & KEY_Wifi) //NC/NA mode
+        LCD_Check_LCD();
+    else if (Key_Count & KEY_MON)
+        LCD_Check_Clock();
+    else
+        LCD_Check_LCD();
+    check_key();
+}
+static void LCD_Check_LCD(void)
+{
+    static uint8_t check_step = 0;
+    uint8_t step_changed = 0;
+    uint8_t i;
+    if (Key_Down_Trg & KEY_Add)
+    {
+        check_step++;
+        step_changed = 1;
+    }
+    else if (Key_Down_Trg & KEY_Minus)
+    {
+        check_step--;
+        step_changed = 1;
+    }
+    if (step_changed)
+    {
+        /****display all*******/
+        if (check_step == 0)
+            HT162x_LCD_Clear(SET);
+        /****check 0-9*******/
+        else if (check_step < 11)
+        {
+            for (i = Serial_01; i < Serial_MAX; i++)
+                HT162x_LCD_Num_Set((LCD_Digital_Serial_t)i, check_step - 1);
+        }
+        /****check week*******/
+        else if (check_step < 18)
+        {
+            HT162x_LCD_Week_Set(TIME_PART, (LCD_Week_Day_t)(check_step - 10));  //week
+            HT162x_LCD_Week_Set(ALARM_PART, (LCD_Week_Day_t)(check_step - 10)); //week
+        }
+        /****time am*******/
+        else if (check_step == 18)
+            HT162x_LCD_Toggle_Pixel(COM7, SEG22);
+        /****time pm*******/
+        else if (check_step == 19)
+            HT162x_LCD_Toggle_Pixel(COM7, SEG23);
+        /****alarm am*******/
+        else if (check_step == 20)
+            HT162x_LCD_Toggle_Pixel(COM7, SEG38);
+        /****alarm pm*******/
+        else if (check_step == 21)
+            HT162x_LCD_Toggle_Pixel(COM7, SEG39);
+
+        /****check wifi*******/
+        else if (check_step < 27)
+            HT162x_LCD_RSSI_Set(Rssi_array[check_step - 18]);
+        /****red Exclamation*******/
+        else if (check_step == 27)
+            HT162x_LCD_Toggle_Pixel(COM7, SEG21);
+        /****next alarm*******/
+        else if (check_step == 28)
+            HT162x_LCD_Toggle_Pixel(COM7, SEG11);
+        /****snooze*******/
+        else if (check_step == 29)
+            HT162x_LCD_Toggle_Pixel(COM7, SEG13);
+
+        /****point 1*******/
+        else if (check_step == 30)
+            HT162x_LCD_Toggle_Pixel(COM0, SEG08);
+        /****point 2*******/
+        else if (check_step == 27)
+            HT162x_LCD_Toggle_Pixel(COM0, SEG16);
+        /****point 3*******/
+        else if (check_step == 28)
+            HT162x_LCD_Toggle_Pixel(COM0, SEG33);
+        /****point 4*******/
+        else if (check_step == 29)
+            HT162x_LCD_Toggle_Pixel(COM0, SEG32);
+        /****point 5*******/
+        else if (check_step == 29)
+            HT162x_LCD_Toggle_Pixel(COM7, SEG15);
+        /****point 6*******/
+        else if (check_step == 29)
+            HT162x_LCD_Toggle_Pixel(COM7, SEG07);
+        /****point 7*******/
+        else if (check_step == 29)
+            HT162x_LCD_Toggle_Pixel(COM7, SEG31);
+        /****point 8*******/
+        else if (check_step == 29)
+            HT162x_LCD_Toggle_Pixel(COM7, SEG30);
+    }
+}
+static void LCD_Check_Clock(void)
+{
+    static uint8_t brightness = 0;
+    if (Key_Down_Trg & KEY_Minus)
+    {
+        if (brightness == 0)
+            brightness = 100;
+        else
+            brightness = 0;
+        RGBLED_Set_Brightness(brightness);
+    }
+    if (AlarmOccurred == TRUE) //1s time flash
+    {
+        /****second******/
+        HT162x_LCD_Double_Digits_Write(5, CurrentMicoTime.sec, 2);
+        AlarmOccurred = FALSE;
+    }
+}
+static void check_key(void)
+{
+    uint8_t key_press_number = 0;
+    uint8_t key_well_flag = 1;   uint8_t i;
+
+    __eland_color_t color = ELAND_BLACK;
+    key_press_number = 0;
+    for (i = 0; i < 9; i++)
+    {
+        if (Key_Count & (1 << i))
+            key_press_number++;
+    }
+    if (key_press_number >= 3)
+        key_well_flag = 0;
+    key_press_number = 0;
+    for (i = 4; i < 7; i++)
+    {
+        if (Key_Count & (1 << i))
+            key_press_number++;
+    }
+    if (key_press_number >= 2)
+        key_well_flag = 0;
+    if (key_well_flag)
+    {
+        if (color == ELAND_RED)
+            color = ELAND_GREEN;
+        else if (color == ELAND_GREEN)
+            color = ELAND_BLUE;
+        else
+            color = ELAND_RED;
+        if ((Key_Down_Trg & KEY_Set) ||
+            (Key_Down_Trg & KEY_Reset) ||
+            (Key_Down_Trg & KEY_Add) ||
+            (Key_Down_Trg & KEY_Minus) ||
+            (Key_Down_Trg & KEY_MON) ||
+            (Key_Down_Trg & KEY_AlarmMode) ||
+            (Key_Down_Trg & KEY_Wifi) ||
+            (Key_Down_Trg & KEY_Snooze) ||
+            (Key_Down_Trg & KEY_Alarm))
+            RGBLED_Color_Set(color, 100);
+    }
+    else
+        RGBLED_FlashRainBow_Color();
 }

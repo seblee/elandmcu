@@ -359,3 +359,26 @@ void RGBLED_SwitchRainBow_Color(void)
         HT162x_LCD_Num_Set(Serial_12, ((color + 1) % 10));
     }
 }
+/**
+ ****************************************************************************
+ * @Function : void RGBLED_FlashRainBow_Color(void)
+ * @File     : rgbled.c
+ * @Program  : Brightness:value of brightness
+ * @Created  : 2018/1/11 by seblee
+ * @Brief    : set background bright
+ * @Version  : V1.0
+**/
+void RGBLED_FlashRainBow_Color(void)
+{
+    static __rainbow_t color = RAINBOW_RED;
+    static uint8_t count = 0;
+    if (count++ > 25)
+    {
+        count = 0;
+        if (color >= RAINBOW_GRAY)
+            color = RAINBOW_RED;
+        else
+            color++;
+        RGBLED_Rainbow_Set(color);
+    }
+}

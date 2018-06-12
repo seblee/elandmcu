@@ -15,7 +15,8 @@
 #include "syscfg.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private typedef -----------------------------------------------------------*/
-typedef enum {
+typedef enum
+{
     ELAND_BLACK,
     ELAND_BLUE,
     ELAND_WHITE_BLUE,
@@ -28,7 +29,8 @@ typedef enum {
     ELAND_GREEN,
     ELAND_WHITE,
 } __eland_color_t;
-typedef enum {
+typedef enum
+{
     RAINBOW_RED,
     RAINBOW_ORANGE,
     RAINBOW_YELLOW,
@@ -72,6 +74,7 @@ void RGBLED_Rainbow_Set(__rainbow_t color);
 void RGBLED_RGBCode_Set(u32 ColorCode);
 void RGBLED_Set_Brightness(uint8_t Brightness);
 void RGBLED_SwitchRainBow_Color(void);
+void RGBLED_FlashRainBow_Color(void);
 /* Private functions ---------------------------------------------------------*/
 
 #endif /*__RGBLED_H_*/

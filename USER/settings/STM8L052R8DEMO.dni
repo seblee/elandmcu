@@ -29,7 +29,7 @@ Enabled=0
 ShowSource=1
 [DebugChecksum]
 <<<<<<< HEAD
-Checksum=946970318
+Checksum=1018351778
 =======
 Checksum=-2074508045
 >>>>>>> master
@@ -83,6 +83,8 @@ Fmt14={W}42:opt_M	4	0
 LogEnabled=0
 GraphEnabled=0
 ShowTimeLog=1
+[Breakpoints]
+Count=0
 [Log file]
 LoggingEnabled=_ 0
 LogFile=_ ""
@@ -90,8 +92,6 @@ Category=_ 0
 [TermIOLog]
 LoggingEnabled=_ 0
 LogFile=_ ""
-[Breakpoints]
-Count=0
 [Aliases]
 Count=0
 SuppressDialog=0

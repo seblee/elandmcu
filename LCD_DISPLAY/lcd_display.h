@@ -28,7 +28,8 @@ typedef struct eland_data_2_mcu
     uint32_t night_mode_end_time;
 } __ELAND_DATA_2_MCU_t;
 
-typedef enum _eland_mode {
+typedef enum _eland_mode
+{
     ELAND_MODE_NONE = (uint8_t)0x00,
     ELAND_CLOCK_MON,
     ELAND_CLOCK_ALARM,
@@ -36,10 +37,12 @@ typedef enum _eland_mode {
     ELAND_NA,
     ELAND_AP,
     ELAND_OTA,
+    ELAND_TEST,
     ELAND_MODE_MAX,
 } _ELAND_MODE_t;
 
-typedef enum {
+typedef enum
+{
     ALARM_IDEL,
     ALARM_ADD,
     ALARM_MINUS,
