@@ -15,7 +15,8 @@
 #include "syscfg.h"
 #include "ht162x.h"
 /* Private typedef -----------------------------------------------------------*/
-typedef enum {
+typedef enum
+{
     KEY_FUN_NONE = 0x00, /* 空命令*/
     SEND_ELAND_ERR_01,   /* SEND ELAND ERROR CODE*/
     KEY_READ_02,         /* READ MCU KEY STATE*/
@@ -33,14 +34,22 @@ typedef enum {
     ELAND_DELETE_0E,     /* DEVICE DATA DELETE */
 } __msg_function_t;
 
-typedef enum {
+typedef enum
+{
     EL_ERROR_NONE = 0x00, /*error none */
     EL_HTTP_TIMEOUT,      /*http time out*/
     EL_HTTP_204,          /*http 204*/
     EL_HTTP_400,          /*http 400*/
+    EL_HTTP_OTHER,        /*http other error*/
+    EL_FLASH_READ,        /*flash read error*/
+    EL_AUDIO_PLAY,        /*audio play error*/
+    EL_MAIN_THREAD,       /*file download  error*/
+    EL_FLASH_OK,          /*file download  error*/
+    EL_FLASH_ERR,         /*file download  error*/
 } __eland_error_t;
 
-typedef enum {
+typedef enum
+{
     FrameHeadSataus,
     FrameDataStatus,
     FrameTrailSataus,
@@ -48,7 +57,8 @@ typedef enum {
 } __msg_state_t;
 
 /*Eland 状态*/
-typedef enum {
+typedef enum
+{
     ElandNone = 0,
     ElandBegin,
     APStatusStart,
@@ -69,7 +79,8 @@ typedef enum {
 } Eland_Status_type_t;
 
 /**need **/
-typedef enum {
+typedef enum
+{
     REFRESH_NONE = 0,
     REFRESH_TIME,
     REFRESH_ALARM,

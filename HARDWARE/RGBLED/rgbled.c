@@ -372,7 +372,7 @@ void RGBLED_FlashRainBow_Color(void)
 {
     static __rainbow_t color = RAINBOW_RED;
     static uint8_t count = 0;
-    if (count++ > 25)
+    if (count++ > 10)
     {
         count = 0;
         if (color >= RAINBOW_GRAY)

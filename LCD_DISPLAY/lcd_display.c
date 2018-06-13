@@ -33,6 +33,7 @@ _ELAND_MODE_t Eland_mode = ELAND_MODE_NONE;
 uint8_t alarm_skip_flag = 0;
 uint8_t alarm_skip_flash_count = 0;
 uint8_t alarm_snooze_flash_count = 0; //20ms
+__eland_error_t eland_flash_state = EL_ERROR_NONE;
 
 const LCD_Digital_Serial_t Clock_number_table[8][2] = {
     /*          */
@@ -980,6 +981,11 @@ static void LCD_Check_LCD(void)
                 HT162x_LCD_Clear(RESET);
             for (i = Serial_01; i < Serial_MAX; i++)
                 HT162x_LCD_Num_Set((LCD_Digital_Serial_t)i, check_step - 1);
+            if ((key_up == 0) && (check_step == 10))
+            {
+                HT162x_LCD_Week_Set(TIME_PART, WEEKDAYMAX);  //week
+                HT162x_LCD_Week_Set(ALARM_PART, WEEKDAYMAX); //week
+            }
         }
         /****check week*******/
         else if (check_step < 18)
@@ -989,51 +995,39 @@ static void LCD_Check_LCD(void)
                     HT162x_LCD_Num_Set((LCD_Digital_Serial_t)i, 10);
             HT162x_LCD_Week_Set(TIME_PART, (LCD_Week_Day_t)(check_step - 11));  //week
             HT162x_LCD_Week_Set(ALARM_PART, (LCD_Week_Day_t)(check_step - 11)); //week
+
+            if ((key_up == 0) && (check_step == 17))
+                HT162x_LCD_Change_Pixel(COM7, SEG22, RESET);
         }
         /****time am*******/
         else if (check_step == 18)
         {
-            if (key_up == 1)
-            {
-                HT162x_LCD_Week_Set(TIME_PART, WEEKDAYMAX);  //week
-                HT162x_LCD_Week_Set(ALARM_PART, WEEKDAYMAX); //week
-            }
-            else if (key_up == 0)
-            {
+            if (key_up == 0)
                 HT162x_LCD_Change_Pixel(COM7, SEG23, RESET);
-            }
             HT162x_LCD_Change_Pixel(COM7, SEG22, SET);
         }
         /****time pm*******/
         else if (check_step == 19)
         {
-            if (key_up == 1)
-                HT162x_LCD_Change_Pixel(COM7, SEG22, RESET);
-            else if (key_up == 0)
+            if (key_up == 0)
                 HT162x_LCD_Change_Pixel(COM7, SEG38, RESET);
             HT162x_LCD_Change_Pixel(COM7, SEG23, SET);
         }
         /****alarm am*******/
         else if (check_step == 20)
         {
-            if (key_up == 1)
-                HT162x_LCD_Change_Pixel(COM7, SEG23, RESET);
-            else if (key_up == 0)
+            if (key_up == 0)
                 HT162x_LCD_Change_Pixel(COM7, SEG39, RESET);
             HT162x_LCD_Change_Pixel(COM7, SEG38, SET);
         }
         /****alarm pm*******/
         else if (check_step == 21)
         {
-            if (key_up == 1)
-                HT162x_LCD_Change_Pixel(COM7, SEG38, RESET);
             HT162x_LCD_Change_Pixel(COM7, SEG39, SET);
         }
         /****check wifi*******/
         else if (check_step < 27)
         {
-            if (key_up == 1)
-                HT162x_LCD_Change_Pixel(COM7, SEG39, RESET);
             HT162x_LCD_RSSI_Set(Rssi_array[check_step - 22]);
             if ((key_up == 0) && (check_step == 26))
                 HT162x_LCD_Change_Pixel(COM7, SEG21, RESET);
@@ -1041,99 +1035,77 @@ static void LCD_Check_LCD(void)
         /****red Exclamation*******/
         else if (check_step == 27)
         {
-            if (key_up == 1)
-                HT162x_LCD_RSSI_Set(LEVEL0);
-            else if (key_up == 0)
+            if (key_up == 0)
                 HT162x_LCD_Change_Pixel(COM7, SEG11, RESET);
             HT162x_LCD_Change_Pixel(COM7, SEG21, SET);
         }
         /****next alarm*******/
         else if (check_step == 28)
         {
-            if (key_up == 1)
-                HT162x_LCD_Change_Pixel(COM7, SEG21, RESET);
-            else if (key_up == 0)
+            if (key_up == 0)
                 HT162x_LCD_Change_Pixel(COM7, SEG13, RESET);
             HT162x_LCD_Change_Pixel(COM7, SEG11, SET);
         }
         /****snooze*******/
         else if (check_step == 29)
         {
-            if (key_up == 1)
-                HT162x_LCD_Change_Pixel(COM7, SEG11, RESET);
-            else if (key_up == 0)
+            if (key_up == 0)
                 HT162x_LCD_Change_Pixel(COM0, SEG08, RESET);
             HT162x_LCD_Change_Pixel(COM7, SEG13, SET);
         }
         /****point 1*******/
         else if (check_step == 30)
         {
-            if (key_up == 1)
-                HT162x_LCD_Change_Pixel(COM7, SEG13, RESET);
-            else if (key_up == 0)
+            if (key_up == 0)
                 HT162x_LCD_Change_Pixel(COM0, SEG16, RESET);
             HT162x_LCD_Change_Pixel(COM0, SEG08, SET);
         }
         /****point 2*******/
         else if (check_step == 31)
         {
-            if (key_up == 1)
-                HT162x_LCD_Change_Pixel(COM0, SEG08, RESET);
-            else if (key_up == 0)
+            if (key_up == 0)
                 HT162x_LCD_Change_Pixel(COM0, SEG33, RESET);
             HT162x_LCD_Change_Pixel(COM0, SEG16, SET);
         }
         /****point 3*******/
         else if (check_step == 32)
         {
-            if (key_up == 1)
-                HT162x_LCD_Change_Pixel(COM0, SEG16, RESET);
-            else if (key_up == 0)
+            if (key_up == 0)
                 HT162x_LCD_Change_Pixel(COM0, SEG32, RESET);
             HT162x_LCD_Change_Pixel(COM0, SEG33, SET);
         }
         /****point 4*******/
         else if (check_step == 33)
         {
-            if (key_up == 1)
-                HT162x_LCD_Change_Pixel(COM0, SEG33, RESET);
-            else if (key_up == 0)
+            if (key_up == 0)
                 HT162x_LCD_Change_Pixel(COM7, SEG15, RESET);
             HT162x_LCD_Change_Pixel(COM0, SEG32, SET);
         }
         /****point 5*******/
         else if (check_step == 34)
         {
-            if (key_up == 1)
-                HT162x_LCD_Change_Pixel(COM0, SEG32, RESET);
-            else if (key_up == 0)
+            if (key_up == 0)
                 HT162x_LCD_Change_Pixel(COM7, SEG07, RESET);
             HT162x_LCD_Change_Pixel(COM7, SEG15, SET);
         }
         /****point 6*******/
         else if (check_step == 35)
         {
-            if (key_up == 1)
-                HT162x_LCD_Change_Pixel(COM7, SEG15, RESET);
-            else if (key_up == 0)
+            if (key_up == 0)
                 HT162x_LCD_Change_Pixel(COM7, SEG31, RESET);
             HT162x_LCD_Change_Pixel(COM7, SEG07, SET);
         }
         /****point 7*******/
         else if (check_step == 36)
         {
-            if (key_up == 1)
-                HT162x_LCD_Change_Pixel(COM7, SEG07, RESET);
-            else if (key_up == 0)
+            if (key_up == 0)
                 HT162x_LCD_Change_Pixel(COM7, SEG30, RESET);
             HT162x_LCD_Change_Pixel(COM7, SEG31, SET);
         }
         /****point 8*******/
         else if (check_step == 37)
         {
-            if (key_up == 1)
-                HT162x_LCD_Change_Pixel(COM7, SEG31, RESET);
-            else if (key_up == 0)
+            if (key_up == 0)
                 HT162x_LCD_Change_Pixel(COM7, SEG30, RESET);
             HT162x_LCD_Change_Pixel(COM7, SEG30, SET);
         }
@@ -1141,10 +1113,13 @@ static void LCD_Check_LCD(void)
 }
 static void LCD_Check_Clock(void)
 {
+    uint8_t i;
     static uint8_t brightness = 0;
     if (Key_Down_Trg & KEY_Minus)
     {
         if (brightness == 0)
+            brightness = 10;
+        else if (brightness == 10)
             brightness = 100;
         else
             brightness = 0;
@@ -1156,14 +1131,27 @@ static void LCD_Check_Clock(void)
         HT162x_LCD_Double_Digits_Write(5, CurrentMicoTime.sec, 2);
         AlarmOccurred = FALSE;
     }
+    if (eland_flash_state == EL_FLASH_OK)
+    {
+        eland_flash_state = EL_ERROR_NONE;
+        for (i = Serial_07; i < Serial_11; i++)
+            HT162x_LCD_Num_Set((LCD_Digital_Serial_t)i, 8);
+    }
+    else if (eland_flash_state == EL_FLASH_ERR)
+    {
+        eland_flash_state = EL_ERROR_NONE;
+        for (i = Serial_07; i < Serial_11; i++)
+            HT162x_LCD_Num_Set((LCD_Digital_Serial_t)i, 0);
+    }
 }
+
 static void check_key(void)
 {
-    uint8_t key_press_number = 0;
-    uint8_t key_well_flag = 1;
     uint8_t i;
-
-    __eland_color_t color = ELAND_BLACK;
+    uint8_t key_well_flag = 1;
+    uint8_t key_press_number = 0;
+    static uint8_t count = 0;
+    static __eland_color_t color = ELAND_BLACK;
     key_press_number = 0;
     for (i = 0; i < 9; i++)
     {
@@ -1182,12 +1170,6 @@ static void check_key(void)
         key_well_flag = 0;
     if (key_well_flag)
     {
-        if (color == ELAND_RED)
-            color = ELAND_GREEN;
-        else if (color == ELAND_GREEN)
-            color = ELAND_BLUE;
-        else
-            color = ELAND_RED;
         if ((Key_Down_Trg & KEY_Set) ||
             (Key_Down_Trg & KEY_Reset) ||
             (Key_Down_Trg & KEY_Add) ||
@@ -1197,8 +1179,26 @@ static void check_key(void)
             (Key_Down_Trg & KEY_Wifi) ||
             (Key_Down_Trg & KEY_Snooze) ||
             (Key_Down_Trg & KEY_Alarm))
+        {
+            if (color == ELAND_RED)
+                color = ELAND_GREEN;
+            else if (color == ELAND_GREEN)
+                color = ELAND_BLUE;
+            else
+                color = ELAND_RED;
             RGBLED_Color_Set(color, 100);
+        }
     }
     else
-        RGBLED_FlashRainBow_Color();
+    {
+        if (count++ > 2)
+        {
+            count = 0;
+            if (color >= ELAND_RED)
+                color = ELAND_BLACK;
+            else
+                color = ELAND_RED;
+            RGBLED_Color_Set(color, 100);
+        }
+    }
 }

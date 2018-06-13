@@ -182,6 +182,9 @@ static void OprationFrame(void)
 static void MODH_Opration_01H(void)
 {
     uint8_t SendBuf[4];
+    __eland_error_t eland_error = (__eland_error_t)msg_receive_buff[3];
+    if ((eland_error == EL_FLASH_OK) || (eland_error == EL_FLASH_ERR))
+        eland_flash_state = eland_error;
     SendBuf[0] = Uart_Packet_Header;
     SendBuf[1] = SEND_ELAND_ERR_01;
     SendBuf[2] = 0;

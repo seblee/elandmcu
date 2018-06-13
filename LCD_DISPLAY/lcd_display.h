@@ -76,7 +76,7 @@ extern _alarm_mcu_data_t alarm_data_simple;
 extern _alarm_mcu_data_t alarm_data_display;
 extern _ELAND_MODE_t Eland_mode;
 extern uint8_t alarm_skip_flag;
-
+extern __eland_error_t eland_flash_state;
 /* Private function prototypes -----------------------------------------------*/
 
 /* Private functions ---------------------------------------------------------*/
