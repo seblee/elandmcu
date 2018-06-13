@@ -148,25 +148,25 @@ void LCD_Clock_MON(void)
     static uint8_t changeflag = 0;
     if (Eland_mode != Eland_modeBak)
     {
-        /**refresh wifi**/
-        HT162x_LCD_RSSI_Set(LEVEL0);
-        HT162x_LCD_Change_Pixel(COM7, SEG21, RESET);
-        /**refresh time**/
-        HT162x_LCD_Time_Display(TIME_PART, CurrentMicoTime);
-        /**refresh date**/
-        HT162x_LCD_Date_Display(TIME_PART, CurrentMicoTime);
-        /**SHOW the line**/
-        HT162x_LCD_Change_Pixel(COM7, SEG33, SET);
-        /**backup mode**/
-        Eland_modeBak = Eland_mode;
-        if ((time_set_mode != 0) && (number_flash_flag == 0))
-        {
-            HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, ((time_set_mode == 2) || (time_set_mode == 3) || (time_set_mode == 7)) ? 2 : 1);
-            number_flash_flag = 1;
+        if (Eland_mode != ELAND_TEST)
+        { /**refresh wifi**/
+            HT162x_LCD_RSSI_Set(LEVEL0);
+            HT162x_LCD_Change_Pixel(COM7, SEG21, RESET);
+            /**refresh time**/
+            HT162x_LCD_Time_Display(TIME_PART, CurrentMicoTime);
+            /**refresh date**/
+            HT162x_LCD_Date_Display(TIME_PART, CurrentMicoTime);
+            /**SHOW the line**/
+            HT162x_LCD_Change_Pixel(COM7, SEG33, SET);
+            /**backup mode**/
+            if ((time_set_mode != 0) && (number_flash_flag == 0))
+            {
+                HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, ((time_set_mode == 2) || (time_set_mode == 3) || (time_set_mode == 7)) ? 2 : 1);
+                number_flash_flag = 1;
+            }
+            time_set_mode = 0;
         }
-        if (Eland_mode == ELAND_TEST)
-            HT162x_LCD_Clear(RESET);
-        time_set_mode = 0;
+        Eland_modeBak = Eland_mode;
     }
     if (Eland_mode == ELAND_TEST)
     {
@@ -618,7 +618,7 @@ void LCD_NetMode(void)
             Eland_alarm_display(RESET);
         }
         else if (Eland_mode == ELAND_TEST)
-            HT162x_LCD_Clear(RESET);
+            HT162x_LCD_Clear(SET);
         else
         {
             /**refresh time**/
@@ -940,8 +940,8 @@ static void test_display(void)
         LCD_Check_LCD();
     else if (Key_Count & KEY_MON)
         LCD_Check_Clock();
-    else
-        LCD_Check_LCD();
+    // else
+    //     LCD_Check_LCD();
     check_key();
 }
 static void LCD_Check_LCD(void)
@@ -970,7 +970,6 @@ static void LCD_Check_LCD(void)
     }
     if (step_changed)
     {
-
         /****display all*******/
         if (check_step == 0)
             HT162x_LCD_Clear(SET);
@@ -1135,13 +1134,13 @@ static void LCD_Check_Clock(void)
     {
         eland_flash_state = EL_ERROR_NONE;
         for (i = Serial_07; i < Serial_11; i++)
-            HT162x_LCD_Num_Set((LCD_Digital_Serial_t)i, 8);
+            HT162x_LCD_Num_Set((LCD_Digital_Serial_t)i, 0);
     }
     else if (eland_flash_state == EL_FLASH_ERR)
     {
         eland_flash_state = EL_ERROR_NONE;
         for (i = Serial_07; i < Serial_11; i++)
-            HT162x_LCD_Num_Set((LCD_Digital_Serial_t)i, 0);
+            HT162x_LCD_Num_Set((LCD_Digital_Serial_t)i, 8);
     }
 }
 
@@ -1153,7 +1152,7 @@ static void check_key(void)
     static uint8_t count = 0;
     static __eland_color_t color = ELAND_BLACK;
     key_press_number = 0;
-    for (i = 0; i < 9; i++)
+    for (i = 0; i < (KEY_NUM - 1); i++)
     {
         if (Key_Count & (1 << i))
             key_press_number++;

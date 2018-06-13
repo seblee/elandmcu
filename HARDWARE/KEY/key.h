@@ -16,7 +16,8 @@
 #include "stm8l15x_gpio.h"
 
 /* Private typedef -----------------------------------------------------------*/
-typedef enum {
+typedef enum
+{
     KEY_Set = (uint16_t)0x0001,       /*!< 時刻設置 */
     KEY_Reset = (uint16_t)0x0002,     /*!< 軟件復位 */
     KEY_Add = (uint16_t)0x0004,       /*!< 時間＋   */
@@ -26,6 +27,7 @@ typedef enum {
     KEY_Wifi = (uint16_t)0x0040,      /*!< wifi模式 NA/NC mode*/
     KEY_Snooze = (uint16_t)0x0080,    /*!< 貪睡     */
     KEY_Alarm = (uint16_t)0x0100,     /*!< 鬧鐘     */
+    KEY_TEST = (uint16_t)0x0200,      /*!< TEST    */
 } KEY_State_TypeDef;
 /* Private define ------------------------------------------------------------*/
 //時刻設置
@@ -58,9 +60,16 @@ typedef enum {
 #define ELAND_KEY_ALARM_PORT GPIOC
 #define ELAND_KEY_ALARM_PIN GPIO_Pin_4
 
+//TEST
+#define ELAND_KEY_TEST_PORT GPIOB
+#define ELAND_KEY_TEST_PIN GPIO_Pin_5
+
 #define LONG_PRESS_TIMES 250    //100 × 20ms = 2s
 #define SHSORT_RESTAIN_TIMES 50 //50 × 20ms = 1s
 #define SW_LIGHT_TIMES 250      //250 × 20ms = 5s
+
+#define KEY_CHECK_BASE 0x03ff //10 KEY
+#define KEY_NUM 10            //10 KEY
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/

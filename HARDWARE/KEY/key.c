@@ -52,6 +52,7 @@ void ElandKeyInit(void) //按键初始化
     GPIO_Init(ELAND_KEY_WIFI_PORT, ELAND_KEY_WIFI_PIN, GPIO_Mode_In_FL_No_IT);             //wifi模式
     GPIO_Init(ELAND_KEY_SNOOZE_PORT, ELAND_KEY_SNOOZE_PIN, GPIO_Mode_In_FL_No_IT);         //貪睡
     GPIO_Init(ELAND_KEY_ALARM_PORT, ELAND_KEY_ALARM_PIN, GPIO_Mode_In_FL_No_IT);           //鬧鐘
+    GPIO_Init(ELAND_KEY_TEST_PORT, ELAND_KEY_TEST_PIN, GPIO_Mode_In_PU_No_IT);             //TEST
 }
 /**
  ****************************************************************************
@@ -83,6 +84,8 @@ uint16_t Eland_PinState_Read(void)
         Cache |= KEY_Snooze; //貪睡
     if (GPIO_ReadInputDataBit(ELAND_KEY_ALARM_PORT, ELAND_KEY_ALARM_PIN))
         Cache |= KEY_Alarm; //鬧鐘
+    if (GPIO_ReadInputDataBit(ELAND_KEY_TEST_PORT, ELAND_KEY_TEST_PIN))
+        Cache |= KEY_TEST; //TEST
 
     return Cache;
 }
@@ -102,7 +105,7 @@ void Eland_KeyState_Read(void)
     KeyValue_present = Eland_PinState_Read(); //key当前值
     if (KeyValue_present == KeyValue_last)    //去抖20ms
     {
-        ReadData = KeyValue_present ^ 0x01ff;
+        ReadData = KeyValue_present ^ KEY_CHECK_BASE;
         Key_Down_Trg = ReadData & (ReadData ^ Key_Count);
         Key_Count = ReadData;
     }
@@ -138,7 +141,7 @@ static void Eland_Key_Long_Press_State(void)
     uint8_t i;
     static uint16_t Key_Restain_Count = 0;
     static uint16_t Key_Short_Restain_Count = 0;
-    for (i = 0; i < 9; i++)
+    for (i = 0; i < KEY_NUM; i++)
     {
         if (Key_Count & (1 << i))
         {
