@@ -214,7 +214,6 @@ static void MODH_Opration_02H(void)
     SendBuf[7] = (uint8_t)(MCU_Refreshed);
     SendBuf[8] = Uart_Packet_Trail;
     USARTx_Send_Data(USART1, SendBuf, 9);
-
     MCU_Refreshed = REFRESH_NONE;
 }
 /**

@@ -67,23 +67,23 @@ uint16_t Eland_PinState_Read(void)
 {
     uint16_t Cache = 0;
     if (GPIO_ReadInputDataBit(ELAND_KEY_SET_PORT, ELAND_KEY_SET_PIN))
-        Cache |= KEY_Set; //時刻設置
+        Cache |= KEY_Set; /*!< SET */
     if (GPIO_ReadInputDataBit(ELAND_KEY_SOFT_RESET_PORT, ELAND_KEY_SOFT_RESET_PIN))
-        Cache |= KEY_Reset; //軟件復位
+        Cache |= KEY_Reset; /*!< RESET */
     if (GPIO_ReadInputDataBit(ELAND_KEY_ADD_PORT, ELAND_KEY_ADD_PIN))
-        Cache |= KEY_Add; //時間＋
+        Cache |= KEY_Add; /*!< UP   */
     if (GPIO_ReadInputDataBit(ELAND_KEY_MINUS_PORT, ELAND_KEY_MINUS_PIN))
-        Cache |= KEY_Minus; //時間－
+        Cache |= KEY_Minus; /*!< DOWN  */
     if (GPIO_ReadInputDataBit(ELAND_KEY_MON_PORT, ELAND_KEY_MON_PIN))
-        Cache |= KEY_MON; //mon時間
+        Cache |= KEY_MON; /*!< offline clock alarm off*/
     if (GPIO_ReadInputDataBit(ELAND_KEY_ALARM_MODE_PORT, ELAND_KEY_ALARM_MODE_PIN))
-        Cache |= KEY_AlarmMode; //鬧鐘模式
+        Cache |= KEY_AlarmMode; /*!< offline alarm on*/
     if (GPIO_ReadInputDataBit(ELAND_KEY_WIFI_PORT, ELAND_KEY_WIFI_PIN))
-        Cache |= KEY_Wifi; //wifi模式
+        Cache |= KEY_Wifi; /*!< ON line*/
     if (GPIO_ReadInputDataBit(ELAND_KEY_SNOOZE_PORT, ELAND_KEY_SNOOZE_PIN))
-        Cache |= KEY_Snooze; //貪睡
+        Cache |= KEY_Snooze; /*!< SNOOZE     */
     if (GPIO_ReadInputDataBit(ELAND_KEY_ALARM_PORT, ELAND_KEY_ALARM_PIN))
-        Cache |= KEY_Alarm; //鬧鐘
+        Cache |= KEY_Alarm; /*!< ALARM_OFF   */
     if (GPIO_ReadInputDataBit(ELAND_KEY_TEST_PORT, ELAND_KEY_TEST_PIN))
         Cache |= KEY_TEST; //TEST
 

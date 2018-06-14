@@ -332,14 +332,12 @@ void HT162x_Read_Data_Continuously(uint8_t address, uint8_t *data, uint8_t lengt
 **/
 void HT162x_LCD_Clear(FlagStatus value)
 {
-    uint8_t *cache;
-    cache = malloc(HT1623_MEM_NUM);
+    uint8_t cache[HT1623_MEM_NUM];
     if (value)
         memset(cache, 0xff, HT1623_MEM_NUM);
     else
         memset(cache, 0, HT1623_MEM_NUM);
     TH162x_Write_Data_Write_Continuously(0, cache, HT1623_MEM_NUM);
-    free(cache);
     IWDG_ReloadCounter();
 }
 

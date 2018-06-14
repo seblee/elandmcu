@@ -54,7 +54,7 @@ void main(void)
     TIM4_Init();
     UART1_Init();
     ElandKeyInit();
-    IWDG_Config();
+    //IWDG_Config();
     RGBLED_CFG();
     /* Reload IWDG counter */
     IWDG_ReloadCounter();
