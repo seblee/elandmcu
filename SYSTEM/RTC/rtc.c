@@ -54,9 +54,9 @@ const uint8_t DayOfMon[12][2] = {
 
 uint32_t second_Alarm = 0, second_RTC = 0;
 /* Private function prototypes -----------------------------------------------*/
-//static ErrorStatus Calendar_Init(void);
-static void Calendar_Init_register(void);
-static void Get_built_DateTime(_eland_date_time_t *time);
+static ErrorStatus Calendar_Init(void);
+void Calendar_Init_register(void);
+void Get_built_DateTime(_eland_date_time_t *time);
 /* Private functions ---------------------------------------------------------*/
 /**
  ****************************************************************************
@@ -73,8 +73,8 @@ void ELAND_RTC_Init(void)
     /* Select LSE (32.768 KHz) as RTC clock source */
     CLK_RTCClockConfig(CLK_RTCCLKSource_LSE, CLK_RTCCLKDiv_1);
 
-    //Calendar_Init();
-    Calendar_Init_register();
+    Calendar_Init();
+    // Calendar_Init_register();
     /* Configures the RTC wakeup timer_step = RTCCLK/16 = LSE/16 = 488.28125 us */
     RTC_WakeUpClockConfig(RTC_WakeUpClock_RTCCLK_Div16);
     /* Enable wake up unit Interrupt */
@@ -103,16 +103,20 @@ void ELAND_RTC_Check(void)
     }
 }
 
-static void Calendar_Init_register(void)
+void Calendar_Init_register(void)
 {
+    uint16_t wutwfcount = 0;
     //关闭RTC寄存器的写保护功能
     RTC->WPR = 0XCA;
     RTC->WPR = 0x53;
     /* Set the Initialization mode */
     RTC->ISR1 = (uint8_t)RTC_ISR1_INIT;
     /* Wait until INITF flag is set */
-    while ((RTC->ISR1 & RTC_ISR1_INITF) == RESET)
-        ;
+    while (((RTC->ISR1 & RTC_ISR1_INITF) == RESET) && (wutwfcount < 0xffff))
+    {
+        Delay_By_nop(1);
+        wutwfcount++;
+    }
     /*24小时模式*/
     RTC->CR1 &= ((uint8_t) ~(RTC_CR1_FMT));
 
@@ -138,40 +142,40 @@ static void Calendar_Init_register(void)
   * @param  None
   * @retval None
   */
-ErrorStatus Calendar_Init(void)
+static ErrorStatus Calendar_Init(void)
 {
-    uint8_t times = 0;
     ErrorStatus err;
     RTC_InitStr.RTC_HourFormat = RTC_HourFormat_24;
     RTC_InitStr.RTC_AsynchPrediv = 0x7f;
     RTC_InitStr.RTC_SynchPrediv = 0x00ff;
-rtcstart:
-    if (RTC_Init(&RTC_InitStr) == ERROR)
-    {
-        times++;
-        RTC_DeInit();
-        goto rtcstart;
-    }
-    HT162x_LCD_Num_Set(Serial_13, ((times / 10) % 10));
-    HT162x_LCD_Num_Set(Serial_14, (times % 10));
+    RTC_Init(&RTC_InitStr);
+    // rtcstart:
+    //     if (RTC_Init(&RTC_InitStr) == ERROR)
+    //     {
+    //         times++;
+    //         RTC_DeInit();
+    //         goto rtcstart;
+    //     }
+    // HT162x_LCD_Num_Set(Serial_13, ((times / 10) % 10));
+    // HT162x_LCD_Num_Set(Serial_14, (times % 10));
 
-    Get_built_DateTime(&CurrentMCUTime);
+    // Get_built_DateTime(&CurrentMCUTime);
 
-    RTC_DateStructInit(&RTC_DateStr);
-    RTC_DateStr.RTC_WeekDay = CurrentMCUTime.week;
-    RTC_DateStr.RTC_Date = CurrentMCUTime.day;
-    RTC_DateStr.RTC_Month = CurrentMCUTime.month;
-    RTC_DateStr.RTC_Year = CurrentMCUTime.yea % 100;
-    //RTC_SetDate(RTC_Format_BIN, &RTC_DateStr);
+    // RTC_DateStructInit(&RTC_DateStr);
+    // RTC_DateStr.RTC_WeekDay = CurrentMCUTime.week;
+    // RTC_DateStr.RTC_Date = CurrentMCUTime.day;
+    // RTC_DateStr.RTC_Month = CurrentMCUTime.month;
+    // RTC_DateStr.RTC_Year = CurrentMCUTime.yea % 100;
+    // //RTC_SetDate(RTC_Format_BIN, &RTC_DateStr);
 
-    RTC_TimeStructInit(&RTC_TimeStr);
-    RTC_TimeStr.RTC_Hours = CurrentMCUTime.hour;
-    RTC_TimeStr.RTC_Minutes = CurrentMCUTime.minute;
-    RTC_TimeStr.RTC_Seconds = CurrentMCUTime.second;
-    //RTC_SetTime(RTC_Format_BIN, &RTC_TimeStr);
-    Today_Second = (uint32_t)((uint32_t)CurrentMCUTime.hour * 3600);
-    Today_Second += (uint32_t)((uint32_t)CurrentMCUTime.minute * 60);
-    Today_Second += (uint32_t)CurrentMCUTime.second;
+    // RTC_TimeStructInit(&RTC_TimeStr);
+    // RTC_TimeStr.RTC_Hours = CurrentMCUTime.hour;
+    // RTC_TimeStr.RTC_Minutes = CurrentMCUTime.minute;
+    // RTC_TimeStr.RTC_Seconds = CurrentMCUTime.second;
+    // //RTC_SetTime(RTC_Format_BIN, &RTC_TimeStr);
+    // Today_Second = (uint32_t)((uint32_t)CurrentMCUTime.hour * 3600);
+    // Today_Second += (uint32_t)((uint32_t)CurrentMCUTime.minute * 60);
+    // Today_Second += (uint32_t)CurrentMCUTime.second;
 
     RTC_AlarmStructInit(&RTC_AlarmStr);
     RTC_AlarmStr.RTC_AlarmTime.RTC_Hours = 01;
@@ -337,7 +341,7 @@ void ELAND_Time_Convert(mico_rtc_time_t *mico_time, _eland_date_time_t *mcu_time
  * @Brief    : set current time
  * @Version  : V1.0
 **/
-static void Get_built_DateTime(_eland_date_time_t *time)
+void Get_built_DateTime(_eland_date_time_t *time)
 {
     uint16_t da, ho, mi, se;
     char temp_str[4] = {0, 0, 0, 0}, i;
