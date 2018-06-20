@@ -26,7 +26,7 @@ uint16_t Key_Restain = 0;           //按鍵按捺狀態
 uint16_t Key_Restain_Trg = 0;       //按鍵按捺狀態
 uint16_t Key_Short_Restain = 0;     //按鍵按捺狀態
 uint16_t Key_Short_Restain_Trg = 0; //按鍵按捺狀態
-uint16_t Key_Light_counter = 0;
+__no_init uint16_t Key_Light_counter;
 /* Private function prototypes -----------------------------------------------*/
 static void Eland_Key_Long_Press_State(void);
 /* Private functions ---------------------------------------------------------*/
@@ -53,6 +53,10 @@ void ElandKeyInit(void) //按键初始化
     GPIO_Init(ELAND_KEY_SNOOZE_PORT, ELAND_KEY_SNOOZE_PIN, GPIO_Mode_In_FL_No_IT);         //貪睡
     GPIO_Init(ELAND_KEY_ALARM_PORT, ELAND_KEY_ALARM_PIN, GPIO_Mode_In_FL_No_IT);           //鬧鐘
     GPIO_Init(ELAND_KEY_TEST_PORT, ELAND_KEY_TEST_PIN, GPIO_Mode_In_PU_No_IT);             //TEST
+
+    Eland_KeyState_Read();
+    Eland_KeyState_Read();
+    Eland_KeyState_Read();
 }
 /**
  ****************************************************************************

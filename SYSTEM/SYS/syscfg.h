@@ -30,6 +30,7 @@
 /* Private variables ---------------------------------------------------------*/
 extern int Firmware_Version_Major;
 extern int Firmware_Version_Minor;
+extern RST_FLAG_TypeDef rst_flag;
 /* Private function prototypes -----------------------------------------------*/
 void SysClock_Init(void);
 

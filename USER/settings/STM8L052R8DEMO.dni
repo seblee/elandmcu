@@ -8,13 +8,31 @@ UseTrigger=1
 TriggerName=main
 LimitSize=0
 ByteLimit=50
+[DebugChecksum]
+<<<<<<< HEAD
+Checksum=-1964877406
+=======
+Checksum=-2074508045
+>>>>>>> master
+[CallStack]
+ShowArgs=0
+[Disassembly]
+MixedMode=1
 [InterruptLog]
 LogEnabled=0
-SumEnabled=0
 GraphEnabled=0
 ShowTimeLog=1
+SumEnabled=0
 ShowTimeSum=1
 SumSortOrder=0
+[DataLog]
+LogEnabled=0
+GraphEnabled=0
+ShowTimeLog=1
+SumEnabled=0
+ShowTimeSum=1
+[Breakpoints2]
+Count=0
 [Interrupts]
 Enabled=1
 [MemoryMap]
@@ -27,16 +45,11 @@ ActionState=1
 [Trace1]
 Enabled=0
 ShowSource=1
-[DebugChecksum]
-<<<<<<< HEAD
-Checksum=558338882
-=======
-Checksum=-2074508045
->>>>>>> master
-[CallStack]
-ShowArgs=0
-[Disassembly]
-MixedMode=1
+[Simulator]
+Freq=16000000
+[SfrWindow]
+Show=1 1
+Sort=4 0
 [struct_types]
 Fmt0=__ELAND_DATA_2_MCU_t-brightness_night	3	0
 Fmt1=__ELAND_DATA_2_MCU_t-brightness_normal	3	0
@@ -80,6 +93,7 @@ Fmt12={W}42:ope_L	4	0
 Fmt13={W}42:ope_M	4	0
 Fmt14={W}42:opt_L	4	0
 Fmt15={W}42:opt_M	4	0
+Fmt16={W}42:test_ram	4	0
 [DataSample]
 LogEnabled=0
 GraphEnabled=0

@@ -27,9 +27,9 @@
 /* Private variables ---------------------------------------------------------*/
 uint8_t Firmware_Conter = 0;
 uint8_t msg_receive_buff[300];
-Eland_Status_type_t eland_state = ElandNone;
-LCD_Wifi_Rssi_t RSSI_Value = LEVELNUM;
-MCU_Refresh_type_t MCU_Refreshed = REFRESH_NONE;
+__no_init Eland_Status_type_t eland_state;
+__no_init LCD_Wifi_Rssi_t RSSI_Value;
+MCU_Refresh_type_t MCU_Refreshed = REFRESH_ALARM;
 
 /* Private function prototypes -----------------------------------------------*/
 static void OprationFrame(void);
@@ -104,7 +104,7 @@ void ReceiveUsart(u8 Cache)
     if (UartStatus == FrameEndStatus) //接收完一帧处理数据
     {
         //add Opration function
-        IWDG_ReloadCounter();
+        // IWDG_ReloadCounter();
         OprationFrame();
         UartStatus = FrameHeadSataus;
         count = 0;

@@ -116,14 +116,16 @@ void USART1_RX_Service(void)
 void USARTx_Send_Data(USART_TypeDef *USARTx, uint8_t *P_data, uint16_t length)
 {
     uint16_t i = 0;
+    uint16_t rsfcount = 0;
     //TXD1_enable; // 允许发送
     for (i = 0; i < length; i++)
     {
-        while (USART_GetFlagStatus(USARTx, USART_FLAG_TXE) == RESET)
-            ; // 检查发送OK
+        while ((USART_GetFlagStatus(USARTx, USART_FLAG_TXE) == RESET) && (rsfcount != 0xffff))
+            rsfcount++; // 检查发送OK
         USART_SendData8(USARTx, *(P_data + i));
     }
-    while (USART_GetFlagStatus(USARTx, USART_FLAG_TC) == RESET)
-        ; // 检查发送OK
+    rsfcount = 0;
+    while ((USART_GetFlagStatus(USARTx, USART_FLAG_TC) == RESET) && (rsfcount != 0xffff))
+        rsfcount++; // 检查发送OK
     //RXD1_enable; // 允许接收及其中断
 }

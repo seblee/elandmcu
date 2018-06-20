@@ -42,18 +42,21 @@
 **/
 void main(void)
 {
+     if (!RST_GetFlagStatus(RST_FLAG_IWDGF))
+        LCD_data_init();
+    else
+        rst_flag = RST_FLAG_IWDGF;
     disableInterrupts();
     OTA_bootloader_disable();
     enableInterrupts();
     /* System clock */
-    LCD_data_init();
     SysClock_Init();
     HT162x_init();
     ELAND_RTC_Init();
     ELAND_RTC_Check();
     TIM4_Init();
-    UART1_Init();
     ElandKeyInit();
+    UART1_Init();
     IWDG_Config();
     RGBLED_CFG();
     /* Reload IWDG counter */
@@ -61,8 +64,9 @@ void main(void)
     /* Infinite loop */
     while (1)
     {
-        /* Reload IWDG counter */
-        IWDG_ReloadCounter();
+            /* Reload IWDG counter */
+            IWDG_ReloadCounter();
+
         Eland_KeyState_Read();
         if (Key_Count & KEY_Wifi) //NC/NA mode
             LCD_NetMode();

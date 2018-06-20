@@ -132,7 +132,8 @@ void HT162x_init(void)
     HT162x_Write_Command(F128);   //Time base clock output : 128Hz
     HT162x_Write_Command(NORMAL); //Normal mod
 
-    HT162x_LCD_Clear(RESET);
+    if (rst_flag != RST_FLAG_IWDGF)
+        HT162x_LCD_Clear(RESET);
 }
 
 /**

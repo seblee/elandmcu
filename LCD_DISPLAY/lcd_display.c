@@ -22,14 +22,14 @@
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-__ELAND_DATA_2_MCU_t eland_data;
-_alarm_mcu_data_t alarm_data_simple;
-_alarm_mcu_data_t alarm_data_display;
-bool Alarm_is_empty = TRUE;
+__no_init __ELAND_DATA_2_MCU_t eland_data;
+__no_init _alarm_mcu_data_t alarm_data_simple;
+__no_init _alarm_mcu_data_t alarm_data_display;
+__no_init bool Alarm_is_empty;
 uint8_t Alarm_led_brigh = 100;
 bool Alarm_need_Refresh = TRUE;
 bool ELAND_DATA_Refreshed = TRUE;
-_ELAND_MODE_t Eland_mode = ELAND_MODE_NONE;
+__no_init _ELAND_MODE_t Eland_mode;
 uint8_t alarm_skip_flag = 0;
 uint8_t alarm_skip_flash_count = 0;
 uint8_t alarm_snooze_flash_count = 0; //20ms
@@ -76,9 +76,16 @@ void LCD_data_init(void)
     eland_data.night_mode_end_time = 21600;
 
     Alarm_is_empty = TRUE;
+    AlarmOccurred = FALSE;
+    WakeupOccurred = FALSE;
+    Key_Light_counter = 0;
 
     memset(&alarm_data_simple, 0, sizeof(_alarm_mcu_data_t));
     memset(&alarm_data_display, 0, sizeof(_alarm_mcu_data_t));
+
+    eland_state = ElandNone;
+    RSSI_Value = LEVELNUM;
+    Eland_mode = ELAND_MODE_NONE;
 }
 
 /**
@@ -599,7 +606,7 @@ void LCD_NetMode(void)
 {
     static _ELAND_MODE_t Eland_modeBak = ELAND_MODE_MAX;
     /***** bit0 time bit1 alarm*************/
-    static uint8_t changeflag = 2;
+    static uint8_t changeflag = 5;
     static uint8_t second_count = 0;
     if (Eland_mode != Eland_modeBak)
     {
@@ -629,7 +636,7 @@ void LCD_NetMode(void)
             HT162x_LCD_Change_Pixel(COM7, SEG33, SET);
         }
         if (Eland_modeBak == ELAND_MODE_MAX)
-            changeflag = 6;
+            changeflag = 4;
         /**refresh wifi**/
         LCD_Display_Rssi_State(eland_state);
         Eland_modeBak = Eland_mode;
@@ -677,24 +684,24 @@ void LCD_NetMode(void)
     ALARM_Alarm_Refresh();
     Eland_data_Refresh();
 
-    if ((changeflag & 7) && (eland_state >= ElandBegin)) //syncchronize
+    if (changeflag & 7) // && (eland_state >= ElandBegin)) //syncchronize
     {
         if (MCU_Refreshed == REFRESH_NONE)
         {
             if (changeflag & 1)
             {
                 MCU_Refreshed = REFRESH_TIME;
-                changeflag &= 0xfe;
+                changeflag &= ~1;
             }
             else if (changeflag & 2)
             {
                 MCU_Refreshed = REFRESH_ALARM;
-                changeflag &= 0xfd;
+                changeflag &= ~2;
             }
             else if (changeflag & 4)
             {
                 MCU_Refreshed = REFRESH_ELAND_DATA;
-                changeflag &= 0XFB;
+                changeflag &= ~4;
             }
         }
     }

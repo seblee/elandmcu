@@ -322,7 +322,9 @@ void RGBLED_Set_Brightness(uint8_t Brightness)
     {
         if (Brightness > 100)
             Brightness = 100;
-        TIM3_SetCompare2(TIM3_PERIOD / 100 * Brightness); //back light turn brightest
+        //    TIM3_SetCompare2(TIM3_PERIOD / 100 * Brightness); //back light turn brightest
+        TIM3_SetCompare2(Brightness * Brightness / 10); //back light turn brightest
+                                                        //   TIM3_SetCompare2(Brightness * Brightness * Brightness / 1000); //back light turn brightest
         BrightnessBak = Brightness;
     }
 }
