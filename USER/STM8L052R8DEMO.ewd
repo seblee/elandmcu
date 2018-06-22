@@ -200,7 +200,7 @@
         </option>
         <option>
           <name>STlinkOptionBytesSetupFile</name>
-          <state></state>
+          <state>D:\MyCloud\Working\NetworkClock\elandmcu\option_byte.obc</state>
         </option>
         <option>
           <name>STlinkEraseMemory</name>
