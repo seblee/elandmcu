@@ -71,7 +71,7 @@ void SysClock_Init(void)
         wutwfcount++; //等待直到LSE稳定
     }                 /* wait for 1 second for the LSE Stabilisation */
 
-    //   Delay_By_nop(10000);
+    Delay_By_nop(10000);
 #endif
     //CLK_CCOConfig(CLK_CCOSource_LSE, CLK_CCODiv_1);
 }

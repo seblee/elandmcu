@@ -42,18 +42,29 @@
 **/
 void main(void)
 {
-     if (!RST_GetFlagStatus(RST_FLAG_IWDGF))
-        LCD_data_init();
-    else
-        rst_flag = RST_FLAG_IWDGF;
+    uint16_t count = 0;
     disableInterrupts();
     OTA_bootloader_disable();
     enableInterrupts();
     /* System clock */
     SysClock_Init();
-    HT162x_init();
     ELAND_RTC_Init();
-    ELAND_RTC_Check();
+    /* System restart by iwdg */
+    if ((RST_GetFlagStatus(RST_FLAG_IWDGF) != RESET) ||
+        (RST_GetFlagStatus(RST_FLAG_SWIMF) != RESET))
+    {
+        rst_flag = RST_FLAG_IWDGF;
+        RST_ClearFlag(RST_FLAG_IWDGF);
+        RST_ClearFlag(RST_FLAG_SWIMF);
+    }
+    /* System restart by poweron */
+    else
+    {
+        rst_flag = (RST_FLAG_TypeDef)0;
+        LCD_data_init();
+        ELAND_RTC_Check();
+    }
+    HT162x_init();
     TIM4_Init();
     ElandKeyInit();
     UART1_Init();
@@ -64,12 +75,18 @@ void main(void)
     /* Infinite loop */
     while (1)
     {
-            /* Reload IWDG counter */
-            IWDG_ReloadCounter();
-
+        if (count < 500)
+        {
+            count++;
+        }
+        /* Reload IWDG counter */
+        IWDG_ReloadCounter();
+        /* read key state */
         Eland_KeyState_Read();
-        if (Key_Count & KEY_Wifi) //NC/NA mode
+        /***NC/NA mode**/
+        if (Key_Count & KEY_Wifi)
             LCD_NetMode();
+        /***offline mode**/
         else if (Key_Count & KEY_MON)
             LCD_Clock_MON();
         else

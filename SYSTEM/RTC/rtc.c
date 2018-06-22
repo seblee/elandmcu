@@ -83,6 +83,7 @@ void ELAND_RTC_Init(void)
     RTC_SetWakeUpCounter(1023);
     RTC_WakeUpCmd(ENABLE);
     /* Calendar Configuration */
+    ELAND_RTC_Read(&CurrentMicoTime);
 }
 /**
  ****************************************************************************
@@ -149,33 +150,6 @@ static ErrorStatus Calendar_Init(void)
     RTC_InitStr.RTC_AsynchPrediv = 0x7f;
     RTC_InitStr.RTC_SynchPrediv = 0x00ff;
     RTC_Init(&RTC_InitStr);
-    // rtcstart:
-    //     if (RTC_Init(&RTC_InitStr) == ERROR)
-    //     {
-    //         times++;
-    //         RTC_DeInit();
-    //         goto rtcstart;
-    //     }
-    // HT162x_LCD_Num_Set(Serial_13, ((times / 10) % 10));
-    // HT162x_LCD_Num_Set(Serial_14, (times % 10));
-
-    // Get_built_DateTime(&CurrentMCUTime);
-
-    // RTC_DateStructInit(&RTC_DateStr);
-    // RTC_DateStr.RTC_WeekDay = CurrentMCUTime.week;
-    // RTC_DateStr.RTC_Date = CurrentMCUTime.day;
-    // RTC_DateStr.RTC_Month = CurrentMCUTime.month;
-    // RTC_DateStr.RTC_Year = CurrentMCUTime.yea % 100;
-    // //RTC_SetDate(RTC_Format_BIN, &RTC_DateStr);
-
-    // RTC_TimeStructInit(&RTC_TimeStr);
-    // RTC_TimeStr.RTC_Hours = CurrentMCUTime.hour;
-    // RTC_TimeStr.RTC_Minutes = CurrentMCUTime.minute;
-    // RTC_TimeStr.RTC_Seconds = CurrentMCUTime.second;
-    // //RTC_SetTime(RTC_Format_BIN, &RTC_TimeStr);
-    // Today_Second = (uint32_t)((uint32_t)CurrentMCUTime.hour * 3600);
-    // Today_Second += (uint32_t)((uint32_t)CurrentMCUTime.minute * 60);
-    // Today_Second += (uint32_t)CurrentMCUTime.second;
 
     RTC_AlarmStructInit(&RTC_AlarmStr);
     RTC_AlarmStr.RTC_AlarmTime.RTC_Hours = 01;
@@ -201,7 +175,7 @@ void RTC_Time_Set(_eland_date_time_t time)
 {
     RTC_TimeTypeDef TimeStr;
     RTC_DateTypeDef DateStr;
-    ELAND_RTC_Init();
+    //  ELAND_RTC_Init();
 
     RTC_DateStructInit(&DateStr);
     DateStr.RTC_WeekDay = time.week;

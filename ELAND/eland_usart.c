@@ -232,6 +232,13 @@ static void MODH_Opration_03H(void)
     mico_rtc_time_t mico_time;
     _eland_date_time_t mcu_time;
     memcpy(&mico_time, &msg_receive_buff[3], sizeof(mico_rtc_time_t));
+
+    // if ((mico_time.year != CurrentMicoTime.year) ||
+    //     (mico_time.month != CurrentMicoTime.month) ||
+    //     (mico_time.date != CurrentMicoTime.date) ||
+    //     (mico_time.hr != CurrentMicoTime.hr) ||
+    //     (mico_time.min != CurrentMicoTime.min) ||
+    //     (mico_time.sec != CurrentMicoTime.sec))
     if (memcmp(&mico_time, &CurrentMicoTime, sizeof(mico_rtc_time_t)))
     {
         ELAND_Time_Convert(&mico_time, &mcu_time, MICO_2_MCU);
