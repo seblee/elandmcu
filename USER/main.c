@@ -23,6 +23,7 @@
 #include "usart.h"
 #include "lcd_display.h"
 #include "eland_ota.h"
+
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -50,8 +51,9 @@ void main(void)
     SysClock_Init();
     ELAND_RTC_Init();
     /* System restart by iwdg */
-    if ((RST_GetFlagStatus(RST_FLAG_IWDGF) != RESET) ||
-        (RST_GetFlagStatus(RST_FLAG_SWIMF) != RESET))
+    if ((RST_GetFlagStatus(RST_FLAG_IWDGF) != RESET) /* ||
+        (RST_GetFlagStatus(RST_FLAG_SWIMF) != RESET)*/
+    )
     {
         rst_flag = RST_FLAG_IWDGF;
         RST_ClearFlag(RST_FLAG_IWDGF);
@@ -65,11 +67,11 @@ void main(void)
         ELAND_RTC_Check();
     }
     HT162x_init();
-    TIM4_Init();
+    RGBLED_CFG();
     ElandKeyInit();
+    TIM4_Init();
     UART1_Init();
     IWDG_Config();
-    RGBLED_CFG();
     /* Reload IWDG counter */
     IWDG_ReloadCounter();
     /* Infinite loop */

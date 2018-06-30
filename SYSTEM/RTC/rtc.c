@@ -69,12 +69,20 @@ void Get_built_DateTime(_eland_date_time_t *time);
 **/
 void ELAND_RTC_Init(void)
 {
+    uint8_t count = 0;
+    _eland_date_time_t mcu_time;
     CLK_PeripheralClockConfig(CLK_Peripheral_RTC, ENABLE);
     /* Select LSE (32.768 KHz) as RTC clock source */
     CLK_RTCClockConfig(CLK_RTCCLKSource_LSE, CLK_RTCCLKDiv_1);
 
-    Calendar_Init();
-    // Calendar_Init_register();
+    ELAND_RTC_Read(&CurrentMicoTime);
+    ELAND_Time_Convert(&CurrentMicoTime, &mcu_time, MICO_2_MCU);
+    RTC_InitStr.RTC_HourFormat = RTC_HourFormat_24;
+    RTC_InitStr.RTC_AsynchPrediv = 0x7f;
+    RTC_InitStr.RTC_SynchPrediv = 0x00ff;
+
+    RTC_Init(&RTC_InitStr);
+
     /* Configures the RTC wakeup timer_step = RTCCLK/16 = LSE/16 = 488.28125 us */
     RTC_WakeUpClockConfig(RTC_WakeUpClock_RTCCLK_Div16);
     /* Enable wake up unit Interrupt */
@@ -83,7 +91,9 @@ void ELAND_RTC_Init(void)
     RTC_SetWakeUpCounter(1023);
     RTC_WakeUpCmd(ENABLE);
     /* Calendar Configuration */
-    ELAND_RTC_Read(&CurrentMicoTime);
+    RTC_Time_Set(mcu_time);
+
+    Calendar_Init();
 }
 /**
  ****************************************************************************
@@ -146,10 +156,6 @@ void Calendar_Init_register(void)
 static ErrorStatus Calendar_Init(void)
 {
     ErrorStatus err;
-    RTC_InitStr.RTC_HourFormat = RTC_HourFormat_24;
-    RTC_InitStr.RTC_AsynchPrediv = 0x7f;
-    RTC_InitStr.RTC_SynchPrediv = 0x00ff;
-    RTC_Init(&RTC_InitStr);
 
     RTC_AlarmStructInit(&RTC_AlarmStr);
     RTC_AlarmStr.RTC_AlarmTime.RTC_Hours = 01;

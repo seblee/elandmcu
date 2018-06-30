@@ -529,7 +529,7 @@ void LCD_Clock_MON(void)
     default:
         break;
     }
-    if (WakeupOccurred == TRUE) //500ms point flash
+    if ((WakeupOccurred == TRUE) && (AlarmOccurred == TRUE)) //500ms point flash
     {
         WakeupOccurred = FALSE;
         HT162x_LCD_Toggle_Pixel(COM0, SEG32);
@@ -901,7 +901,7 @@ void Brightness_refresh(void)
 **/
 void Eland_alarm_display(FlagStatus status)
 {
-    if ((status == RESET) || Alarm_is_empty || (Eland_mode == ELAND_OTA))
+    if ((status == RESET) || Alarm_is_empty || (Eland_mode == ELAND_OTA) || (Eland_mode == ELAND_CLOCK_MON))
     {
         /*Clear alarm date*/
         HT162x_LCD_Date_Display(ALARM_CLEAR, alarm_data_display.moment_time);
