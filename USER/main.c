@@ -49,7 +49,6 @@ void main(void)
     enableInterrupts();
     /* System clock */
     SysClock_Init();
-    ELAND_RTC_Init();
     /* System restart by iwdg */
     if ((RST_GetFlagStatus(RST_FLAG_IWDGF) != RESET) /* ||
         (RST_GetFlagStatus(RST_FLAG_SWIMF) != RESET)*/
@@ -71,6 +70,7 @@ void main(void)
     ElandKeyInit();
     TIM4_Init();
     UART1_Init();
+    ELAND_RTC_Init();
     IWDG_Config();
     /* Reload IWDG counter */
     IWDG_ReloadCounter();

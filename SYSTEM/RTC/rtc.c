@@ -69,8 +69,7 @@ void Get_built_DateTime(_eland_date_time_t *time);
 **/
 void ELAND_RTC_Init(void)
 {
-    uint8_t count = 0;
-    _eland_date_time_t mcu_time;
+     _eland_date_time_t mcu_time;
     CLK_PeripheralClockConfig(CLK_Peripheral_RTC, ENABLE);
     /* Select LSE (32.768 KHz) as RTC clock source */
     CLK_RTCClockConfig(CLK_RTCCLKSource_LSE, CLK_RTCCLKDiv_1);

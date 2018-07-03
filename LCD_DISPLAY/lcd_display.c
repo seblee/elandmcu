@@ -307,7 +307,7 @@ void LCD_Clock_MON(void)
             else
                 Time_cache.year = 0;
             number_flash_cache = Time_cache.year;
-            HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, 1);
+            HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, 2);
         }
         else if ((Key_Up_Trg & KEY_Minus) || ((key_delay >= ChangeSpeed) && (Key_Short_Restain & KEY_Minus)))
         {
@@ -317,7 +317,7 @@ void LCD_Clock_MON(void)
             else
                 Time_cache.year = 37;
             number_flash_cache = Time_cache.year;
-            HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, 1);
+            HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, 2);
         }
         else
         {
@@ -326,7 +326,7 @@ void LCD_Clock_MON(void)
         }
         if (Key_Up_Trg & KEY_Set)
         {
-            HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, 1);
+            HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, 2);
             number_flash_cache = Time_cache.month;
             time_set_mode = 4;
         }
