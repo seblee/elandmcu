@@ -875,3 +875,22 @@ void HT162x_LCD_Time_Display(LCD_Time_Type_t type, mico_rtc_time_t time)
     time_format[type] = eland_data.time_display_format;
     memcpy(&time_cache[type], &time, sizeof(mico_rtc_time_t));
 }
+/**
+ ****************************************************************************
+ * @Function : void HT162x_LCD_FLASH_Point_Toggle(void)
+ * @File     : ht162x.c
+ * @Program  : none
+ * @Created  : 2018/7/5 by seblee
+ * @Brief    : double point flash
+ * @Version  : V1.0
+**/
+void HT162x_LCD_FLASH_Point_Toggle(void)
+{
+    static FlagStatus point_flag = RESET;
+    if (point_flag)
+        point_flag = RESET;
+    else
+        point_flag = SET;
+    HT162x_LCD_Change_Pixel(COM0, SEG32, point_flag);
+    HT162x_LCD_Change_Pixel(COM0, SEG33, point_flag);
+}

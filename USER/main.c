@@ -50,9 +50,8 @@ void main(void)
     /* System clock */
     SysClock_Init();
     /* System restart by iwdg */
-    if ((RST_GetFlagStatus(RST_FLAG_IWDGF) != RESET) /* ||
-        (RST_GetFlagStatus(RST_FLAG_SWIMF) != RESET)*/
-    )
+    if ((RST_GetFlagStatus(RST_FLAG_IWDGF) != RESET) ||
+        (RST_GetFlagStatus(RST_FLAG_SWIMF) != RESET))
     {
         rst_flag = RST_FLAG_IWDGF;
         RST_ClearFlag(RST_FLAG_IWDGF);
@@ -63,7 +62,6 @@ void main(void)
     {
         rst_flag = (RST_FLAG_TypeDef)0;
         LCD_data_init();
-        ELAND_RTC_Check();
     }
     HT162x_init();
     RGBLED_CFG();

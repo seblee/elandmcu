@@ -32,8 +32,7 @@ __IO uint32_t Today_Second = 0;
 
 _eland_date_time_t CurrentMCUTime = {
     0, RTC_Month_January, 1, 0, 0, 0, RTC_Weekday_Saturday};
-mico_rtc_time_t CurrentMicoTime = {
-    0, 0, 0, 7, 1, 1, 0};
+__no_init mico_rtc_time_t CurrentMicoTime;
 
 const char MonthStr[12][4] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 const RTC_Month_TypeDef MonthValue[12] = {RTC_Month_January, RTC_Month_February, RTC_Month_March, RTC_Month_April, RTC_Month_May, RTC_Month_June, RTC_Month_July, RTC_Month_August, RTC_Month_September, RTC_Month_October, RTC_Month_November, RTC_Month_December};
@@ -69,13 +68,10 @@ void Get_built_DateTime(_eland_date_time_t *time);
 **/
 void ELAND_RTC_Init(void)
 {
-     _eland_date_time_t mcu_time;
     CLK_PeripheralClockConfig(CLK_Peripheral_RTC, ENABLE);
     /* Select LSE (32.768 KHz) as RTC clock source */
     CLK_RTCClockConfig(CLK_RTCCLKSource_LSE, CLK_RTCCLKDiv_1);
 
-    ELAND_RTC_Read(&CurrentMicoTime);
-    ELAND_Time_Convert(&CurrentMicoTime, &mcu_time, MICO_2_MCU);
     RTC_InitStr.RTC_HourFormat = RTC_HourFormat_24;
     RTC_InitStr.RTC_AsynchPrediv = 0x7f;
     RTC_InitStr.RTC_SynchPrediv = 0x00ff;
@@ -90,9 +86,11 @@ void ELAND_RTC_Init(void)
     RTC_SetWakeUpCounter(1023);
     RTC_WakeUpCmd(ENABLE);
     /* Calendar Configuration */
-    RTC_Time_Set(mcu_time);
 
+    if (rst_flag != RST_FLAG_IWDGF)
+        RTC_Time_Set(CurrentMCUTime);
     Calendar_Init();
+    ELAND_RTC_Read(&CurrentMicoTime);
 }
 /**
  ****************************************************************************
@@ -105,12 +103,12 @@ void ELAND_RTC_Init(void)
 **/
 void ELAND_RTC_Check(void)
 {
+    //ELAND_RTC_Read(&CurrentMicoTime);
+    // if (CurrentMicoTime.year == 0)
+    // {
+    RTC_Time_Set(CurrentMCUTime);
     ELAND_RTC_Read(&CurrentMicoTime);
-    if (CurrentMicoTime.year == 0)
-    {
-        RTC_Time_Set(CurrentMCUTime);
-        ELAND_RTC_Read(&CurrentMicoTime);
-    }
+    //  }
 }
 
 void Calendar_Init_register(void)

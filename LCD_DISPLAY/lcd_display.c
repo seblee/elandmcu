@@ -79,9 +79,17 @@ void LCD_data_init(void)
     AlarmOccurred = FALSE;
     WakeupOccurred = FALSE;
     Key_Light_counter = 0;
-
+    /***init display alarm***/
     memset(&alarm_data_simple, 0, sizeof(_alarm_mcu_data_t));
     memset(&alarm_data_display, 0, sizeof(_alarm_mcu_data_t));
+    /***init display time***/
+    CurrentMicoTime.sec = 0;
+    CurrentMicoTime.min = 0;
+    CurrentMicoTime.hr = 0;
+    CurrentMicoTime.weekday = 7;
+    CurrentMicoTime.date = 1;
+    CurrentMicoTime.month = 1;
+    CurrentMicoTime.year = 0;
 
     eland_state = ElandNone;
     RSSI_Value = LEVELNUM;
@@ -532,8 +540,7 @@ void LCD_Clock_MON(void)
     if ((WakeupOccurred == TRUE) && (AlarmOccurred == TRUE)) //500ms point flash
     {
         WakeupOccurred = FALSE;
-        HT162x_LCD_Toggle_Pixel(COM0, SEG32);
-        HT162x_LCD_Toggle_Pixel(COM0, SEG33);
+        HT162x_LCD_FLASH_Point_Toggle();
         alarm_snooze_flash_count++;
         if ((time_set_mode != 0) && (time_set_mode != 8))
         {
@@ -659,8 +666,7 @@ void LCD_NetMode(void)
     {
         WakeupOccurred = FALSE;
         alarm_snooze_flash_count++;
-        HT162x_LCD_Toggle_Pixel(COM0, SEG32);
-        HT162x_LCD_Toggle_Pixel(COM0, SEG33);
+        HT162x_LCD_FLASH_Point_Toggle();
         LCD_Display_Rssi_State(eland_state);
     }
     if (AlarmOccurred == TRUE) //1s update time
@@ -800,8 +806,7 @@ void LCD_OtherMode(void)
     if (WakeupOccurred == TRUE) //500ms point flash
     {
         WakeupOccurred = FALSE;
-        HT162x_LCD_Toggle_Pixel(COM0, SEG32);
-        HT162x_LCD_Toggle_Pixel(COM0, SEG33);
+        HT162x_LCD_FLASH_Point_Toggle();
         LCD_Display_Rssi_State(eland_state);
 
         if (display_flag)

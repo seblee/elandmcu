@@ -15,7 +15,8 @@
 #include "syscfg.h"
 #include "rtc.h"
 /* Private typedef -----------------------------------------------------------*/
-typedef enum _HT162x_CMD {
+typedef enum _HT162x_CMD
+{
     SYS_DIS = 0X00,   //Turn off both system oscillator and LCD bias generator ------------ Def.
     SYS_EN = 0X01,    //Turn on system oscillator
     LCD_OFF = 0X02,   //Turn off LCD display ------------ Def.
@@ -44,12 +45,14 @@ typedef enum _HT162x_CMD {
     TEST = 0XE0,      //Test mode,user don t use.
     NORMAL = 0XE3,    //Normal mod ------------ Def.
 } _HT162x_CMD_t;
-typedef enum _SEQUENT_ {
+typedef enum _SEQUENT_
+{
     MSB = 0X00,
     LSB
 } _SEQUENT_t;
 
-typedef enum {
+typedef enum
+{
     COM0 = (uint8_t)0x00,   /*!< COM 0  */
     COM1 = (uint8_t)0x01,   /*!< COM 1  */
     COM2 = (uint8_t)0x02,   /*!< COM 2  */
@@ -62,7 +65,8 @@ typedef enum {
 
 } LCD_COMx_TypeDef;
 
-typedef enum {
+typedef enum
+{
     SEG00 = (uint8_t)0x00, /*!< SEG00  */
     SEG01 = (uint8_t)0x01, /*!< SEG01  */
     SEG02 = (uint8_t)0x02, /*!< SEG02  */
@@ -113,7 +117,8 @@ typedef enum {
     SEG47 = (uint8_t)0x2F, /*!< SEG47  */
 } LCD_SEGx_TypeDef;
 
-typedef enum {
+typedef enum
+{
     Serial_01 = 0X00,
     Serial_02,
     Serial_03,
@@ -137,12 +142,14 @@ typedef enum {
     Serial_MAX,
 } LCD_Digital_Serial_t;
 
-typedef enum {
+typedef enum
+{
     TENS = 0X00,
     UNITS,
 } __Double_Digits_p_t;
 
-typedef enum {
+typedef enum
+{
     DIGIT_YEAR = 0X00,
     DIGIT_MONTH,
     DIGIT_DAY,
@@ -163,12 +170,14 @@ typedef union {
     };
 } __Digital_Coding_t;
 
-typedef enum {
+typedef enum
+{
     POSITIVE,
     NEGATIVE,
 } LCD_Coding_Dirtction_t;
 
-typedef enum {
+typedef enum
+{
     TIME_PART = 0,
     ALARM_PART = 1,
     TIME_CLEAR = 2,
@@ -176,7 +185,8 @@ typedef enum {
     WEEKTYPEMAX,
 } LCD_Time_Type_t;
 
-typedef enum {
+typedef enum
+{
     SUNDAY = 0,
     MONDAY,
     TUESDAY,
@@ -188,14 +198,16 @@ typedef enum {
     WEEKDAYNUM,
 } LCD_Week_Day_t;
 
-typedef enum {
+typedef enum
+{
     AM = 0,
     PM = 1,
     AMPMMAX,
     AMPMNUM,
 } LCD_AMPM_Distinguish_t;
 
-typedef enum {
+typedef enum
+{
     LEVEL0 = 0x00,
     LEVEL1 = 0x08,
     LEVEL2 = 0x0C,
@@ -268,6 +280,7 @@ void HT162x_LCD_AMPM_Set(LCD_Time_Type_t type, LCD_AMPM_Distinguish_t value);
 void HT162x_LCD_Time_Display(LCD_Time_Type_t type, mico_rtc_time_t time);
 void HT162x_LCD_Date_Display(LCD_Time_Type_t type, mico_rtc_time_t time);
 void HT162x_LCD_Double_Digits_Write(uint8_t position, uint8_t num, uint8_t mode);
+void HT162x_LCD_FLASH_Point_Toggle(void);
 /* Private functions ---------------------------------------------------------*/
 
 #endif /*__HT162x_H_*/
