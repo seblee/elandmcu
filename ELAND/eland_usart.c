@@ -494,6 +494,7 @@ static void MODH_Opration_0EH(void)
     eland_state = ElandNone;
     RSSI_Value = LEVELNUM;
     memset(&alarm_data_display, 0, sizeof(_alarm_mcu_data_t));
+    Alarm_is_empty = TRUE;
     MCU_RESET_STATE();
     asm("jp 0x8000"); // jump to given entry point address
 }

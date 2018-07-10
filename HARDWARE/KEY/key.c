@@ -145,11 +145,16 @@ static void Eland_Key_Long_Press_State(void)
     uint8_t i;
     static uint16_t Key_Restain_Count = 0;
     static uint16_t Key_Short_Restain_Count = 0;
+    uint8_t long_press_time_tem;
     for (i = 0; i < KEY_NUM; i++)
     {
+        if (i == 8)
+            long_press_time_tem = ALARM_OFF_LONG_PRESS_TIMES;
+        else
+            long_press_time_tem = LONG_PRESS_TIMES;
         if (Key_Count & (1 << i))
         {
-            if (KEY_Timer[i] < LONG_PRESS_TIMES)
+            if (KEY_Timer[i] < long_press_time_tem)
                 KEY_Timer[i]++;
             else
                 Key_Restain |= (1 << i);
@@ -159,7 +164,7 @@ static void Eland_Key_Long_Press_State(void)
         }
         else
         {
-            if ((KEY_Timer[i] > 0) && (KEY_Timer[i] < LONG_PRESS_TIMES)) // short press
+            if ((KEY_Timer[i] > 0) && (KEY_Timer[i] < long_press_time_tem)) // short press
                 Key_Up_Trg |= (1 << i);
             else
                 Key_Up_Trg &= (~(1 << i));

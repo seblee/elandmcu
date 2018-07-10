@@ -537,7 +537,7 @@ void LCD_Clock_MON(void)
     default:
         break;
     }
-    if ((WakeupOccurred == TRUE) && (AlarmOccurred == TRUE)) //500ms point flash
+    if (WakeupOccurred == TRUE) //500ms point flash
     {
         WakeupOccurred = FALSE;
         HT162x_LCD_FLASH_Point_Toggle();

@@ -49,19 +49,21 @@ void main(void)
     enableInterrupts();
     /* System clock */
     SysClock_Init();
-    /* System restart by iwdg */
-    if ((RST_GetFlagStatus(RST_FLAG_IWDGF) != RESET) ||
-        (RST_GetFlagStatus(RST_FLAG_SWIMF) != RESET))
+
+    /* System restart by poweron */
+    if (RST_GetFlagStatus(RST_FLAG_PORF) ||
+        RST_GetFlagStatus(RST_FLAG_BORF))
+    {
+        rst_flag = (RST_FLAG_TypeDef)0;
+        LCD_data_init();
+        RST_ClearFlag(RST_FLAG_PORF);
+        RST_ClearFlag(RST_FLAG_BORF);
+    }
+    else /* System restart by iwdg */
     {
         rst_flag = RST_FLAG_IWDGF;
         RST_ClearFlag(RST_FLAG_IWDGF);
         RST_ClearFlag(RST_FLAG_SWIMF);
-    }
-    /* System restart by poweron */
-    else
-    {
-        rst_flag = (RST_FLAG_TypeDef)0;
-        LCD_data_init();
     }
     HT162x_init();
     RGBLED_CFG();
