@@ -77,6 +77,7 @@ void LCD_data_init(void)
 
     Alarm_is_empty = TRUE;
     AlarmOccurred = FALSE;
+    Today_Second = 0;
     WakeupOccurred = FALSE;
     Key_Light_counter = 0;
     /***init display alarm***/
@@ -843,7 +844,10 @@ void LCD_OtherMode(void)
 void Brightness_refresh(void)
 {
     bool now_is_night = FALSE;
-    if (eland_data.night_mode_enabled)
+
+    if ((eland_data.night_mode_enabled) &&
+        (Eland_mode != ELAND_CLOCK_MON) &&
+        (Eland_mode != ELAND_CLOCK_ALARM))
     {
         if (eland_data.night_mode_end_time < eland_data.night_mode_begin_time)
         {
@@ -867,7 +871,7 @@ void Brightness_refresh(void)
     else
         now_is_night = FALSE;
     /* back light turn brightest */
-    if (Key_Light_counter < SW_LIGHT_TIMES)
+    if ((Key_Light_counter < SW_LIGHT_TIMES) || (Eland_mode == ELAND_AP))
     {
         RGBLED_Set_Brightness(100);
     }

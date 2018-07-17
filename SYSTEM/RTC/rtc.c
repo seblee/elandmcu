@@ -28,7 +28,7 @@ RTC_AlarmTypeDef RTC_AlarmStr;
 
 __no_init __IO bool AlarmOccurred;
 __no_init __IO bool WakeupOccurred;
-__IO uint32_t Today_Second = 0;
+__no_init __IO uint32_t Today_Second;
 
 _eland_date_time_t CurrentMCUTime = {
     0, RTC_Month_January, 1, 0, 0, 0, RTC_Weekday_Saturday};
