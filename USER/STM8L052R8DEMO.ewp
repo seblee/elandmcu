@@ -493,7 +493,7 @@
         <option>
           <name>OOCOutputFormat</name>
           <version>2</version>
-          <state>1</state>
+          <state>2</state>
         </option>
         <option>
           <name>OCOutputOverride</name>
@@ -501,7 +501,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>STM8L052R8DEMO.hex</state>
+          <state>LT01(MCU)v01.26.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>

@@ -63,7 +63,10 @@ void SysClock_Init(void)
 
 #endif
     /* wait for 1 second for the LSE Stabilisation */
-    // Delay_By_nop(50000);
-    // Delay_By_nop(50000);
+    if (rst_flag != RST_FLAG_IWDGF)
+    {
+        Delay_By_nop(50000);
+        Delay_By_nop(50000);
+    }
     //CLK_CCOConfig(CLK_CCOSource_LSE, CLK_CCODiv_1);
 }

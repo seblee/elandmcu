@@ -47,9 +47,6 @@ void main(void)
     disableInterrupts();
     OTA_bootloader_disable();
     enableInterrupts();
-    /* System clock */
-    SysClock_Init();
-
     /* System restart by poweron */
     if (RST_GetFlagStatus(RST_FLAG_PORF) ||
         RST_GetFlagStatus(RST_FLAG_BORF))
@@ -65,6 +62,9 @@ void main(void)
         RST_ClearFlag(RST_FLAG_IWDGF);
         RST_ClearFlag(RST_FLAG_SWIMF);
     }
+    /* System clock */
+    SysClock_Init();
+
     HT162x_init();
     RGBLED_CFG();
     ElandKeyInit();
