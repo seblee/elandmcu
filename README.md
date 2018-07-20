@@ -3,6 +3,14 @@
 
 此工程用於做，網絡鬧鐘LCD部分程序
 
+# v01.26
+2018年7月20日14:34:03
+## 
+* add Today_Second __no_init
+* ELAND_CLOCK_MON ELAND_CLOCK_ALARM --> now_is_night = false
+* ELAND_AP Set_Brightness(100)
+ 
+
 # v01.25
 2018年7月13日13:43:23
 ## 
