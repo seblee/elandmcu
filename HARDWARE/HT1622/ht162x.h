@@ -15,7 +15,8 @@
 #include "syscfg.h"
 #include "rtc.h"
 /* Private typedef -----------------------------------------------------------*/
-typedef enum _HT162x_CMD {
+typedef enum _HT162x_CMD
+{
     SYS_DIS = 0X00,   //Turn off both system oscillator and LCD bias generator ------------ Def.
     SYS_EN = 0X01,    //Turn on system oscillator
     LCD_OFF = 0X02,   //Turn off LCD display ------------ Def.
@@ -44,12 +45,14 @@ typedef enum _HT162x_CMD {
     TEST = 0XE0,      //Test mode,user don t use.
     NORMAL = 0XE3,    //Normal mod ------------ Def.
 } _HT162x_CMD_t;
-typedef enum _SEQUENT_ {
+typedef enum _SEQUENT_
+{
     MSB = 0X00,
     LSB
 } _SEQUENT_t;
 
-typedef enum {
+typedef enum
+{
     COM0 = (uint8_t)0x00, /*!< COM 0  */
     COM1 = (uint8_t)0x01, /*!< COM 1  */
     COM2 = (uint8_t)0x02, /*!< COM 2  */
@@ -60,7 +63,8 @@ typedef enum {
     COM7 = (uint8_t)0x07, /*!< COM 7  */
 } LCD_COMx_TypeDef;
 
-typedef enum {
+typedef enum
+{
     SEG00 = (uint8_t)0x00, /*!< SEG00  */
     SEG01 = (uint8_t)0x01, /*!< SEG01  */
     SEG02 = (uint8_t)0x02, /*!< SEG02  */
@@ -111,7 +115,8 @@ typedef enum {
     SEG47 = (uint8_t)0x2F, /*!< SEG47  */
 } LCD_SEGx_TypeDef;
 
-typedef enum {
+typedef enum
+{
     Serial_01 = 0X00,
     Serial_02,
     Serial_03,
@@ -146,18 +151,21 @@ typedef union {
     };
 } __Digital_Coding_t;
 
-typedef enum {
+typedef enum
+{
     POSITIVE,
     NEGATIVE,
 } LCD_Coding_Dirtction_t;
 
-typedef enum {
+typedef enum
+{
     TIME_PART = 0,
     ALARM_PART,
     WEEKTYPEMAX,
 } LCD_Time_Type_t;
 
-typedef enum {
+typedef enum
+{
     SUNDAY = 0,
     MONDAY,
     TUESDAY,
@@ -168,13 +176,15 @@ typedef enum {
     WEEKDAYMAX,
 } LCD_Week_Day_t;
 
-typedef enum {
+typedef enum
+{
     AM = 0,
     PM,
     AMPMMAX,
 } LCD_AMPM_Distinguish_t;
 
-typedef enum {
+typedef enum
+{
     LEVEL0 = 0x00,
     LEVEL1 = 0x08,
     LEVEL2 = 0x0C,
@@ -183,6 +193,8 @@ typedef enum {
 } LCD_Wifi_Rssi_t;
 
 /* Private define ------------------------------------------------------------*/
+#define LCD_All_angle_view
+
 //HT162x_CS
 #define HT162x_CS_PORT GPIOD
 #define HT162x_CS_PIN GPIO_Pin_4
@@ -199,8 +211,13 @@ typedef enum {
 #define HT162x_WR_SET GPIO_WriteBit(HT162x_WR_PORT, HT162x_WR_PIN, SET)
 #define HT162x_WR_RESET GPIO_WriteBit(HT162x_WR_PORT, HT162x_WR_PIN, RESET)
 //HT162x_DATA
+#ifdef LCD_All_angle_view
+#define HT162x_DATA_PORT GPIOC
+#define HT162x_DATA_PIN GPIO_Pin_1
+#else
 #define HT162x_DATA_PORT GPIOB
 #define HT162x_DATA_PIN GPIO_Pin_5
+#endif
 #define HT162x_DATA_SET GPIO_WriteBit(HT162x_DATA_PORT, HT162x_DATA_PIN, SET)
 #define HT162x_DATA_RESET GPIO_WriteBit(HT162x_DATA_PORT, HT162x_DATA_PIN, RESET)
 #define HT162x_DATA_SET_OUT GPIO_Init(HT162x_DATA_PORT, HT162x_DATA_PIN, GPIO_Mode_Out_PP_High_Fast)

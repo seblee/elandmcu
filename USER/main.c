@@ -50,6 +50,7 @@ void main(void)
     TIM4_Init();
     UART1_Init();
     //ElandKeyInit();
+    GPIO_Init(ELAND_KEY_ALARM_PORT, ELAND_KEY_ALARM_PIN, GPIO_Mode_Out_PP_Low_Fast); //鬧鐘
     ELAND_RTC_Init();
     IWDG_Config();
     enableInterrupts();
