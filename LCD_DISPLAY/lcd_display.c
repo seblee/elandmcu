@@ -157,6 +157,7 @@ void LCD_Clock_MON(void)
     static uint8_t time_set_mode = 0, number_flash_flag = 0, number_flash_cache;
     static uint8_t key_delay = 0;
     static mico_rtc_time_t Time_cache;
+    static _alarm_mcu_data_t alarm_cache;
     _eland_date_time_t mcutimeCache;
     static _ELAND_MODE_t Eland_modeBak = ELAND_MODE_MAX;
     static LCD_AMPM_Distinguish_t ampm_cache;
@@ -208,28 +209,29 @@ void LCD_Clock_MON(void)
         if ((Key_Up_Trg & KEY_Set) && (Eland_mode == ELAND_CLOCK_ALARM))
         {
             time_set_mode = 1;
-            if ((eland_data.time_display_format == 1) && (alarm_data_simple.moment_time.hr > 12))
-                number_flash_cache = alarm_data_simple.moment_time.hr - 12;
+            memcpy(&alarm_cache, &alarm_data_simple, sizeof(_alarm_mcu_data_t));
+            if ((eland_data.time_display_format == 1) && (alarm_cache.moment_time.hr > 12))
+                number_flash_cache = alarm_cache.moment_time.hr - 12;
             else
-                number_flash_cache = alarm_data_simple.moment_time.hr;
+                number_flash_cache = alarm_cache.moment_time.hr;
         }
         break;
     case 1: //alarm hour
         if ((Key_Up_Trg & KEY_Add) || ((key_delay >= ChangeSpeed) && (Key_Short_Restain & KEY_Add)))
         {
             key_delay = 0;
-            if (alarm_data_simple.moment_time.hr < 24)
-                alarm_data_simple.moment_time.hr++;
+            if (alarm_cache.moment_time.hr < 24)
+                alarm_cache.moment_time.hr++;
             else
-                alarm_data_simple.moment_time.hr = 0;
+                alarm_cache.moment_time.hr = 0;
 
-            if ((eland_data.time_display_format == 1) && (alarm_data_simple.moment_time.hr > 12))
-                number_flash_cache = alarm_data_simple.moment_time.hr - 12;
+            if ((eland_data.time_display_format == 1) && (alarm_cache.moment_time.hr > 12))
+                number_flash_cache = alarm_cache.moment_time.hr - 12;
             else
-                number_flash_cache = alarm_data_simple.moment_time.hr;
+                number_flash_cache = alarm_cache.moment_time.hr;
             if (eland_data.time_display_format == 1)
             {
-                if (alarm_data_simple.moment_time.hr >= 12)
+                if (alarm_cache.moment_time.hr >= 12)
                     HT162x_LCD_AMPM_Set(ALARM_PART, PM);
                 else
                     HT162x_LCD_AMPM_Set(ALARM_PART, AM);
@@ -241,17 +243,17 @@ void LCD_Clock_MON(void)
         else if ((Key_Up_Trg & KEY_Minus) || ((key_delay >= ChangeSpeed) && (Key_Short_Restain & KEY_Minus)))
         {
             key_delay = 0;
-            if (alarm_data_simple.moment_time.hr > 0)
-                alarm_data_simple.moment_time.hr--;
+            if (alarm_cache.moment_time.hr > 0)
+                alarm_cache.moment_time.hr--;
             else
-                alarm_data_simple.moment_time.hr = 23;
-            if ((eland_data.time_display_format == 1) && (alarm_data_simple.moment_time.hr > 12))
-                number_flash_cache = alarm_data_simple.moment_time.hr - 12;
+                alarm_cache.moment_time.hr = 23;
+            if ((eland_data.time_display_format == 1) && (alarm_cache.moment_time.hr > 12))
+                number_flash_cache = alarm_cache.moment_time.hr - 12;
             else
-                number_flash_cache = alarm_data_simple.moment_time.hr;
+                number_flash_cache = alarm_cache.moment_time.hr;
             if (eland_data.time_display_format == 1)
             {
-                if (alarm_data_simple.moment_time.hr >= 12)
+                if (alarm_cache.moment_time.hr >= 12)
                     HT162x_LCD_AMPM_Set(ALARM_PART, PM);
                 else
                     HT162x_LCD_AMPM_Set(ALARM_PART, AM);
@@ -270,28 +272,28 @@ void LCD_Clock_MON(void)
         {
             HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, 1);
             time_set_mode = 2;
-            number_flash_cache = alarm_data_simple.moment_time.min;
+            number_flash_cache = alarm_cache.moment_time.min;
         }
         break;
     case 2: //alarm minute
         if ((Key_Up_Trg & KEY_Add) || ((key_delay >= ChangeSpeed) && (Key_Short_Restain & KEY_Add)))
         {
             key_delay = 0;
-            if (alarm_data_simple.moment_time.min < 59)
-                alarm_data_simple.moment_time.min++;
+            if (alarm_cache.moment_time.min < 59)
+                alarm_cache.moment_time.min++;
             else
-                alarm_data_simple.moment_time.min = 0;
-            number_flash_cache = alarm_data_simple.moment_time.min;
+                alarm_cache.moment_time.min = 0;
+            number_flash_cache = alarm_cache.moment_time.min;
             HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, 2);
         }
         else if ((Key_Up_Trg & KEY_Minus) || ((key_delay >= ChangeSpeed) && (Key_Short_Restain & KEY_Minus)))
         {
             key_delay = 0;
-            if (alarm_data_simple.moment_time.min > 0)
-                alarm_data_simple.moment_time.min--;
+            if (alarm_cache.moment_time.min > 0)
+                alarm_cache.moment_time.min--;
             else
-                alarm_data_simple.moment_time.min = 59;
-            number_flash_cache = alarm_data_simple.moment_time.min;
+                alarm_cache.moment_time.min = 59;
+            number_flash_cache = alarm_cache.moment_time.min;
             HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, 2);
         }
         else
@@ -301,6 +303,7 @@ void LCD_Clock_MON(void)
         }
         if (Key_Up_Trg & KEY_Set)
         {
+            memcpy(&alarm_data_simple, &alarm_cache, sizeof(_alarm_mcu_data_t));
             HT162x_LCD_Double_Digits_Write(Position_alarm_simple[time_set_mode - 1], number_flash_cache, 2);
             changeflag |= 2;
             time_set_mode = 0;
